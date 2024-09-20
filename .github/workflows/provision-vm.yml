@@ -1,0 +1,78 @@
+name: Provision EC2 VM
+
+on:
+  workflow_call:
+    inputs:
+      ec2-image-id:
+        description: 'The AMI ID for the EC2 instance'
+        required: true
+        type: string
+      ec2-instance-type:
+        description: 'The instance type for the EC2 instance'
+        required: true
+        type: string
+      aws-region:
+        description: 'AWS Region'
+        required: false
+        type: string
+        default: us-east-1
+      security-group-id:
+        description: 'Security group for the EC2 instance'
+        required: true
+        type: string
+      subnet-id:
+        description: 'Subnet ID for the EC2 instance'
+        required: true
+        type: string
+    secrets:
+      aws-access-key-id:
+        description: 'AWS Access Key ID'
+        required: true
+      aws-secret-access-key:
+        description: 'AWS Secret Access Key'
+        required: true
+      github-token:
+        description: 'Personal Access Token For GH'
+        required: true
+    outputs:
+      instance_label: 
+        description: "The label of the VM that was created."
+        value: ${{ jobs.provision-ec2.outputs.label }}
+      ec2-instance-id: 
+        description: "Instance id of the VM that was created."
+        value: ${{ jobs.provision-ec2.outputs.instance_id }}
+
+jobs:
+  provision-ec2:
+    runs-on: ubuntu-latest
+    outputs:
+      instance_id: ${{ steps.ec2.outputs.ec2-instance-id }}
+      label: ${{ steps.ec2.outputs.label }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      # Configure AWS credentials using the aws-actions/configure-aws-credentials action
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}  # Specify your preferred region
+
+      # Start the EC2 GitHub runner
+      - name: Start EC2 GitHub runner
+        id: ec2
+        uses: machulav/ec2-github-runner@v2
+        with:
+          mode: start
+          github-token: ${{ secrets.github-token }}
+          ec2-instance-type: ${{ inputs.ec2-instance-type }}        
+          ec2-image-id: ${{ inputs.ec2-image-id }}
+          subnet-id: ${{ inputs.subnet-id }}
+          security-group-id: ${{ inputs.security-group-id }}
+
+      - name: Output EC2 Instance ID
+        run: |
+          echo "EC2 Instance ID: ${{ steps.ec2.outputs.ec2-instance-id }}"
+          echo "Label : ${{ steps.ec2.outputs.label }}"
