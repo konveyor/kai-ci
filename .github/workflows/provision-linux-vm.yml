@@ -1,4 +1,4 @@
-name: Provision Linux VM using reusable
+name: Provision Linux VM using reusable workflow.
 
 on: [push]
 
@@ -23,5 +23,19 @@ jobs:
         run: |
           echo "Running from linux"
           cat /etc/os-release
+          echo ${{ needs.call-reusable-workflow.outputs.instance_label }}
+          
+
+  remove-ec2-runner:
+    needs: [call-reusable-workflow,run-commands]
+    uses: ./.github/workflows/remove-vm.yml
+    with: 
+      ec2-instance-id: ${{ needs.call-reusable-workflow.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.call-reusable-workflow.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+
 
   
