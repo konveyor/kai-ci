@@ -22,7 +22,6 @@ jobs:
       - name: Running script on windows
         run: |
           echo "Running from windows"
-          cat /etc/os-release
           echo ${{ needs.call-reusable-workflow.outputs.instance_label }}
           
 
