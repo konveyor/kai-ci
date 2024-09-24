@@ -6,7 +6,7 @@ jobs:
   call-reusable-workflow:
     uses: ./.github/workflows/provision-vm.yml
     with:
-      ec2-image-id: ami-0d581142e0855275d
+      ec2-image-id: ami-0dc310f8ed01858c6
       ec2-instance-type: t2.micro
       security-group-id: sg-0a3e6b53e86d0e69d
       subnet-id: subnet-06113672589e7e836
@@ -25,6 +25,7 @@ jobs:
           echo "Running from windows"
           $windowsVersion = (Get-ComputerInfo).WindowsVersion
           echo "Windows Version: $windowsVersion"
+          [Environment]::UserName
 
 
   remove-ec2-runner:
