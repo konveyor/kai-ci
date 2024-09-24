@@ -21,12 +21,11 @@ jobs:
     runs-on: ${{ needs.call-reusable-workflow.outputs.instance_label }}
     steps:
       - name: Running script on windows
-        shell: pwsh
         run: |
           echo "Running from windows"
-          (Get-ComputerInfo).WindowsVersion
+          $windowsVersion = (Get-ComputerInfo).WindowsVersion
           echo "Windows Version: $windowsVersion"
-          [Environment]::UserName
+
 
   remove-ec2-runner:
     needs: [call-reusable-workflow,run-commands]
