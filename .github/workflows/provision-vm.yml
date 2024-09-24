@@ -7,6 +7,10 @@ on:
         description: 'The AMI ID for the EC2 instance'
         required: true
         type: string
+      ec2-os-type:
+        description: 'The os type of the ec2 instance (windows/linux)'
+        required: true
+        type: string
       ec2-instance-type:
         description: 'The instance type for the EC2 instance'
         required: true
@@ -67,7 +71,7 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.github-token }}
-          ec2-os: windows
+          ec2-os: ${{ inputs.ec2-os-type }}
           ec2-instance-type: ${{ inputs.ec2-instance-type }}        
           ec2-image-id: ${{ inputs.ec2-image-id }}
           subnet-id: ${{ inputs.subnet-id }}

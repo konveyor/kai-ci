@@ -50,7 +50,7 @@ jobs:
 
       # Start the EC2 GitHub runner
       - name: Terminate EC2 GitHub runner
-        uses: machulav/ec2-github-runner@v2
+        uses: crunchy234/ec2-github-runner@main
         with:
           mode: stop
           github-token: ${{ secrets.github-token }}

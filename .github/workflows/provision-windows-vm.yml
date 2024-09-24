@@ -6,10 +6,11 @@ jobs:
   call-reusable-workflow:
     uses: ./.github/workflows/provision-vm.yml
     with:
-      ec2-image-id: ami-0dc310f8ed01858c6
+      ec2-image-id: ami-00c91d65b642f4913
       ec2-instance-type: t2.micro
       security-group-id: sg-0a3e6b53e86d0e69d
       subnet-id: subnet-06113672589e7e836
+      ec2-os-type: windows
     secrets:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -20,10 +21,12 @@ jobs:
     runs-on: ${{ needs.call-reusable-workflow.outputs.instance_label }}
     steps:
       - name: Running script on windows
+        shell: pwsh
         run: |
           echo "Running from windows"
-          echo ${{ needs.call-reusable-workflow.outputs.instance_label }}
-          
+          (Get-ComputerInfo).WindowsVersion
+          echo "Windows Version: $windowsVersion"
+          [Environment]::UserName
 
   remove-ec2-runner:
     needs: [call-reusable-workflow,run-commands]
