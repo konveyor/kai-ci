@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LaunchVSCodePage } from '../pages/vscode2.pages';
+import { LaunchVSCodePage } from '../pages/vscode.pages';
 
 test.describe('VSCode Tests', () => {
   let vscodeApp: LaunchVSCodePage;

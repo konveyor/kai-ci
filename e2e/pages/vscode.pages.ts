@@ -1,91 +1,92 @@
-// launch_vscode.page.ts
 import { _electron as electron, ElectronApplication, Page } from 'playwright';
 import { execSync } from 'child_process';
-import { expect } from '@playwright/test';
 import * as fs from 'fs';
 
 class LaunchVSCodePage {
-  private vscodeApp: ElectronApplication | null = null;
-  private window: Page | null = null;
+  private vscodeApp?: ElectronApplication;
+  private window?: Page;
 
-  public async launchVSCode(executablePath): Promise<void> {
-    // Get the VSIX file path from environment variable
-    const vsixFilePath = process.env.VSIX_FILE_PATH;
-
-    if (vsixFilePath) {
-      // Pass the environment variable to the method
-      this.installExtensionFromVSIX(vsixFilePath);
-    } else {
-      console.error('Error: VSIX_FILE_PATH is not set in the environment.');
-    }
-    // this.installExtensionFromVSIX(process.env.VSIX_FILE_PATH)
-    this.vscodeApp = await electron.launch({
-      executablePath: executablePath, // Path to VSCode executable
-    });
-    this.window = await this.vscodeApp.firstWindow();
-
-    const title = await this.window.title();
-    console.log(`VSCode window title: ${title}`);
-
-    expect(title).toContain('Visual Studio Code');
+  private constructor(vscodeApp: ElectronApplication, window: Page) {
+    this.vscodeApp = vscodeApp;
+    this.window = window;
   }
 
-  // public async installExtensionFromVSIX(vsixFilePath): Promise<void> {
-  //   if (!fs.existsSync(vsixFilePath)) {
-  //     throw new Error(`VSIX file not found at path: ${vsixFilePath}`);
-  //   }
-
-  //   if (!this.window) {
-  //     throw new Error("VSCode window is not initialized.");
-  //   }
-
-  //   const extensionsTab = await this.window.getByRole("tab", {
-  //     name: "Extensions (Ctrl+Shift+X)",
-  //   });
-  //   await extensionsTab.locator("a").waitFor({ state: "visible" });
-  //   await extensionsTab.locator("a").click({ force: true });
-
-  //   const extensionsActionsButton =
-  //     await this.window.getByLabel("Extensions actions");
-  //   await extensionsActionsButton.click();
-
-  //   // Find the "Views and More Actions..." inside the Extensions actions and click it
-  //   const moreActionsButton = await extensionsActionsButton.getByLabel(
-  //     "Views and More Actions...",
-  //   );
-  //   await moreActionsButton.click();
-
-  //   await this.window.click(
-  //     '.context-view .menu-item span:has-text("Install from VSIX...")',
-  //   );
-  //   // Set the file input for the VSIX file
-  //   const inputSelector = 'input[type="file"]';
-  //   await this.window.setInputFiles(inputSelector, vsixFilePath);
-
-  //   // Wait for the uninstall button to appear indicating the extension is installed
-  //   await this.window.waitForSelector(".extension-list-item .uninstall", {
-  //     timeout: 60000,
-  //   });
-  // }
-
-  public installExtensionFromVSIX(vsixFilePath: string): void {
-    // Install VSCode extension using terminal command
+  public static async launchVSCode(
+    executablePath: string
+  ): Promise<LaunchVSCodePage> {
     try {
+      const vsixFilePath = process.env.VSIX_FILE_PATH;
+      if (vsixFilePath) {
+        console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
+        await LaunchVSCodePage.installExtensionFromVSIX(vsixFilePath);
+      } else {
+        console.warn(
+          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
+        );
+      }
+
+      // Launch VSCode as an Electron app
+      const vscodeApp = await electron.launch({
+        executablePath: executablePath,
+      });
+
+      // Get the main window
+      const window = await vscodeApp.firstWindow();
+
+      // Return an instance of LaunchVSCodePage
+      return new LaunchVSCodePage(vscodeApp, window);
+    } catch (error) {
+      console.error('Error launching VSCode:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Installs an extension from a VSIX file using the VSCode CLI.
+   * This method is static because it is independent of the instance.
+   */
+  private static async installExtensionFromVSIX(
+    vsixFilePath: string
+  ): Promise<void> {
+    if (!fs.existsSync(vsixFilePath)) {
+      throw new Error(`VSIX file not found at path: ${vsixFilePath}`);
+    }
+
+    try {
+      // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
       execSync(`code --install-extension ${vsixFilePath}`, {
         stdio: 'inherit',
       });
-      console.log('Extension installed successfully');
+      console.log('Extension installed successfully.');
     } catch (error) {
       console.error('Error installing the VSIX extension:', error);
+      throw error;
     }
   }
 
-  // Method to close VSCode
+  /**
+   * Closes the VSCode instance.
+   */
   public async closeVSCode(): Promise<void> {
-    if (this.vscodeApp) {
-      await this.vscodeApp.close();
+    try {
+      if (this.vscodeApp) {
+        await this.vscodeApp.close();
+        console.log('VSCode closed successfully.');
+      }
+    } catch (error) {
+      console.error('Error closing VSCode:', error);
     }
+  }
+
+  /**
+   * Returns the main window for further interactions.
+   */
+  public getWindow(): Page {
+    if (!this.window) {
+      throw new Error('VSCode window is not initialized.');
+    }
+    return this.window;
   }
 }
 
