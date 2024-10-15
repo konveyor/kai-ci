@@ -44,10 +44,12 @@ tmp=/tmp/${self}-${pid}
 
 usage() {
   echo "Usage: ${self} <required> <options>"
-  echo "Auth has to be disabled in order to execute this script"
   echo "-h help"
+  echo "Auth has to be disabled in order to execute this script"
   echo "Required:"
-  echo "  -u <URL>/hub"
+  echo "  -u <URL> URL of the hub"
+  echo "Example:"
+  echo "  ${self} -u htps://my-konveyor-instance/hub -n 5"
   echo "Options:"
   echo "  -b base name (Test)"
   echo "  -n count  (10)"
@@ -220,8 +222,8 @@ waitForAnalyses() {
       break
     fi
 
-    echo "Some analyses are still running, waiting 30 secs..."
-    sleep 30
+    echo "Some analyses are still running, waiting 1 min..."
+    sleep 60
   done
 }
 

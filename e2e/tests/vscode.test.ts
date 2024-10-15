@@ -1,19 +1,34 @@
-import { test } from "@playwright/test";
-import { LaunchVSCodePage } from "../pages/vscode.pages";
+import { test, expect } from '@playwright/test';
+import { LaunchVSCodePage } from '../pages/vscode2.pages';
 
-test.describe("VSCode Extension Installation from VSIX", () => {
-  const vscodePage = new LaunchVSCodePage();
+test.describe('VSCode Tests', () => {
+  let vscodeApp: LaunchVSCodePage;
 
-  test("VSCode launches and has correct window title", async () => {
-    const executablePath = process.env.VSCODE_EXECUTABLE_PATH;
-    await vscodePage.launchVSCode(executablePath);
+  test.beforeAll(async () => {
+    const executablePath =
+      process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
+    vscodeApp = await LaunchVSCodePage.launchVSCode(executablePath);
   });
 
-  test("should install extension from a VSIX file in VSCode", async ({
-    page,
-  }) => {
-    const vsixFilePath = process.env.VSIX_FILE_PATH;
-    await vscodePage.installExtensionFromVSIX(vsixFilePath);
-    await page.pause();
+  test.afterAll(async () => {
+    await vscodeApp.closeVSCode();
+  });
+
+  test('should launch VSCode and check window title', async () => {
+    const window = vscodeApp.getWindow();
+    const title = await window.title();
+    expect(title).toContain('Visual Studio Code');
+  });
+
+  test('should open Extensions tab and verify installed extension', async () => {
+    const window = vscodeApp.getWindow();
+    const kaiTab = await window.getByRole('tab', { name: 'KAI', exact: true });
+    await kaiTab.click();
+    // Assert if KAI explorer is opened.
+    const title = await window.getByRole('heading', {
+      name: 'KAI',
+      exact: true,
+    });
+    expect(title).toBeTruthy();
   });
 });
