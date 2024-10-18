@@ -1,7 +1,6 @@
 import * as os from 'os';
 import axios from 'axios';
 import * as fs from 'fs';
-import * as path from 'path';
 
 // Function to get OS information
 export function getOSInfo(): string {
@@ -25,14 +24,12 @@ export function getOSInfo(): string {
  * @param outputLocationPath The local file path where the file will be saved.
  * @returns Promise that resolves when the download is complete.
  */
-export async function downloadFile(
-  fileUrl: string,
-  outputLocationPath: string
-): Promise<void> {
-  outputLocationPath = '/home/sshveta/Work/kai-ci/konveyor-linux-0.0.1.vsix';
+export async function downloadFile(): Promise<void> {
+  const outputLocationPath =
+    process.env.VSIX_FILE_PATH + `konveyor-${getOSInfo()}-0.0.1.vsix`;
+  const fileUrl = buildDownloadUrl();
+
   const writer = fs.createWriteStream(outputLocationPath);
-  console.log('==================output path======');
-  console.log(outputLocationPath);
 
   const response = await axios({
     url: fileUrl,
@@ -49,13 +46,8 @@ export async function downloadFile(
 }
 
 export async function downloadLatestKAIPlugin() {
-  const url = buildDownloadUrl();
-  const outputPath = process.env.VSIX_FILE_PATH || '';
-  console.log('========path=====');
-  console.log(outputPath);
-
   try {
-    await downloadFile(url, outputPath);
+    await downloadFile();
     console.log('File downloaded successfully!');
   } catch (err) {
     console.error('Error downloading the file:', err);
@@ -71,7 +63,7 @@ export function buildDownloadUrl(): string {
   const pluginUrl =
     process.env.PLUGIN_URL ||
     'https://github.com/konveyor/editor-extensions/releases/download/';
-  const version = process.env.PLUGIN_VERSION || 'v0.0.1-dev+';
+  const version = process.env.PLUGIN_VERSION || 'v0.0.1-dev%2B';
 
   const platform = getOSInfo();
   const fileName = `konveyor-${platform}-0.0.1.vsix`;

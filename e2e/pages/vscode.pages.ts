@@ -44,14 +44,8 @@ class LaunchVSCodePage {
   private static async installExtensionFromVSIX(
     vsixFilePath: string
   ): Promise<void> {
-    // if (!fs.existsSync(vsixFile)) {
-    //   throw new Error(`VSIX file not found at path: ${vsixFile}`);
-    // }
+    await downloadLatestKAIPlugin();
 
-    downloadLatestKAIPlugin();
-    if (!fs.existsSync(vsixFilePath)) {
-      throw new Error(`VSIX file not found at path: ${vsixFilePath}`);
-    }
     try {
       // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
