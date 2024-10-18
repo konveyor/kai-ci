@@ -1,6 +1,7 @@
 import { _electron as electron, ElectronApplication, Page } from 'playwright';
 import { execSync } from 'child_process';
 import * as fs from 'fs';
+import { downloadLatestKAIPlugin, getOSInfo } from '../utilities/utils';
 
 class LaunchVSCodePage {
   private vscodeApp?: ElectronApplication;
@@ -15,15 +16,10 @@ class LaunchVSCodePage {
     executablePath: string
   ): Promise<LaunchVSCodePage> {
     try {
-      const vsixFilePath = process.env.VSIX_FILE_PATH;
-      if (vsixFilePath) {
-        console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
-        await LaunchVSCodePage.installExtensionFromVSIX(vsixFilePath);
-      } else {
-        console.warn(
-          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
-        );
-      }
+      const vsixFilePath =
+        process.env.VSIX_FILE_PATH + `konveyor-${getOSInfo()}-0.0.1.vsix`;
+      console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
+      await LaunchVSCodePage.installExtensionFromVSIX(vsixFilePath);
 
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
@@ -48,10 +44,14 @@ class LaunchVSCodePage {
   private static async installExtensionFromVSIX(
     vsixFilePath: string
   ): Promise<void> {
+    // if (!fs.existsSync(vsixFile)) {
+    //   throw new Error(`VSIX file not found at path: ${vsixFile}`);
+    // }
+
+    downloadLatestKAIPlugin();
     if (!fs.existsSync(vsixFilePath)) {
       throw new Error(`VSIX file not found at path: ${vsixFilePath}`);
     }
-
     try {
       // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
