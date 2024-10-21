@@ -2,26 +2,31 @@ import { _electron as electron, ElectronApplication, Page } from 'playwright';
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 
-class LaunchVSCodePage {
-  private vscodeApp?: ElectronApplication;
-  private window?: Page;
+class VSCode {
+  private readonly vscodeApp?: ElectronApplication;
+  private readonly window?: Page;
 
   private constructor(vscodeApp: ElectronApplication, window: Page) {
     this.vscodeApp = vscodeApp;
     this.window = window;
   }
 
-  public static async launchVSCode(
-    executablePath: string
-  ): Promise<LaunchVSCodePage> {
+  /**
+   * Installs kai extensions from the VSIX path configured in the .env file and
+   * launches VSCode
+   * @param executablePath path to the vscode binary
+   */
+  public static async init(
+    executablePath: string,
+  ): Promise<VSCode> {
     try {
       const vsixFilePath = process.env.VSIX_FILE_PATH;
       if (vsixFilePath) {
         console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
-        await LaunchVSCodePage.installExtensionFromVSIX(vsixFilePath);
+        await VSCode.installExtensionFromVSIX(vsixFilePath);
       } else {
         console.warn(
-          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
+          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.',
         );
       }
 
@@ -30,11 +35,9 @@ class LaunchVSCodePage {
         executablePath: executablePath,
       });
 
-      // Get the main window
       const window = await vscodeApp.firstWindow();
 
-      // Return an instance of LaunchVSCodePage
-      return new LaunchVSCodePage(vscodeApp, window);
+      return new VSCode(vscodeApp, window);
     } catch (error) {
       console.error('Error launching VSCode:', error);
       throw error;
@@ -46,7 +49,7 @@ class LaunchVSCodePage {
    * This method is static because it is independent of the instance.
    */
   private static async installExtensionFromVSIX(
-    vsixFilePath: string
+    vsixFilePath: string,
   ): Promise<void> {
     if (!fs.existsSync(vsixFilePath)) {
       throw new Error(`VSIX file not found at path: ${vsixFilePath}`);
@@ -55,7 +58,7 @@ class LaunchVSCodePage {
     try {
       // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
-      execSync(`code --install-extension ${vsixFilePath}`, {
+      execSync(`code --install-extension '${vsixFilePath}'`, {
         stdio: 'inherit',
       });
       console.log('Extension installed successfully.');
@@ -90,4 +93,4 @@ class LaunchVSCodePage {
   }
 }
 
-export { LaunchVSCodePage };
+export { VSCode };

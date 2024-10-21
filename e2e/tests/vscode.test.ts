@@ -1,31 +1,27 @@
 import { test, expect } from '@playwright/test';
-import { LaunchVSCodePage } from '../pages/vscode.pages';
+import { VSCode } from '../pages/vscode.pages';
 
 test.describe('VSCode Tests', () => {
-  let vscodeApp: LaunchVSCodePage;
+  let vscodeApp: VSCode;
 
   test.beforeAll(async () => {
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
-    vscodeApp = await LaunchVSCodePage.launchVSCode(executablePath);
+    vscodeApp = await VSCode.init(executablePath);
   });
 
-  test.afterAll(async () => {
-    await vscodeApp.closeVSCode();
-  });
-
-  test('should launch VSCode and check window title', async () => {
+  test('Should launch VSCode and check window title', async () => {
     const window = vscodeApp.getWindow();
     const title = await window.title();
     expect(title).toContain('Visual Studio Code');
   });
 
-  test('should open Extensions tab and verify installed extension', async () => {
+  test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
-    const kaiTab = await window.getByRole('tab', { name: 'KAI', exact: true });
+    const kaiTab = window.getByRole('tab', {name: 'KAI', exact: true});
     await kaiTab.click();
     // Assert if KAI explorer is opened.
-    const title = await window.getByRole('heading', {
+    const title = window.getByRole('heading', {
       name: 'KAI',
       exact: true,
     });
