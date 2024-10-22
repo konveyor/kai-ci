@@ -3,33 +3,42 @@ import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import { getKAIPluginPath } from '../utilities/utils';
 
-class LaunchVSCodePage {
-  private vscodeApp?: ElectronApplication;
-  private window?: Page;
+class VSCode {
+  private readonly vscodeApp?: ElectronApplication;
+  private readonly window?: Page;
 
   private constructor(vscodeApp: ElectronApplication, window: Page) {
     this.vscodeApp = vscodeApp;
     this.window = window;
   }
 
-  public static async launchVSCode(
-    executablePath: string
-  ): Promise<LaunchVSCodePage> {
+  /**
+   * Installs kai extensions from the VSIX path configured in the .env file and
+   * launches VSCode
+   * @param executablePath path to the vscode binary
+   */
+  public static async init(
+    executablePath: string,
+  ): Promise<VSCode> {
     try {
       const vsixFilePath = getKAIPluginPath();
-      console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
-      await LaunchVSCodePage.installExtensionFromVSIX(vsixFilePath);
+      if (vsixFilePath) {
+        console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
+        await VSCode.installExtensionFromVSIX(vsixFilePath);
+      } else {
+        console.warn(
+          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.',
+        );
+      }
 
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
         executablePath: executablePath,
       });
 
-      // Get the main window
       const window = await vscodeApp.firstWindow();
 
-      // Return an instance of LaunchVSCodePage
-      return new LaunchVSCodePage(vscodeApp, window);
+      return new VSCode(vscodeApp, window);
     } catch (error) {
       console.error('Error launching VSCode:', error);
       throw error;
@@ -41,14 +50,14 @@ class LaunchVSCodePage {
    * This method is static because it is independent of the instance.
    */
   private static async installExtensionFromVSIX(
-    vsixFilePath: string
+    vsixFilePath: string,
   ): Promise<void> {
     await downloadLatestKAIPlugin();
 
     try {
       // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
-      execSync(`code --install-extension ${vsixFilePath}`, {
+      execSync(`code --install-extension '${vsixFilePath}'`, {
         stdio: 'inherit',
       });
       console.log('Extension installed successfully.');
@@ -83,4 +92,4 @@ class LaunchVSCodePage {
   }
 }
 
-export { LaunchVSCodePage };
+export { VSCode };
