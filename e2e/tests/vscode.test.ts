@@ -18,7 +18,7 @@ test.describe('VSCode Tests', () => {
 
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
-    const kaiTab = window.getByRole('tab', {name: 'KAI', exact: true});
+    const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
     await kaiTab.click();
     // Assert if KAI explorer is opened.
     const title = window.getByRole('heading', {

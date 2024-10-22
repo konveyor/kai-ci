@@ -1,6 +1,7 @@
 import { _electron as electron, ElectronApplication, Page } from 'playwright';
 import { execSync } from 'child_process';
-import * as fs from 'fs';
+import { downloadLatestKAIPlugin } from '../utilities/download.utils';
+import { getKAIPluginPath } from '../utilities/utils';
 
 class VSCode {
   private readonly vscodeApp?: ElectronApplication;
@@ -20,7 +21,7 @@ class VSCode {
     executablePath: string,
   ): Promise<VSCode> {
     try {
-      const vsixFilePath = process.env.VSIX_FILE_PATH;
+      const vsixFilePath = getKAIPluginPath();
       if (vsixFilePath) {
         console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
         await VSCode.installExtensionFromVSIX(vsixFilePath);
@@ -51,9 +52,7 @@ class VSCode {
   private static async installExtensionFromVSIX(
     vsixFilePath: string,
   ): Promise<void> {
-    if (!fs.existsSync(vsixFilePath)) {
-      throw new Error(`VSIX file not found at path: ${vsixFilePath}`);
-    }
+    await downloadLatestKAIPlugin();
 
     try {
       // Execute command to install VSIX file using VSCode CLI
