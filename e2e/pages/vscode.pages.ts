@@ -1,7 +1,7 @@
 import { _electron as electron, ElectronApplication, Page } from 'playwright';
 import { execSync } from 'child_process';
-import * as fs from 'fs';
-import { downloadLatestKAIPlugin, getOSInfo } from '../utilities/utils';
+import { downloadLatestKAIPlugin } from '../utilities/download.utils';
+import { getKAIPluginPath } from '../utilities/utils';
 
 class LaunchVSCodePage {
   private vscodeApp?: ElectronApplication;
@@ -16,8 +16,7 @@ class LaunchVSCodePage {
     executablePath: string
   ): Promise<LaunchVSCodePage> {
     try {
-      const vsixFilePath =
-        process.env.VSIX_FILE_PATH + `konveyor-${getOSInfo()}-0.0.1.vsix`;
+      const vsixFilePath = getKAIPluginPath();
       console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
       await LaunchVSCodePage.installExtensionFromVSIX(vsixFilePath);
 
