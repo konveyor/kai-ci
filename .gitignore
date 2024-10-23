@@ -48,6 +48,8 @@ fabric.properties
 
 
 .idea/**/sonarlint/
+.idea/codeStyles/
+.idea/kai-ci.iml
 
 .idea/**/sonarIssues.xml
 
