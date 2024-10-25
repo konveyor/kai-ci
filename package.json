@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "agent-base": "^6.0.2",
+    "axios": "^1.7.7",
     "balanced-match": "^1.0.2",
     "boolean": "^3.2.0",
     "brace-expansion": "^1.1.11",
