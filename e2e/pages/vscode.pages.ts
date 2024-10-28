@@ -17,9 +17,7 @@ class VSCode {
    * launches VSCode
    * @param executablePath path to the vscode binary
    */
-  public static async init(
-    executablePath: string,
-  ): Promise<VSCode> {
+  public static async init(executablePath: string): Promise<VSCode> {
     try {
       const vsixFilePath = getKAIPluginPath();
       if (vsixFilePath) {
@@ -27,7 +25,7 @@ class VSCode {
         await VSCode.installExtensionFromVSIX(vsixFilePath);
       } else {
         console.warn(
-          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.',
+          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
         );
       }
 
@@ -50,14 +48,14 @@ class VSCode {
    * This method is static because it is independent of the instance.
    */
   private static async installExtensionFromVSIX(
-    vsixFilePath: string,
+    vsixFilePath: string
   ): Promise<void> {
     await downloadLatestKAIPlugin();
 
     try {
       // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
-      execSync(`code --install-extension '${vsixFilePath}'`, {
+      execSync(`code --install-extension "${vsixFilePath}"`, {
         stdio: 'inherit',
       });
       console.log('Extension installed successfully.');
