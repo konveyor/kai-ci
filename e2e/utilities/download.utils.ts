@@ -11,21 +11,41 @@ import { getKAIPluginPath, getOSInfo, getKAIPluginName } from './utils';
 export async function downloadFile(): Promise<void> {
   const outputLocationPath = getKAIPluginPath();
   const fileUrl = buildDownloadUrl();
+  const defaultUrl = process.env.VSIX_DOWNLOAD_URL;
 
   const writer = fs.createWriteStream(outputLocationPath);
-
-  const response = await axios({
-    url: fileUrl,
-    method: 'GET',
-    responseType: 'stream',
-  });
-
+  const response = await fetchUrl(fileUrl, defaultUrl);
   response.data.pipe(writer);
 
   return new Promise((resolve, reject) => {
     writer.on('finish', resolve);
     writer.on('error', reject);
   });
+}
+
+async function fetchUrl(fileUrl, defaultUrl) {
+  try {
+    const response = await axios({
+      url: fileUrl,
+      method: 'GET',
+      responseType: 'stream',
+    });
+    return response;
+  } catch (error) {
+    // Check if the error is a 404
+    if (error.response && error.response.status === 404) {
+      console.log('404 error, using default URL:', defaultUrl);
+      const response = await axios({
+        url: defaultUrl,
+        method: 'GET',
+        responseType: 'stream',
+      });
+      return response;
+    } else {
+      console.error('Error fetching URL:', error);
+      throw error;
+    }
+  }
 }
 
 export async function downloadLatestKAIPlugin() {
