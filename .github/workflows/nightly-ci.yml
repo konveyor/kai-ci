@@ -61,4 +61,12 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v3
+      with:
+        name: vscode-screenshots
+        path: |
+          vscode-initialized-screenshot.png
+          vscode-window-title-check.png
+
     
