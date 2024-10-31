@@ -12,9 +12,12 @@ jobs:
 
     services:
       xvfb:
-        image: nsi317/docker-xvfb 
+        image: jessetane/docker-xvfb
         ports:
           - 5900:5900
+        options: >-
+          --privileged
+          --shm-size 2g
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
