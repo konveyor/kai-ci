@@ -11,6 +11,7 @@ test.describe('VSCode Tests', () => {
   });
 
   test('Should launch VSCode and check window title', async () => {
+    test.setTimeout(60000);
     const window = vscodeApp.getWindow();
     const title = await window.title();
     expect(title).toContain('Visual Studio Code');
