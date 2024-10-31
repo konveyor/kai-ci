@@ -9,9 +9,18 @@ on:
 jobs:
   main-nightly:
     runs-on: ubuntu-latest
+
+    services:
+      xvfb:
+        image: dorowu/ubuntu-desktop-lxde-vnc:latest
+        ports:
+          - 5900:5900
+        options: >-
+          --privileged
+          --shm-size 2g
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
       with:
         node-version: lts/*
     - name: Install vscode dependencies
@@ -24,13 +33,11 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
           sudo apt-get update
           sudo apt-get install -y code
-    - name: Install Xvfb
-      run: sudo apt-get install -y xvfb
-    
     - name: Start Xvfb
-      run: Xvfb :99 -screen 0 1920x1080x24 &
-    - name: Set DISPLAY variable
-      run: echo "DISPLAY=:99" >> $GITHUB_ENV
+      run: |
+            apt-get update && apt-get install -y xvfb
+            Xvfb :99 -screen 0 1920x1080x24 &
+            echo "DISPLAY=:99" >> $GITHUB_ENV
     - name: Verify Installation
       run: code --version
     - name: Verbose code
