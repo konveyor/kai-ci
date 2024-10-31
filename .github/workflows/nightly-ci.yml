@@ -44,6 +44,9 @@ jobs:
           echo "Listing /usr/share/code:"
           ls /usr/share/code
         fi  
+    - name: Ensure no VSCode instances are running
+      run: |
+        pkill -f code || true  # Kills all VSCode processes if they are running
     - name: Install playwright dependencies
       run: npm install
     - name: More dependencies
