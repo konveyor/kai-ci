@@ -12,12 +12,9 @@ jobs:
 
     services:
       xvfb:
-        image: hardock14/docker-ubuntu-xvfb
+        image: jessetane/docker-xvfb  # or any of the other images
         ports:
           - 5900:5900
-        options: >-
-          --privileged
-          --shm-size 2g
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
@@ -33,11 +30,8 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
           sudo apt-get update
           sudo apt-get install -y code
-    - name: Start Xvfb
-      run: |
-            apt-get update && apt-get install -y xvfb
-            Xvfb :99 -screen 0 1920x1080x24 &
-            echo "DISPLAY=:99" >> $GITHUB_ENV
+    - name: Set DISPLAY environment variable
+      run: echo "DISPLAY=:99" >> $GITHUB_ENV
     - name: Verify Installation
       run: code --version
     - name: Verbose code
