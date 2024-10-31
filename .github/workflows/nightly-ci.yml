@@ -12,7 +12,7 @@ jobs:
 
     services:
       xvfb:
-        image: jessetane/docker-xvfb  # or any of the other images
+        image: tianon/ubuntu-xvfb
         ports:
           - 5900:5900
     steps:
