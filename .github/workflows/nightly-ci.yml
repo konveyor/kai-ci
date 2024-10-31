@@ -12,7 +12,7 @@ jobs:
 
     services:
       xvfb:
-        image: jessetane/docker-xvfb
+        image: danoong/docker-xvfb
         ports:
           - 5900:5900
         options: >-
