@@ -27,6 +27,8 @@ jobs:
 
     - name: Verify Installation
       run: code --version
+    - name: Install Xvfb
+      run: sudo apt-get install -y xvfb
     - name: Install playwright dependencies
       run: npm install
     - name: More dependencies
