@@ -12,7 +12,7 @@ jobs:
 
     services:
       xvfb:
-        image: daggerok/e2e-ubuntu-jdk8-xvfb
+        image: hardock14/docker-ubuntu-xvfb
         ports:
           - 5900:5900
         options: >-
@@ -26,15 +26,18 @@ jobs:
     - name: Install vscode dependencies
       run: sudo apt-get update && sudo apt-get install -y wget
 
-    - name: Download and Install VSCode
+    - name: Download and Install VSCode                                             
       run: |
           wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
           sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/
           echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
           sudo apt-get update
           sudo apt-get install -y code
-    - name: Set DISPLAY environment variable
-      run: echo "DISPLAY=:99" >> $GITHUB_ENV
+    - name: Start Xvfb
+      run: |
+            apt-get update && apt-get install -y xvfb
+            Xvfb :99 -screen 0 1920x1080x24 &
+            echo "DISPLAY=:99" >> $GITHUB_ENV
     - name: Verify Installation
       run: code --version
     - name: Verbose code
