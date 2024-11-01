@@ -34,7 +34,8 @@ jobs:
           path: |
             vscode-cedar-wasm/target
           key: cargo-build-cache-${{ hashFiles('vscode-cedar-wasm/Cargo.lock') }}
-
+      - name: Install playwright dependencies
+        run: npm install
       - name: Build
         run: |
           npm ci
