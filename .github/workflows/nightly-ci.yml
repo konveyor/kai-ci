@@ -43,6 +43,9 @@ jobs:
         echo "DISPLAY=:99" >> $GITHUB_ENV
     - name: Verify Installation
       run: code --version
+
+    - name: Remove config/code folder
+      run: rm -rf /home/runner/.config/Code
     - name: Verbose code
       run: code --verbose
     - name: Verify VSCode Path
