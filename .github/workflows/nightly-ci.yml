@@ -10,14 +10,6 @@ jobs:
   main-nightly:
     runs-on: ubuntu-latest
 
-    services:
-      xvfb:
-        image: dorowu/ubuntu-desktop-lxde-vnc
-        ports:
-          - 5900:5900
-        options: >-
-          --privileged
-          --shm-size 2g
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
@@ -33,6 +25,18 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
           sudo apt-get update
           sudo apt-get install -y code
+    - name: Set up virtual X11
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          xvfb \
+          x11-xserver-utils \
+          dbus-x11 \
+          xfonts-100dpi \
+          xfonts-75dpi \
+          libxrender1 \
+          libxext6 \
+          libx11-6
     - name: Set DISPLAY environment variable
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
