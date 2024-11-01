@@ -18,13 +18,17 @@ jobs:
     - name: Install vscode dependencies
       run: sudo apt-get update && sudo apt-get install -y wget
 
-    - name: Download and Install VSCode                                             
+    - name: Find VS Code stable release version
+      id: code-stable
       run: |
-          wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-          sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/
-          echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-          sudo apt-get update
-          sudo apt-get install -y code
+        echo "VSCODE_VERSION=`curl --silent https://update.code.visualstudio.com/api/releases/stable | jq -r '.[0]'`" >> "$GITHUB_OUTPUT"
+
+    - name: Cache VS Code download
+      uses: actions/cache@v4
+      with:
+        path: |
+          .vscode-test
+        key: vscode-test-cache-${{ steps.code-stable.outputs.VSCODE_VERSION }}
     - name: Set up virtual X11
       run: |
         sudo apt-get update
