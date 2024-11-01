@@ -49,7 +49,7 @@ jobs:
     - name: Start D-Bus
       run: |
         dbus-launch --exit-with-session &
-    - name: Test using VS Code
+    - name: Start Dbus
       run: |
         sudo service dbus start
         export XDG_RUNTIME_DIR=/run/user/$(id -u)     
@@ -58,7 +58,6 @@ jobs:
         export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
         dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
         mkdir ~/.vscode && echo '{ "disable-hardware-acceleration": true }' > ~/.vscode/argv.json
-        
     - name: Verify Installation
       run: code --version
     - name: Ensure no VSCode instances are running
@@ -72,14 +71,14 @@ jobs:
       run: cp .env.example .env  
     - name: Run Playwright tests
       run: npx playwright test
-    - name: Upload screenshots
+    - name: Upload screenshots on failure
+      if: failure()  # This ensures the step runs if any previous step fails
       uses: actions/upload-artifact@v3
       with:
         name: vscode-screenshots
         path: |
           vscode-initialized-screenshot.png
-          vscode-window-title-check.png
-
+          kai-installed-screenshot.png
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
