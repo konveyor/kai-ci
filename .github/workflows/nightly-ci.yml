@@ -18,11 +18,13 @@ jobs:
     - name: Install vscode dependencies
       run: sudo apt-get update && sudo apt-get install -y wget
 
-    - name: Find VS Code stable release version
-      id: code-stable
+    - name: Download and Install VSCode                                             
       run: |
-        echo "VSCODE_VERSION=`curl --silent https://update.code.visualstudio.com/api/releases/stable | jq -r '.[0]'`" >> "$GITHUB_OUTPUT"
-
+          wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+          sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/
+          echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+          sudo apt-get update
+          sudo apt-get install -y code
     - name: Set up virtual X11
       run: |
         sudo apt-get update
@@ -35,10 +37,6 @@ jobs:
           libxrender1 \
           libxext6 \
           libx11-6
-    - name: Install XVFB for testing with VS Code
-      run: |
-        sudo apt-get -y update
-        sudo apt-get -y install --fix-missing xvfb
     - name: Set DISPLAY environment variable
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
@@ -51,10 +49,16 @@ jobs:
       # - Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
       # - Exiting GPU process due to errors during initialization
       run: |
+        sudo service dbus start     
+        sudo mkdir $XDG_RUNTIME_USER
+        sudo chmod 700 $XDG_RUNTIME_DIR
+        sudo chown $(id -un):$(id -gn) $XDG_RUNTIME_DIR
         export XDG_RUNTIME_DIR=/run/user/$(id -u)
         export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
         dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
         mkdir ~/.vscode && echo '{ "disable-hardware-acceleration": true }' > ~/.vscode/argv.json
+        
+
       # xvfb-run -a npm run test
     - name: Verify Installation
       run: code --version
