@@ -38,7 +38,10 @@ jobs:
           xfonts-75dpi \
           libxrender1 \
           libxext6 \
-          libx11-6
+          libx11-6 \
+          xfonts-base \
+          nickle cairo-5c \
+          xorg-docs-core
     - name: Set DISPLAY environment variable
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
