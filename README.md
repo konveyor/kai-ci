@@ -47,11 +47,8 @@ Install the required packages using npm:
 
     VSCODE_EXECUTABLE_PATH='/usr/share/code/code'
 
-    # Path to Save the vsix file
-    VSIX_FILE_PATH="/home/sshveta/Work/kai-ci/"
-
     # URL to download the vsix file, update this if the URL is different.
-    VSIX_DOWNLOAD_URL= 'https://github.com/konveyor/editor-extensions/releases/download/v0.0.1-dev%2B20241022/konveyor-linux-0.0.1.vsix'
+    DEFAULT_VSIX_DOWNLOAD_URL= 'https://github.com/konveyor/editor-extensions/releases/download/v0.0.1-dev%2B20241022/konveyor-linux-0.0.1.vsix'
 
 
 ## Running Tests

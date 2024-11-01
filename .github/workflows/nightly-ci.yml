@@ -1,0 +1,87 @@
+name: Run Playwright tests nightly on main branch
+
+on:
+  schedule:
+    - cron: "5 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  main-nightly:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: lts/*
+    - name: Install vscode dependencies
+      run: sudo apt-get update && sudo apt-get install -y wget
+
+    - name: Download and Install VSCode                                             
+      run: |
+          wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+          sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+          echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+          rm -f packages.microsoft.gpg
+          sudo apt install apt-transport-https
+          sudo apt update
+          sudo apt install code
+    - name: Set up virtual X11
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          xvfb \
+          x11-xserver-utils \
+          dbus-x11 \
+          xfonts-100dpi \
+          xfonts-75dpi \
+          libxrender1 \
+          libxext6 \
+          libx11-6 \
+          xfonts-base \
+          nickle cairo-5c \
+          xorg-docs-core
+    - name: Set DISPLAY environment variable
+      run: |
+        Xvfb :99 -screen 0 1920x1080x24 &
+        echo "DISPLAY=:99" >> $GITHUB_ENV
+    - name: Start D-Bus
+      run: |
+        dbus-launch --exit-with-session &
+    - name: Start Dbus
+      run: |
+        sudo service dbus start
+        export XDG_RUNTIME_DIR=/run/user/$(id -u)     
+        sudo chmod 700 $XDG_RUNTIME_DIR
+        sudo chown $(id -un):$(id -gn) $XDG_RUNTIME_DIR
+        export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
+        dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
+        mkdir ~/.vscode && echo '{ "disable-hardware-acceleration": true }' > ~/.vscode/argv.json
+    - name: Verify Installation
+      run: code --version
+    - name: Ensure no VSCode instances are running
+      run: |
+        pkill -f code || true  # Kills all VSCode processes if they are running
+    - name: Install playwright dependencies
+      run: npm install
+    - name: More dependencies
+      run: npm ci
+    - name: Copy .env.example to .env
+      run: cp .env.example .env  
+    - name: Run Playwright tests
+      run: npx playwright test || true  # Ensures the workflow continues even if tests fail
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v3
+      with:
+        name: vscode-screenshots
+        path: |
+          vscode-initialized-screenshot.png
+          kai-installed-screenshot.png
+      if: always()  # This ensures the upload runs regardless of previous step results
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
+    

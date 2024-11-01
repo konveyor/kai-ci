@@ -1,7 +1,7 @@
 import { _electron as electron, ElectronApplication, Page } from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
-import { getKAIPluginPath } from '../utilities/utils';
+import { getKAIPluginName } from '../utilities/utils';
 
 class VSCode {
   private readonly vscodeApp?: ElectronApplication;
@@ -13,13 +13,12 @@ class VSCode {
   }
 
   /**
-   * Installs kai extensions from the VSIX path configured in the .env file and
-   * launches VSCode
+   * launches VSCode with KAI plugin installed.
    * @param executablePath path to the vscode binary
    */
   public static async init(executablePath: string): Promise<VSCode> {
     try {
-      const vsixFilePath = getKAIPluginPath();
+      const vsixFilePath = getKAIPluginName();
       if (vsixFilePath) {
         console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
         await VSCode.installExtensionFromVSIX(vsixFilePath);

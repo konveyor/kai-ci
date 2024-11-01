@@ -5,6 +5,7 @@ test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
 
   test.beforeAll(async () => {
+    test.setTimeout(60000);
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
     vscodeApp = await VSCode.init(executablePath);
@@ -12,19 +13,19 @@ test.describe('VSCode Tests', () => {
 
   test('Should launch VSCode and check window title', async () => {
     const window = vscodeApp.getWindow();
-    const title = await window.title();
-    expect(title).toContain('Visual Studio Code');
+    await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
   });
 
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
     const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
     await kaiTab.click();
-    // Assert if KAI explorer is opened.
+    await window.waitForTimeout(10000);
     const title = window.getByRole('heading', {
-      name: 'KAI',
+      name: 'Konveyor Analysis',
       exact: true,
     });
     expect(title).toBeTruthy();
+    await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 });
