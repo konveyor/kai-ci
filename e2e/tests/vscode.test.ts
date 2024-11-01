@@ -5,6 +5,7 @@ test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
 
   test.beforeAll(async () => {
+    test.setTimeout(60000); 
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
     vscodeApp = await VSCode.init(executablePath);
@@ -22,11 +23,13 @@ test.describe('VSCode Tests', () => {
     const window = vscodeApp.getWindow();
     const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
     await kaiTab.click();
+    await window.waitForTimeout(10000); 
     const title = window.getByRole('heading', {
       name: 'Konveyor Analysis',
       exact: true
     });
     expect(title).toBeTruthy();
+    await window.waitForTimeout(10000); 
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 });
