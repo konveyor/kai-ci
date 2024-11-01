@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as fs from 'fs';
-import { getKAIPluginPath, getOSInfo, getKAIPluginName } from './utils';
+import { getKAIPluginName } from './utils';
 
 /**
  * Downloads a file from the given URL and saves it to the specified destination.
@@ -9,9 +9,9 @@ import { getKAIPluginPath, getOSInfo, getKAIPluginName } from './utils';
  * @returns Promise that resolves when the download is complete.
  */
 export async function downloadFile(): Promise<void> {
-  const outputLocationPath = getKAIPluginPath();
+  const outputLocationPath = getKAIPluginName();
   const fileUrl = buildDownloadUrl();
-  const defaultUrl = process.env.VSIX_DOWNLOAD_URL;
+  const defaultUrl = process.env.DEFAULT_VSIX_DOWNLOAD_URL;
 
   const writer = fs.createWriteStream(outputLocationPath);
   const response = await fetchUrl(fileUrl, defaultUrl);

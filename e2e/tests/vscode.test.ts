@@ -13,7 +13,7 @@ test.describe('VSCode Tests', () => {
   test('Should launch VSCode and check window title', async () => {
     const window = vscodeApp.getWindow();
     const title = await window.title();
-    expect(title).toContain('Visual Studio Code');
+    expect(title.replace(/\s+/g, '')).toMatch(/VisualStudioCode/);
     await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
   });
 

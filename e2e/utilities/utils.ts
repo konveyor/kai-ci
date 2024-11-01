@@ -16,12 +16,6 @@ export function getOSInfo(): string {
   }
 }
 
-export function getKAIPluginPath(): string {
-  const vsixFilePath = process.env.VSIX_FILE_PATH;
-  const pluginFilePath = vsixFilePath + getKAIPluginName();
-  return pluginFilePath;
-}
-
 export function getKAIPluginName(): string {
   const vsixFileName =
     process.env.VSIX_FILE_NAME || 'konveyor-linux-0.0.1.vsix';
