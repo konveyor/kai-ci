@@ -15,6 +15,7 @@ test.describe('VSCode Tests', () => {
     const window = vscodeApp.getWindow();
     await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
     const title = await window.title();
+    await window.waitForTimeout(10000); 
     // expect(title.replace(/\s+/g, '')).toMatch(/VisualStudioCode/);
     
   });
@@ -29,7 +30,6 @@ test.describe('VSCode Tests', () => {
       exact: true
     });
     expect(title).toBeTruthy();
-    await window.waitForTimeout(10000); 
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 });
