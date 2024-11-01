@@ -43,7 +43,7 @@ jobs:
         echo "DISPLAY=:99" >> $GITHUB_ENV
     - name: Start D-Bus
       run: |
-        sudo dbus-launch --exit-with-session &
+        dbus-launch --exit-with-session &
     - name: Verify Installation
       run: code --version
 
