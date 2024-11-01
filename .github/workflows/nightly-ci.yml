@@ -66,8 +66,6 @@ jobs:
       # xvfb-run -a npm run test
     - name: Verify Installation
       run: code --version
-    - name: Verbose code
-      run: code --verbose
     - name: Verify VSCode Path
       run: |
         if [ -f /usr/share/code/code ]; then
