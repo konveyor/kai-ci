@@ -71,14 +71,14 @@ jobs:
       run: cp .env.example .env  
     - name: Run Playwright tests
       run: npx playwright test
-    - name: Upload screenshots on failure
-      if: failure()  # This ensures the step runs if any previous step fails
+    - name: Upload screenshots
       uses: actions/upload-artifact@v3
       with:
         name: vscode-screenshots
         path: |
           vscode-initialized-screenshot.png
           kai-installed-screenshot.png
+      if: always()  # This ensures the upload runs regardless of previous step results
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
