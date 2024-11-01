@@ -50,9 +50,6 @@ jobs:
       run: |
         dbus-launch --exit-with-session &
     - name: Test using VS Code
-      # commands before `xvfb-run -a npm run test` avoid these ERROR messages:
-      # - Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-      # - Exiting GPU process due to errors during initialization
       run: |
         sudo service dbus start
         export XDG_RUNTIME_DIR=/run/user/$(id -u)     
@@ -62,19 +59,8 @@ jobs:
         dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
         mkdir ~/.vscode && echo '{ "disable-hardware-acceleration": true }' > ~/.vscode/argv.json
         
-
-      # xvfb-run -a npm run test
     - name: Verify Installation
       run: code --version
-    - name: Verify VSCode Path
-      run: |
-        if [ -f /usr/share/code/code ]; then
-          echo "VSCode is installed at /usr/share/code/code"
-        else
-          echo "VSCode is NOT found at /usr/share/code/code"
-          echo "Listing /usr/share/code:"
-          ls /usr/share/code
-        fi  
     - name: Ensure no VSCode instances are running
       run: |
         pkill -f code || true  # Kills all VSCode processes if they are running
