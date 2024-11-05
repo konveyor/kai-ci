@@ -98,7 +98,7 @@ function addRangePicker() {
                 canvasContainer.id = 'kai-performance-chart';
                 document.getElementById('history-performance').appendChild(canvasContainer);
 
-                KAIPerformanceChart(filteredData);
+                kaiPerformanceChart(filteredData);
             }
         }
     });
@@ -133,7 +133,7 @@ function getMinAndMaxValues(data, key) {
     return [Math.min(...values), Math.max(...values)];
 }
 
-function KAIPerformanceChart(filteredData) {
+function kaiPerformanceChart(filteredData) {
 
     const ctx = document.getElementById('kai-performance-chart').getContext('2d');
 
@@ -491,7 +491,7 @@ async function init() {
     await fetchJson();
     addRangePicker();
     createDatePicker();
-    KAIPerformanceChart(KAIData);
+    kaiPerformanceChart(KAIData);
     pieCharts(KAIData[0].date);
     averageRangesChart(KAIData[0].date);
 }
