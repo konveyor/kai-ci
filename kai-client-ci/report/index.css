@@ -1,0 +1,122 @@
+canvas:hover {
+    cursor: crosshair;
+}
+
+#history-performance {
+    padding: 20px;
+    border: solid #b7b7b7 1px;
+    border-radius: 20px;
+    max-height: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.box-shadow-hover:hover {
+    box-shadow: #00000080 0px 0px 30px -10px;
+    transition: cubic-bezier(0.46, 0.03, 0.52, 0.96) 0.3s
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-color: #ffffff;
+}
+
+#navbar {
+    position: sticky;
+    top: 0;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    z-index: 1000;
+    width: 100%;
+  }
+
+#navbar>h1 {
+    margin: 10px;
+    color: white;
+    font-weight: lighter;
+}
+
+#dashboard {
+    width: 85%;
+    padding: 10px;
+    margin-top: 10px;
+    min-height: 1350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: #6e6e6e;
+}
+
+#date-selector {
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+}
+
+.utils {
+    border-bottom: solid #cbcaca 1px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+#date-range-pick {
+    padding: 10px;
+    min-width: 300px;
+    min-height: 50px;
+    display: inline-block;
+}
+
+.flatpickr-calendar {
+    z-index: 9999 !important;
+    display: block !important;
+}
+
+#single-performance {
+    padding: 20px;
+    border: solid #b7b7b7 1px;
+    border-radius: 20px;
+    margin-top: 10px;
+    z-index: 5;
+}
+
+#single-performace-charts {
+    display: flex;
+    flex-direction: row;
+    min-width: 30%;
+    max-height: 400px;
+    justify-content: center;
+}
+
+#average-ranges-chart {
+    width: 70%;
+}
+
+/* Date input styling */
+input[type="date"],
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Date picker input styling */
+#date-range-input {
+    width: 100%;
+}
+
+#footer {
+    width: 100%;
+    min-height: 200px;
+}
+
+#kai-performance-chart {
+    width: auto;
+    max-height: 500px;
+}

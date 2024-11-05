@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Chart from JSON Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="navbar">
+        <h1>KAI Performance Visualizer</h1>
+    </div>
+    <div id="dashboard">
+        <div id="history-performance" class="box-shadow-hover">
+            <h2>KAI Nightly Performance History Report</h2>
+            <div class="utils">
+                <label>Select Date Range</label>
+                <div id="date-range-pick">
+                    <input id="date-range-input" type="text" placeholder="Select date range" />
+                </div>
+            </div>
+            <canvas id="kai-performance-chart"></canvas>
+        </div>
+        <div id="single-performance" class="box-shadow-hover">
+            <h2>Single Nightly Run Performance</h2>
+            <div class="utils">
+                <label>Select Date</label>
+                <input type="date" id="date-picker" />
+            </div>
+            <div id="single-performace-charts">
+                <canvas id="pies-chart"></canvas>
+                <canvas id="average-ranges-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div id="footer"></div>
+    <script src="./visualizer.js"></script>
+</body>
+
+</html>
