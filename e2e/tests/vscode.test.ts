@@ -21,11 +21,19 @@ test.describe('VSCode Tests', () => {
     const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
     await kaiTab.click();
     await window.waitForTimeout(10000);
-    const title = window.getByRole('heading', {
-      name: 'Konveyor Analysis',
-      exact: true,
-    });
-    expect(title).toBeTruthy();
+    const iframe = await vscodeApp.getLeftIframe();
+    if (iframe) {
+      const heading = await iframe.locator('h1:has-text("Konveyor Analysis")');
+      await expect(heading).toBeVisible();
+    } else {
+      console.log('Iframe with title "Konveyor" not found.');
+    }
+
+    // const title = window.getByRole('heading', {
+    //   name: 'Konveyor Analysis',
+    //   exact: true,
+    // });
+    // expect(title).toBeTruthy();
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 });
