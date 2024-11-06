@@ -25,9 +25,7 @@ test.describe('VSCode Tests', () => {
     if (iframe) {
       const heading = await iframe.locator('h1:has-text("Konveyor Analysis")');
       await expect(heading).toBeVisible();
-    } else {
-      console.log('Iframe with title "Konveyor" not found.');
-    }
+    } 
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 });
