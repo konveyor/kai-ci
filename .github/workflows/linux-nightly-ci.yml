@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: lts/*
     - name: Install vscode dependencies
@@ -71,7 +71,7 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test || true  # Ensures the workflow continues even if tests fail
     - name: Upload screenshots
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: vscode-screenshots
         path: |
