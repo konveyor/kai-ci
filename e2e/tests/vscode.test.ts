@@ -28,12 +28,6 @@ test.describe('VSCode Tests', () => {
     } else {
       console.log('Iframe with title "Konveyor" not found.');
     }
-
-    // const title = window.getByRole('heading', {
-    //   name: 'Konveyor Analysis',
-    //   exact: true,
-    // });
-    // expect(title).toBeTruthy();
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 });
