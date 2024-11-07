@@ -36,7 +36,7 @@ const CHART_COLORS = {
 };
 
 // todo: Update to correct path or env variable
-const gistURL = "https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/20e8598d34ce1f31160a5c08e96d1d8976d8f66f/newData"
+const gistURL = "https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/20f1ad8f184704657829249209d1315abf7e7744/newData"
 
 function createDatePicker() {
     const datePicker = document.getElementById('date-picker');
@@ -134,11 +134,9 @@ function getMinAndMaxValues(data, key) {
 }
 
 function kaiPerformanceChart(filteredData) {
-
     const ctx = document.getElementById('kai-performance-chart').getContext('2d');
 
     formattedDates = formatDatesToLabels(filteredData.map(item => item.date))
-
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -146,7 +144,7 @@ function kaiPerformanceChart(filteredData) {
             datasets: [
                 {
                     label: 'Total Incidents',
-                    data: filteredData.map(item => item.KaiEvalData.TotalIncidents),
+                    data: filteredData.map(item => item.kaiEvalData.length),
                     borderColor: CHART_COLORS.red,
                     backgroundColor: CHART_COLORS.red,
                     borderWidth: 4,
@@ -155,7 +153,7 @@ function kaiPerformanceChart(filteredData) {
                 },
                 {
                     label: 'Average Score',
-                    data: filteredData.map(item => item.KaiEvalData["Average Score"]),
+                    data: filteredData.map(item => item.kaiEvalData.averageScore),
                     borderColor: CHART_COLORS.blue,
                     backgroundColor: CHART_COLORS.blue,
                     borderWidth: 4,
@@ -164,7 +162,7 @@ function kaiPerformanceChart(filteredData) {
                 },
                 {
                     label: 'Average Effectiveness',
-                    data: filteredData.map(item => item.KaiEvalData["Average Effectiveness"]),
+                    data: filteredData.map(item => item.kaiEvalData.averageEffectiveness),
                     borderColor: CHART_COLORS.green,
                     backgroundColor: CHART_COLORS.green,
                     borderWidth: 2,
@@ -172,7 +170,7 @@ function kaiPerformanceChart(filteredData) {
                 },
                 {
                     label: 'Average Specificity',
-                    data: filteredData.map(item => item.KaiEvalData["Average Specificity"]),
+                    data: filteredData.map(item => item.kaiEvalData.averageSpecificity),
                     borderColor: CHART_COLORS.cyan,
                     backgroundColor: CHART_COLORS.cyan,
                     borderWidth: 2,
@@ -181,7 +179,7 @@ function kaiPerformanceChart(filteredData) {
                 },
                 {
                     label: 'Average Reasoning',
-                    data: filteredData.map(item => item.KaiEvalData["Average Reasoning"]),
+                    data: filteredData.map(item => item.kaiEvalData.averageReasoning),
                     borderColor: CHART_COLORS.darkBlue,
                     backgroundColor: CHART_COLORS.darkBlue,
                     borderWidth: 2,
@@ -190,7 +188,7 @@ function kaiPerformanceChart(filteredData) {
                 },
                 {
                     label: 'Average Competency',
-                    data: filteredData.map(item => item.KaiEvalData["Average Competency"]),
+                    data: filteredData.map(item => item.kaiEvalData.averageCompetency),
                     borderColor: CHART_COLORS.purple,
                     backgroundColor: CHART_COLORS.purple,
                     borderWidth: 2,
@@ -200,8 +198,8 @@ function kaiPerformanceChart(filteredData) {
                 {
                     label: 'Valid Code True',
                     data: filteredData.map(obj => {
-                        const totalCount = obj.KaiEvalData.data.reduce((count, data) => {
-                            return data["Valid Code"] === "True" ? count + 1 : count;
+                        const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+                            return data.validCode === true ? count + 1 : count;
                         }, 0);
                         return totalCount;
                     }),
@@ -216,8 +214,8 @@ function kaiPerformanceChart(filteredData) {
                 {
                     label: 'Valid Code False',
                     data: filteredData.map(obj => {
-                        const totalCount = obj.KaiEvalData.data.reduce((count, data) => {
-                            return data["Valid Code"] === "False" ? count + 1 : count;
+                        const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+                            return data.validCode === false ? count + 1 : count;
                         }, 0);
                         return totalCount;
                     }),
@@ -232,8 +230,8 @@ function kaiPerformanceChart(filteredData) {
                 {
                     label: 'Unnecessary Changes True',
                     data: filteredData.map(obj => {
-                        const totalCount = obj.KaiEvalData.data.reduce((count, data) => {
-                            return data["Unnecessary Changes"] === "True" ? count + 1 : count;
+                        const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+                            return data.unnecessaryChanges === true ? count + 1 : count;
                         }, 0);
                         return totalCount;
                     }),
@@ -248,8 +246,8 @@ function kaiPerformanceChart(filteredData) {
                 {
                     label: 'Unnecessary Changes False',
                     data: filteredData.map(obj => {
-                        const totalCount = obj.KaiEvalData.data.reduce((count, data) => {
-                            return data["Unnecessary Changes"] === "False" ? count + 1 : count;
+                        const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+                            return data["unnecessaryChanges"] === false ? count + 1 : count;
                         }, 0);
                         return totalCount;
                     }),
@@ -301,12 +299,14 @@ function pieCharts(selectedDate) {
 
     SelectedKaiData = KAIData.find(item => item.date.includes(selectedDate))
 
-    const [validCodeTrueCount, validCodeFalseCount, unnecessaryChangesCount, necessaryChangesCount] = SelectedKaiData.KaiEvalData.data.reduce(
+    console.log(SelectedKaiData)
+
+    const [validCodeTrueCount, validCodeFalseCount, unnecessaryChangesCount, necessaryChangesCount] = SelectedKaiData.kaiEvalData.data.reduce(
         ([codeTrueCount, codeFalseCount, changesTrueCount, changesFalseCount], item) => [
-            codeTrueCount + (item["Valid Code"] === "True" ? 1 : 0),
-            codeFalseCount + (item["Valid Code"] === "False" ? 1 : 0),
-            changesTrueCount + (item["Unnecessary Changes"] === "True" ? 1 : 0),
-            changesFalseCount + (item["Unnecessary Changes"] === "False" ? 1 : 0)
+            codeTrueCount + (item["validCode"] === true ? 1 : 0),
+            codeFalseCount + (item["validCode"] === false ? 1 : 0),
+            changesTrueCount + (item["unnecessaryChanges"] === true ? 1 : 0),
+            changesFalseCount + (item["unnecessaryChanges"] === false ? 1 : 0)
 
         ], [0, 0, 0, 0]
     );
@@ -391,10 +391,10 @@ function averageRangesChart(selectedDate) {
 
     SelectedKaiData = KAIData.find(item => item.date.includes(selectedDate))
 
-    const effectivenessRange = getMinAndMaxValues(SelectedKaiData.KaiEvalData.data, 'Effectiveness');
-    const specificityRange = getMinAndMaxValues(SelectedKaiData.KaiEvalData.data, 'Specificity');
-    const reasoningRange = getMinAndMaxValues(SelectedKaiData.KaiEvalData.data, 'Reasoning');
-    const competencyRange = getMinAndMaxValues(SelectedKaiData.KaiEvalData.data, 'Competency');
+    const effectivenessRange = getMinAndMaxValues(SelectedKaiData.kaiEvalData.data, 'effectiveness');
+    const specificityRange = getMinAndMaxValues(SelectedKaiData.kaiEvalData.data, 'specificity');
+    const reasoningRange = getMinAndMaxValues(SelectedKaiData.kaiEvalData.data, 'reasoning');
+    const competencyRange = getMinAndMaxValues(SelectedKaiData.kaiEvalData.data, 'competency');
 
     const ctx = document.getElementById('average-ranges-chart').getContext('2d');
 
@@ -437,10 +437,10 @@ function averageRangesChart(selectedDate) {
                 {
                     label: 'Average Value',
                     data: [
-                        SelectedKaiData.KaiEvalData["Average Effectiveness"],
-                        SelectedKaiData.KaiEvalData["Average Specificity"],
-                        SelectedKaiData.KaiEvalData["Average Reasoning"],
-                        SelectedKaiData.KaiEvalData["Average Competency"]
+                        SelectedKaiData.kaiEvalData["averageEffectiveness"],
+                        SelectedKaiData.kaiEvalData["averageSpecificity"],
+                        SelectedKaiData.kaiEvalData["averageReasoning"],
+                        SelectedKaiData.kaiEvalData["averageCompetency"]
                     ],
                     borderColor: 'rgba(0, 0, 0, 1)',
                     backgroundColor: 'rgba(0, 0, 0, 0)',
