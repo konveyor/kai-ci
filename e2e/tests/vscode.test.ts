@@ -34,6 +34,6 @@ test.describe('VSCode Tests', () => {
   });
 
   test.afterAll(async () => {
-    cleanupRepo();
+    await cleanupRepo();
   });
 });
