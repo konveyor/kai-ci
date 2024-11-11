@@ -1,0 +1,8 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+kai-client-ci/.idea
+kai-client-ci/output
+kai-client-ci/fixtures
