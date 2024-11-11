@@ -1,2412 +1,2412 @@
 [
-    {
-        "date": "2024-10-30 13:07:57",
-        "kaiEvalData": [
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 5,
-                "specificity": 5,
-                "reasoning": 5,
-                "competency": 5,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 5.0
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "ejb-multi-server/client/src/main/java/org/jboss/as/quickstarts/ejb/multi/server/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 7,
-                "specificity": 7,
-                "reasoning": 7,
-                "competency": 7,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-context-propagation/src/main/java/org/jboss/as/quickstarts/ejb_security_context_propagation/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
-                "effectiveness": 7,
-                "specificity": 7,
-                "reasoning": 7,
-                "competency": 7,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.0
-            },
-            {
-                "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 7,
-                "specificity": 6,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.25
-            },
-            {
-                "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 6,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.25
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 9,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 9,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            }
-        ]
-    },
-    {
-        "date": "2024-10-30 13:44:32",
-        "kaiEvalData": [
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 5,
-                "specificity": 5,
-                "reasoning": 5,
-                "competency": 5,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 5.0
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "ejb-multi-server/client/src/main/java/org/jboss/as/quickstarts/ejb/multi/server/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 7,
-                "specificity": 7,
-                "reasoning": 7,
-                "competency": 7,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.0
-            },
-            {
-                "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-context-propagation/src/main/java/org/jboss/as/quickstarts/ejb_security_context_propagation/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
-                "effectiveness": 7,
-                "specificity": 7,
-                "reasoning": 7,
-                "competency": 7,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.0
-            },
-            {
-                "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 7,
-                "specificity": 6,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.25
-            },
-            {
-                "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 6,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.25
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 7,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 9,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 9,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.0
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 9,
-                "specificity": 8,
-                "reasoning": 8,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.25
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 7,
-                "competency": 8,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 7.75
-            },
-            {
-                "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
-                "effectiveness": 8,
-                "specificity": 8,
-                "reasoning": 9,
-                "competency": 9,
-                "validCode": false,
-                "unnecessaryChanges": false,
-                "averageScore": 8.5
-            }
-        ]
-    }
+  {
+    "date": "2024-10-30 13:07:57",
+    "kaiEvalData": [
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 5,
+        "specificity": 5,
+        "reasoning": 5,
+        "competency": 5,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 5.0
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "ejb-multi-server/client/src/main/java/org/jboss/as/quickstarts/ejb/multi/server/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 7,
+        "specificity": 7,
+        "reasoning": 7,
+        "competency": 7,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-context-propagation/src/main/java/org/jboss/as/quickstarts/ejb_security_context_propagation/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
+        "effectiveness": 7,
+        "specificity": 7,
+        "reasoning": 7,
+        "competency": 7,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.0
+      },
+      {
+        "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 7,
+        "specificity": 6,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.25
+      },
+      {
+        "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 6,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.25
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 9,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 9,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      }
+    ]
+  },
+  {
+    "date": "2024-10-30 13:44:32",
+    "kaiEvalData": [
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-addressing/client/src/main/java/org/jboss/quickstarts/ws/jaxws/samples/wsa/AddressingClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxws-retail/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 5,
+        "specificity": 5,
+        "reasoning": 5,
+        "competency": 5,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 5.0
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-ejb/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "ejb-multi-server/client/src/main/java/org/jboss/as/quickstarts/ejb/multi/server/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 7,
+        "specificity": 7,
+        "reasoning": 7,
+        "competency": 7,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.0
+      },
+      {
+        "file": "ejb-security-jaas/src/main/java/org/jboss/as/quickstarts/ejb_security_jaas/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-context-propagation/src/main/java/org/jboss/as/quickstarts/ejb_security_context_propagation/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security-programmatic-auth/src/main/java/org/jboss/as/quickstarts/ejb_security_programmatic_auth/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "ejb-security/src/main/java/org/jboss/as/quickstarts/ejb_security/RemoteClient.java",
+        "effectiveness": 7,
+        "specificity": 7,
+        "reasoning": 7,
+        "competency": 7,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.0
+      },
+      {
+        "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 7,
+        "specificity": 6,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.25
+      },
+      {
+        "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxws-pojo/client/src/main/java/org/jboss/quickstarts/ws/client/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 6,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.25
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "helloworld-ws/src/test/java/org/jboss/as/quickstarts/wshelloworld/ClientTest.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "jaxrs-client/src/test/java/org/jboss/as/quickstarts/jaxrsclient/test/ContactsRestClient.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "managed-executor-service/src/test/java/org/jboss/as/quickstarts/managedexecutorservice/test/ProductsRestClientIT.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 7,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsat-simple/src/test/java/org/jboss/as/quickstarts/wsat/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 9,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 9,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-coordinator-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/coordinatorcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.0
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 9,
+        "specificity": 8,
+        "reasoning": 8,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.25
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 7,
+        "competency": 8,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 7.75
+      },
+      {
+        "file": "wsba-participant-completion-simple/src/test/java/org/jboss/as/quickstarts/wsba/participantcompletion/simple/Client.java",
+        "effectiveness": 8,
+        "specificity": 8,
+        "reasoning": 9,
+        "competency": 9,
+        "validCode": false,
+        "unnecessaryChanges": false,
+        "averageScore": 8.5
+      }
+    ]
+  }
 ]
