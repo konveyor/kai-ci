@@ -97,7 +97,6 @@ body {
     width: 70%;
 }
 
-/* Date input styling */
 input[type="date"],
 input[type="text"] {
     padding: 10px;
@@ -106,7 +105,6 @@ input[type="text"] {
     font-size: 1em;
 }
 
-/* Date picker input styling */
 #date-range-input {
     width: 100%;
 }

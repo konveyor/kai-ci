@@ -11,24 +11,18 @@ const CHART_COLORS = {
   darkBlue: 'rgb(0, 0, 139)',
   yellow: 'rgb(255, 205, 86)',
   orange: 'rgb(255, 159, 64)',
-  grey: 'rgb(201, 203, 207)',
-  pink: 'rgb(255, 182, 193)',
 
   // Warm and Muted/Pastel Colors
   lightOrange: 'rgb(255, 200, 112)',
-  lightRed: 'rgb(255, 150, 150)',
   lightBlue: 'rgb(122, 213, 255)',
-  lightBrown: 'rgb(210, 180, 140)',
   lightPurple: 'rgb(199, 171, 255)',
-
+  
   // Transparent colors
   redTransparent: 'rgba(255, 99, 132, 0.5)',
   orangeTransparent: 'rgba(255, 159, 64, 0.5)',
   yellowTransparent: 'rgba(255, 205, 86, 0.5)',
-  greenTransparent: 'rgba(75, 192, 192, 0.5)',
   blueTransparent: 'rgba(54, 162, 235, 0.5)',
   purpleTransparent: 'rgba(153, 102, 255, 0.5)',
-  greyTransparent: 'rgba(201, 203, 207, 0.5)',
   lightBlueTransparent: 'rgb(122, 213, 255, 0.5)',
   lightPurpleTransparent: 'rgb(199, 171, 255, 0.5)',
 };
