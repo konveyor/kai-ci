@@ -416,7 +416,9 @@ function getMinAndMaxValues(data, key) {
 }
 
 function getRangeData(selectedkaiData, keys) {
-  return keys.map(key => getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key));
+  return keys.map((key) =>
+    getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key)
+  );
 }
 
 function averageRangesChart(selectedDate) {
@@ -446,7 +448,7 @@ function averageRangesChart(selectedDate) {
         borderWidth: 1,
         barThickness: 25,
         type: 'bar',
-        base: ranges.map(range => range[0]),
+        base: ranges.map((range) => range[0]),
         order: 0,
       },
       {
