@@ -37,47 +37,50 @@ const CHART_COLORS = {
 const gistURL =
   'https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/c63f7dadc3666533eeca53479ce830ad0a8f45c0/newData';
 
-  function createDatePicker() {
-    const datePicker = document.getElementById('date-picker');
-  
-    const minDate = jsonDates[0];
-    const maxDate = jsonDates[jsonDates.length - 1];
-    datePicker.min = minDate;
-    datePicker.max = maxDate;
-  
-    datePicker.addEventListener('change', (event) => {
-      const selectedDate = event.target.value;
-  
-      if (!jsonDates.includes(selectedDate)) return;
-  
-      resetCanvasElements(['pies-chart', 'average-ranges-chart'], 'single-performace-charts');
-  
-      pieCharts(selectedDate);
-      averageRangesChart(selectedDate);
-    });
-  }
-  
-  function resetCanvasElements(chartIds, containerId) {
-    chartIds.forEach((chartId) => {
-      const existingCanvas = document.getElementById(chartId);
-      if (existingCanvas) {
-        existingCanvas.remove();
-      }
-      const newCanvas = document.createElement('canvas');
-      newCanvas.id = chartId;
-      document.getElementById(containerId).appendChild(newCanvas);
-    });
-  }
+function createDatePicker() {
+  const datePicker = document.getElementById('date-picker');
 
-  function formatDatesToLabels(dates) {
-    return dates.map((dateStr) => {
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    });
-  }
+  const minDate = jsonDates[0];
+  const maxDate = jsonDates[jsonDates.length - 1];
+  datePicker.min = minDate;
+  datePicker.max = maxDate;
 
-function addRangePicker() {
-  flatpickr('#date-range-input', {
+  datePicker.addEventListener('change', (event) => {
+    const selectedDate = event.target.value;
+
+    if (!jsonDates.includes(selectedDate)) return;
+
+    resetCanvasElements(
+      ['pies-chart', 'average-ranges-chart'],
+      'single-performace-charts'
+    );
+
+    pieCharts(selectedDate);
+    averageRangesChart(selectedDate);
+  });
+}
+
+function resetCanvasElements(chartIds, containerId) {
+  chartIds.forEach((chartId) => {
+    const existingCanvas = document.getElementById(chartId);
+    if (existingCanvas) {
+      existingCanvas.remove();
+    }
+    const newCanvas = document.createElement('canvas');
+    newCanvas.id = chartId;
+    document.getElementById(containerId).appendChild(newCanvas);
+  });
+}
+
+function formatDatesToLabels(dates) {
+  return dates.map((dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  });
+}
+
+function addRangePicker(options = {}) {
+  const defaultOptions = {
     mode: 'range',
     dateFormat: 'Y-m-d',
     onClose: function (selectedDates) {
@@ -91,16 +94,15 @@ function addRangePicker() {
         return itemDate >= startDate && itemDate <= endDate;
       });
 
-      document.getElementById('kai-performance-chart').remove();
-      const canvasContainer = document.createElement('canvas');
-      canvasContainer.id = 'kai-performance-chart';
-      document
-        .getElementById('history-performance')
-        .appendChild(canvasContainer);
+      resetCanvasElements(['kai-performance-chart'], 'history-performance');
 
       kaiPerformanceChart(filteredData);
     },
-  });
+  };
+
+  const finalOptions = { ...defaultOptions, ...options };
+
+  flatpickr('#date-range-input', finalOptions);
 }
 
 async function fetchJson() {
@@ -496,13 +498,21 @@ function createChart(chartID, type, data, options) {
   });
 }
 
-async function init() {
-  await fetchJson();
+function initializeComponents() {
   addRangePicker();
   createDatePicker();
+}
+
+function initializeCharts() {
   kaiPerformanceChart(kaiData);
   pieCharts(kaiData[0].date);
   averageRangesChart(kaiData[0].date);
+}
+
+async function init() {
+  await fetchJson();
+  initializeComponents();
+  initializeCharts();
 }
 
 init();
