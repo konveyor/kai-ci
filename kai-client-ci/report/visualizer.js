@@ -376,6 +376,7 @@ function pieCharts(selectedDate) {
       },
       tooltip: {
         callbacks: {
+          title : () => null,
           label: function (context) {
             const label =
               context.chart.data.labels[
