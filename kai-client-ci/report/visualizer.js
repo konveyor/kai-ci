@@ -16,7 +16,7 @@ const CHART_COLORS = {
   lightOrange: 'rgb(255, 200, 112)',
   lightBlue: 'rgb(122, 213, 255)',
   lightPurple: 'rgb(199, 171, 255)',
-  
+
   // Transparent colors
   redTransparent: 'rgba(255, 99, 132, 0.5)',
   orangeTransparent: 'rgba(255, 159, 64, 0.5)',
@@ -131,7 +131,6 @@ function getMinAndMaxValues(data, key) {
 }
 
 function kaiPerformanceChart(filteredData) {
-
   filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   formattedDates = formatDatesToLabels(filteredData.map((item) => item.date));
@@ -370,7 +369,7 @@ function pieCharts(selectedDate) {
       },
       tooltip: {
         callbacks: {
-          title : () => null,
+          title: () => null,
           label: function (context) {
             const label =
               context.chart.data.labels[
