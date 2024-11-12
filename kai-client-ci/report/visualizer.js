@@ -37,38 +37,37 @@ const CHART_COLORS = {
 const gistURL =
   'https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/c63f7dadc3666533eeca53479ce830ad0a8f45c0/newData';
 
-function createDatePicker() {
-  const datePicker = document.getElementById('date-picker');
-
-  const minDate = jsonDates[0];
-  const maxDate = jsonDates[jsonDates.length - 1];
-  datePicker.min = minDate;
-  datePicker.max = maxDate;
-
-  datePicker.addEventListener('change', (event) => {
-    const selectedDate = event.target.value;
-
-    if (!jsonDates.includes(selectedDate)) return;
-
-    document.getElementById('pies-chart').remove();
-    const validCodeCanvas = document.createElement('canvas');
-    validCodeCanvas.id = 'pies-chart';
-
-    document.getElementById('average-ranges-chart').remove();
-    const averageRangesCanvas = document.createElement('canvas');
-    averageRangesCanvas.id = 'average-ranges-chart';
-
-    document
-      .getElementById('single-performace-charts')
-      .appendChild(validCodeCanvas);
-    document
-      .getElementById('single-performace-charts')
-      .appendChild(averageRangesCanvas);
-
-    pieCharts(selectedDate);
-    averageRangesChart(selectedDate);
-  });
-}
+  function createDatePicker() {
+    const datePicker = document.getElementById('date-picker');
+  
+    const minDate = jsonDates[0];
+    const maxDate = jsonDates[jsonDates.length - 1];
+    datePicker.min = minDate;
+    datePicker.max = maxDate;
+  
+    datePicker.addEventListener('change', (event) => {
+      const selectedDate = event.target.value;
+  
+      if (!jsonDates.includes(selectedDate)) return;
+  
+      resetCanvasElements(['pies-chart', 'average-ranges-chart'], 'single-performace-charts');
+  
+      pieCharts(selectedDate);
+      averageRangesChart(selectedDate);
+    });
+  }
+  
+  function resetCanvasElements(chartIds, containerId) {
+    chartIds.forEach((chartId) => {
+      const existingCanvas = document.getElementById(chartId);
+      if (existingCanvas) {
+        existingCanvas.remove();
+      }
+      const newCanvas = document.createElement('canvas');
+      newCanvas.id = chartId;
+      document.getElementById(containerId).appendChild(newCanvas);
+    });
+  }
 
 function formatDatesToLabels(dates) {
   const months = [
