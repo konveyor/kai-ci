@@ -16,7 +16,7 @@ const CHART_COLORS = {
   lightOrange: 'rgb(255, 200, 112)',
   lightBlue: 'rgb(122, 213, 255)',
   lightPurple: 'rgb(199, 171, 255)',
-
+  
   // Transparent colors
   redTransparent: 'rgba(255, 99, 132, 0.5)',
   orangeTransparent: 'rgba(255, 159, 64, 0.5)',
