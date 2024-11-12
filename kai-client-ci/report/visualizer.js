@@ -35,7 +35,7 @@ const CHART_COLORS = {
 
 // todo: Update to correct path or env variable
 const gistURL =
-  'https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/c63f7dadc3666533eeca53479ce830ad0a8f45c0/newData';
+  'https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/857df002b4ac87ccb334baac7e0fc46f18b5e76e/newData';
 
 function createDatePicker() {
   const datePicker = document.getElementById('date-picker');
@@ -137,6 +137,9 @@ function getMinAndMaxValues(data, key) {
 }
 
 function kaiPerformanceChart(filteredData) {
+
+  filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
   formattedDates = formatDatesToLabels(filteredData.map((item) => item.date));
 
   const chartData = {
