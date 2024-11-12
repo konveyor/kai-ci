@@ -69,29 +69,12 @@ const gistURL =
     });
   }
 
-function formatDatesToLabels(dates) {
-  const months = [
-    'Jan',
-    'Feb',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  return dates.map((dateStr) => {
-    const date = new Date(dateStr);
-    const monthName = months[date.getMonth()];
-    const day = date.getDate();
-    return `${monthName} ${day}`;
-  });
-}
+  function formatDatesToLabels(dates) {
+    return dates.map((dateStr) => {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+  }
 
 function addRangePicker() {
   flatpickr('#date-range-input', {
