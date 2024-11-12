@@ -35,7 +35,7 @@ const CHART_COLORS = {
 
 // todo: Update to correct path or env variable
 const gistURL =
-  'https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/20f1ad8f184704657829249209d1315abf7e7744/newData';
+  'https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/c63f7dadc3666533eeca53479ce830ad0a8f45c0/newData';
 
 function createDatePicker() {
   const datePicker = document.getElementById('date-picker');
@@ -410,37 +410,27 @@ function pieCharts(selectedDate) {
   createChart('pies-chart', 'doughnut', chartData, chartOptions);
 }
 
+function getMinAndMaxValues(data, key) {
+  const values = data.map((item) => item[key]);
+  return [Math.min(...values), Math.max(...values)];
+}
+
+function getRangeData(selectedkaiData, keys) {
+  return keys.map(key => getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key));
+}
+
 function averageRangesChart(selectedDate) {
   selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
 
-  const effectivenessRange = getMinAndMaxValues(
-    selectedkaiData.kaiEvalData.data,
-    'effectiveness'
-  );
-  const specificityRange = getMinAndMaxValues(
-    selectedkaiData.kaiEvalData.data,
-    'specificity'
-  );
-  const reasoningRange = getMinAndMaxValues(
-    selectedkaiData.kaiEvalData.data,
-    'reasoning'
-  );
-  const competencyRange = getMinAndMaxValues(
-    selectedkaiData.kaiEvalData.data,
-    'competency'
-  );
+  const keys = ['effectiveness', 'specificity', 'reasoning', 'competency'];
+  const ranges = getRangeData(selectedkaiData, keys);
 
   const chartData = {
     labels: ['Effectiveness', 'Specificity', 'Reasoning', 'Competency'],
     datasets: [
       {
         label: 'Range',
-        data: [
-          effectivenessRange,
-          specificityRange,
-          reasoningRange,
-          competencyRange,
-        ],
+        data: ranges,
         backgroundColor: [
           CHART_COLORS.blueTransparent,
           CHART_COLORS.redTransparent,
@@ -456,12 +446,7 @@ function averageRangesChart(selectedDate) {
         borderWidth: 1,
         barThickness: 25,
         type: 'bar',
-        base: [
-          effectivenessRange.min,
-          specificityRange.min,
-          reasoningRange.min,
-          competencyRange.min,
-        ],
+        base: ranges.map(range => range[0]),
         order: 0,
       },
       {
