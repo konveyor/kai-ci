@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
+import { cleanupRepo } from '../utilities/utils';
+
+// TODO : Get repo URL from fixtures
+const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
 
 test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
@@ -8,7 +12,7 @@ test.describe('VSCode Tests', () => {
     test.setTimeout(60000);
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
-    vscodeApp = await VSCode.init(executablePath);
+    vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
   });
 
   test('Should launch VSCode and check window title', async () => {
@@ -27,5 +31,9 @@ test.describe('VSCode Tests', () => {
       await expect(heading).toBeVisible();
     }
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
+  });
+
+  test.afterAll(async () => {
+    await cleanupRepo();
   });
 });
