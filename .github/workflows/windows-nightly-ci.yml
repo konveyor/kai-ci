@@ -1,0 +1,49 @@
+name: Provision Windows VM using reusable workflow
+
+on: [push]
+
+jobs:
+  run-provisioner-workflow:
+    uses: ./.github/workflows/provision-runner.yml
+    with:
+      ec2-image-id: ami-0b7d4973163feb944
+      ec2-instance-type: t2.micro
+      security-group-id: sg-0a3e6b53e86d0e69d
+      subnet-id: subnet-06113672589e7e836
+      ec2-os-type: windows
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+
+  run-pytest:
+    needs: run-provisioner-workflow
+    runs-on: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
+    steps:
+      - name: Install vscode
+        run: |
+          echo "installing vscode"
+      - name: Clone kai-ci repo
+        run: |
+          mkdir ./kai-ci-temp
+          cd ./kai-ci-temp
+          git clone https://github.com/konveyor/kai-ci.git
+          cd kai-ci
+          echo "repo cloned"
+      - name: Install npm dependencies
+        run: |
+          npm install .
+      - name: Run tests
+        run: |
+          echo "Executing tests"
+
+  remove-ec2-runner:
+    needs: [ run-provisioner-workflow,execute-script ]
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.run-provisioner-workflow.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
