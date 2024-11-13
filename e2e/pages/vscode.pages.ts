@@ -1,13 +1,13 @@
 import {
   _electron as electron,
   ElectronApplication,
-  Frame,
   FrameLocator,
   Page,
 } from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import { getKAIPluginName } from '../utilities/utils';
+import * as path from 'path';
 
 class VSCode {
   private readonly vscodeApp?: ElectronApplication;
@@ -19,10 +19,22 @@ class VSCode {
   }
 
   /**
-   * launches VSCode with KAI plugin installed.
+   * launches VSCode with KAI plugin installed and coolstore app opened.
    * @param executablePath path to the vscode binary
+   * @param repoUrl coolstore app to be cloned
+   * @param cloneDir path to repo
    */
-  public static async init(executablePath: string): Promise<VSCode> {
+  public static async init(
+    executablePath: string,
+    repoUrl: string,
+    cloneDir: string
+  ): Promise<VSCode> {
+    try {
+      execSync(`git clone ${repoUrl}`);
+    } catch (error) {
+      throw new Error('Failed to clone the repository');
+    }
+
     try {
       const vsixFilePath = getKAIPluginName();
       if (vsixFilePath) {
@@ -37,10 +49,10 @@ class VSCode {
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
         executablePath: executablePath,
+        args: [path.resolve(cloneDir)],
       });
 
       const window = await vscodeApp.firstWindow();
-
       return new VSCode(vscodeApp, window);
     } catch (error) {
       console.error('Error launching VSCode:', error);
