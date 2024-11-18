@@ -135,6 +135,25 @@ class VSCode {
     console.log('Iframe with title "Konveyor" not found.');
     return null;
   }
+
+  /**
+   * Opens command palette by doing ctrl+shift+P
+   * and then typing "Welcome" and then "Set Up".
+   */
+  public async openSetUpKonveyor() {
+    const window = this.getWindow();
+    await window.keyboard.press('Control+Shift+P');
+    await window.waitForTimeout(1000);
+
+    await window.keyboard.type('welcome: open walkthrough');
+    await window.waitForTimeout(500);
+
+    await window.keyboard.press('Enter');
+    await window.waitForTimeout(500);
+
+    await window.keyboard.type('set up konveyor');
+    await window.keyboard.press('Enter');
+  }
 }
 
 export { VSCode };
