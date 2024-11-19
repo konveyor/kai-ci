@@ -36,6 +36,7 @@ jobs:
       - name: Run tests
         run: |
           echo "Executing tests"
+          npx playwright test
 
   remove-ec2-runner:
     needs: [ run-provisioner-workflow,execute-script ]
