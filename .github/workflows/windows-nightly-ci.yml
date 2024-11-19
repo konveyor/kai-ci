@@ -39,7 +39,7 @@ jobs:
           npx playwright test
 
   remove-ec2-runner:
-    needs: [ run-provisioner-workflow,execute-script ]
+    needs: [ run-provisioner-workflow,run-tests ]
     uses: ./.github/workflows/remove-runner.yml
     with:
       ec2-instance-id: ${{ needs.run-provisioner-workflow.outputs.ec2-instance-id }}
