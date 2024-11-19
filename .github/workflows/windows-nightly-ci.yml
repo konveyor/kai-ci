@@ -20,22 +20,36 @@ jobs:
     needs: run-provisioner-workflow
     runs-on: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
     steps:
-      - name: Install vscode
+      - name: Install dependencies
         run: |
-          echo "installing vscode"
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https
+
+      - name: Install Visual Studio Code
+        run: |
+          wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+          sudo install -o root -g root -m 644 packages.microsoft.gpg /usr/share/keyrings/
+          sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+          rm -f packages.microsoft.gpg
+          sudo apt-get update
+          sudo apt-get install -y code
+
+      - name: Check VSCode installation
+        run: code --version
+
       - name: Clone kai-ci repo
         run: |
           mkdir ./kai-ci-temp
           cd ./kai-ci-temp
           git clone https://github.com/konveyor/kai-ci.git
           cd kai-ci
-          echo "repo cloned"
+
       - name: Install npm dependencies
         run: |
           npm install .
+
       - name: Run tests
         run: |
-          echo "Executing tests"
           npx playwright test
 
   remove-ec2-runner:
