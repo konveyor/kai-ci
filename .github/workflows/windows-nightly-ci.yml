@@ -20,19 +20,11 @@ jobs:
     needs: run-provisioner-workflow
     runs-on: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
     steps:
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget apt-transport-https
 
       - name: Install Visual Studio Code
         run: |
-          wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-          sudo install -o root -g root -m 644 packages.microsoft.gpg /usr/share/keyrings/
-          sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-          rm -f packages.microsoft.gpg
-          sudo apt-get update
-          sudo apt-get install -y code
+          Invoke-WebRequest -Uri "https://update.code.visualstudio.com/latest/win32-x64-user/stable" -OutFile "$env:TEMP\vscode-installer.exe"
+          Start-Process -FilePath "$env:TEMP\vscode-installer.exe" -ArgumentList "/silent" -Wait
 
       - name: Check VSCode installation
         run: code --version
