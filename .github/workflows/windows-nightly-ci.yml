@@ -16,7 +16,7 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
-  run-pytest:
+  run-tests:
     needs: run-provisioner-workflow
     runs-on: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
     steps:
