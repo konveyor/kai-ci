@@ -21,10 +21,12 @@ jobs:
     runs-on: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
     steps:
 
-      - name: Install Visual Studio Code using winget
+      - name: Install Visual Studio Code
         shell: powershell
         run: |
-          winget install -e --id Microsoft.VisualStudioCode -h --silent
+          $InstallerPath = "C:\vscode-installer.exe"
+          Invoke-WebRequest -Uri "https://update.code.visualstudio.com/latest/win32-x64-user/stable" -OutFile $InstallerPath
+          Start-Process -FilePath $InstallerPath -ArgumentList "/silent" -Wait
 
       - name: Check VSCode installation
         shell: powershell
