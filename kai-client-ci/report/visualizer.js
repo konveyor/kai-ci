@@ -25,9 +25,8 @@ const CHART_COLORS = {
   lightPurpleTransparent: 'rgb(199, 171, 255, 0.5)',
 };
 
-// todo: Update to correct path or env variable
-const gistURL =
-  'https://gist.githubusercontent.com/midays/c6e40aac77cbecf8b9a92849bd3393ca/raw/857df002b4ac87ccb334baac7e0fc46f18b5e76e/newData';
+const kaiPerformanceJSON =
+  'https://raw.githubusercontent.com/konveyor/kai-ci/refs/heads/main/kai-client-ci/output/report.json';
 
 function createDatePicker() {
   const datePicker = document.getElementById('date-picker');
@@ -101,7 +100,7 @@ async function fetchJson() {
   const retries = 3;
   while (retries > 0) {
     try {
-      const response = await fetch(gistURL);
+      const response = await fetch(kaiPerformanceJSON);
       if (!response.ok) {
         throw new Error(
           'Network Error, failed to fetch the evaluation data file'
