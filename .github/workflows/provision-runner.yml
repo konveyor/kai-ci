@@ -79,3 +79,14 @@ jobs:
         run: |
           echo "EC2 Instance ID: ${{ steps.ec2.outputs.ec2-instance-id }}"
           echo "Label : ${{ steps.ec2.outputs.label }}"
+
+      - name: Install winget (Windows only)
+        if: ${{ inputs.ec2-os-type == 'windows' }}
+        shell: powershell
+        run: |
+          $InstallerUrl = "https://aka.ms/MicrosoftAppInstaller"
+          $InstallerPath = "C:\appinstaller.appxbundle"
+          Invoke-WebRequest -Uri $InstallerUrl -OutFile $InstallerPath
+          Add-AppxPackage -Path $InstallerPath
+          # Wait for winget to be available
+          Start-Sleep -Seconds 10

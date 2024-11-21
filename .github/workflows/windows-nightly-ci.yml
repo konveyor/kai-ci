@@ -24,25 +24,7 @@ jobs:
       - name: Install Visual Studio Code
         shell: powershell
         run: |
-          $InstallerPath = "C:\vscode-installer.exe"
-          $Uri = "https://update.code.visualstudio.com/latest/win32-x64-user/stable"
-          $RetryCount = 0
-          $MaxRetries = 3
-          $Success = $false
-          
-          while (-not $Success -and $RetryCount -lt $MaxRetries) {
-          try {
-          Invoke-WebRequest -Uri $Uri -OutFile $InstallerPath -TimeoutSec 60
-          $Success = $true
-          } catch {
-            $RetryCount++
-            Write-Output "Download failed. Retry $RetryCount of $MaxRetries..."
-            Start-Sleep -Seconds 10
-          }
-            }
-            if (-not $Success) {
-              throw "Failed to download VSCode installer after $MaxRetries attempts."
-            }
+          winget install -e --id Microsoft.VisualStudioCode
 
       - name: Check VSCode installation
         shell: powershell
