@@ -22,12 +22,12 @@ jobs:
     steps:
 
       - name: Install Visual Studio Code using winget
-        shell: pwsh
+        shell: powershell
         run: |
           winget install -e --id Microsoft.VisualStudioCode -h --silent
 
       - name: Check VSCode installation
-        shell: pwsh
+        shell: powershell
         run: code --version
 
       - name: Clone kai-ci repo
