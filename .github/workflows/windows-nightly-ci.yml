@@ -21,11 +21,16 @@ jobs:
     runs-on: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
     steps:
 
+      - name: Check Env PATH variable
+        shell: pwsh
+        run: echo $env:PATH
+
       - name: Check VSCode installation
-        shell: powershell
+        shell: pwsh
         run: code --version
 
       - name: Clone kai-ci repo
+        shell: pwsh
         run: |
           mkdir ./kai-ci-temp
           cd ./kai-ci-temp
@@ -33,10 +38,12 @@ jobs:
           cd kai-ci
 
       - name: Install npm dependencies
+        shell: pwsh
         run: |
           npm install .
 
       - name: Run tests
+        shell: pwsh
         run: |
           npx playwright test
 
