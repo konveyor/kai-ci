@@ -21,11 +21,6 @@ jobs:
     runs-on: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
     steps:
 
-      - name: Install Visual Studio Code
-        shell: powershell
-        run: |
-          winget install -e --id Microsoft.VisualStudioCode
-
       - name: Check VSCode installation
         shell: powershell
         run: code --version
