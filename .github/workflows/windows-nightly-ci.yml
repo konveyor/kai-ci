@@ -36,9 +36,8 @@ jobs:
         run: choco install nodejs -y
         shell: powershell
 
-      - name: Add VSCode to PATH
-        run: |
-          $env:PATH = "C:\Program Files\Microsoft VS Code;$env:PATH"
+      - name: Refresh Environment Variables
+        run: refreshenv
         shell: powershell
 
       - name: Check Env PATH variable
