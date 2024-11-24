@@ -22,15 +22,15 @@ jobs:
     steps:
 
       - name: Check Env PATH variable
-        shell: pwsh
+        shell: powershell
         run: echo $env:PATH
 
       - name: Check VSCode installation
-        shell: pwsh
+        shell: powershell
         run: code --version
 
       - name: Clone kai-ci repo
-        shell: pwsh
+        shell: powershell
         run: |
           mkdir ./kai-ci-temp
           cd ./kai-ci-temp
@@ -38,12 +38,12 @@ jobs:
           cd kai-ci
 
       - name: Install npm dependencies
-        shell: pwsh
+        shell: powershell
         run: |
           npm install .
 
       - name: Run tests
-        shell: pwsh
+        shell: powershell
         run: |
           npx playwright test
 
