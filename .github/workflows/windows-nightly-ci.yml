@@ -47,14 +47,14 @@ jobs:
         run: |
           npx playwright test
 
-#  remove-ec2-runner:
-#    needs: [ run-provisioner-workflow,run-tests ]
-#    if: always()
-#    uses: ./.github/workflows/remove-runner.yml
-#    with:
-#      ec2-instance-id: ${{ needs.run-provisioner-workflow.outputs.ec2-instance-id }}
-#      ec2-runner-label: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
-#    secrets:
-#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  remove-ec2-runner:
+    needs: [ run-provisioner-workflow,run-tests ]
+    if: always()
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.run-provisioner-workflow.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.run-provisioner-workflow.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
