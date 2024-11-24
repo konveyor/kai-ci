@@ -21,26 +21,20 @@ jobs:
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
 
-#      - name: Install Chocolatey
-#        run: |
-#          Set-ExecutionPolicy Bypass -Scope Process -Force;
-#          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-#          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-#        shell: powershell
-#
-#      - name: Install VSCode
-#        run: choco install vscode -y
-#        shell: powershell
-#
-#      - name: Install Node.js
-#        run: choco install nodejs -y
-#        shell: powershell
-#
-#      - name: Verify Installations
-#        run: |
-#          code --version
-#          node --version
-#        shell: powershell
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        shell: powershell
+
+      - name: Install VSCode
+        run: choco install vscode -y
+        shell: powershell
+
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
 
       - name: Add VSCode to PATH
         run: |
@@ -51,9 +45,11 @@ jobs:
         shell: powershell
         run: echo $env:PATH
 
-      - name: Check VSCode installation
+      - name: Verify Installation
+        run: |
+          code --version
+          node --version
         shell: powershell
-        run: code --version
 
       - name: Clone kai-ci repo
         shell: powershell
