@@ -79,3 +79,24 @@ jobs:
         run: |
           echo "EC2 Instance ID: ${{ steps.ec2.outputs.ec2-instance-id }}"
           echo "Label : ${{ steps.ec2.outputs.label }}"
+
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force; 
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; 
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        shell: powershell
+
+      - name: Install VSCode
+        run: choco install vscode -y
+        shell: powershell
+
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
+
+      - name: Verify Installations
+        run: |
+          code --version
+          node --version
+        shell: powershell
