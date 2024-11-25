@@ -36,13 +36,18 @@ jobs:
 #        run: choco install nodejs -y
 #        shell: powershell
 
+#      - name: Update PATH for VSCode
+#        shell: powershell
+#        run: |
+#          $env:PATH += ";C:\Program Files\Microsoft VS Code\bin"
+
       - name: Check Env PATH variable
         shell: powershell
         run: echo $env:PATH
 
       - name: Verify Installation
         run: |
-          code --version
+          & "C:\Program Files\Microsoft VS Code\bin\code" --version
           node --version
         shell: powershell
 
