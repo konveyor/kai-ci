@@ -62,7 +62,7 @@ jobs:
           mkdir ./kai-ci-temp
           cd ./kai-ci-temp
           git clone https://github.com/konveyor/kai-ci.git
-          cd kai-ci
+          cd ./kai-ci
 
       - name: Install npm dependencies
         shell: powershell
