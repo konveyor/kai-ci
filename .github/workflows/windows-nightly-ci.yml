@@ -36,26 +36,11 @@ jobs:
         run: choco install nodejs -y
         shell: powershell
 
-      - name: Add VSCode and Node.js Manually to PATH
+      - name: Import Chocolatey Profile and Refresh Environment
         shell: powershell
         run: |
-          $nodePath = 'C:\Program Files\nodejs'
-          if (-Not (Test-Path $nodePath)) {
-            Write-Error "Node.js installation path not found at: $nodePath"
-            exit 1
-          }
-          $env:PATH += ";$nodePath"
-          
-          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
-          if (-Not (Test-Path $vscodePath)) {
-            Write-Error "VSCode installation path not found at: $vscodePath"
-            exit 1
-          }
-          $env:PATH += ";$vscodePath"
-      
-          # Set the updated PATH variable at Machine level
-          [System.Environment]::SetEnvironmentVariable('PATH', $env:PATH, [System.EnvironmentVariableTarget]::Machine)
-          echo $env:PATH
+          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+          refreshenv
 
       - name: Check Env PATH variable
         shell: powershell
