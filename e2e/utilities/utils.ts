@@ -32,7 +32,13 @@ export function getKAIPluginName(): string {
 export async function cleanupRepo() {
   if (fs.existsSync(repoDir)) {
     try {
-      await execPromise(`rm -rf "${repoDir}"`);
+      if (getOSInfo() == 'windows') {
+        await execPromise(
+          `powershell.exe Remove-Item -Recurse -Force "${repoDir}"`
+        );
+      } else {
+        await execPromise(`rm -rf "${repoDir}"`);
+      }
     } catch (error) {
       console.error('Error while cleaning up cloned repository:', error);
     }
