@@ -36,24 +36,42 @@ jobs:
         run: choco install nodejs -y
         shell: powershell
 
-      - name: Update PATH for VSCode
+      - name: Add VSCode and Node.js Manually to PATH
         shell: powershell
         run: |
-          $env:PATH += ";C:\Program Files\Microsoft VS Code\bin"
-
-      - name: Refresh PATH after Node.js Installation
-        run: refreshenv
-        shell: powershell
+          $nodePath = 'C:\Program Files\nodejs'
+          if (-Not (Test-Path $nodePath)) {
+            Write-Error "Node.js installation path not found at: $nodePath"
+            exit 1
+          }
+          $env:PATH += ";$nodePath"
+          
+          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
+          if (-Not (Test-Path $vscodePath)) {
+            Write-Error "VSCode installation path not found at: $vscodePath"
+            exit 1
+          }
+          $env:PATH += ";$vscodePath"
+      
+          # Set the updated PATH variable at Machine level
+          [System.Environment]::SetEnvironmentVariable('PATH', $env:PATH, [System.EnvironmentVariableTarget]::Machine)
+          echo $env:PATH
 
       - name: Check Env PATH variable
         shell: powershell
         run: echo $env:PATH
 
-      - name: Verify Installation
-        run: |
-          & "C:\Program Files\Microsoft VS Code\bin\code" --version
-          & "C:\Program Files\nodejs\node.exe" --version
+#      - name: Verify Installation
+#        run: |
+#          & "C:\Program Files\Microsoft VS Code\bin\code" --version
+#          & "C:\Program Files\nodejs\node.exe" --version
+#        shell: powershell
+
+      - name: Verify VSCode and Node.js Installation
         shell: powershell
+        run: |
+          code --version
+          node --version
 
       - name: Clone kai-ci repo
         shell: powershell
