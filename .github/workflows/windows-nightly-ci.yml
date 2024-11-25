@@ -57,23 +57,29 @@ jobs:
           # Export the paths so they can be used in subsequent steps
           "NODE_PATH=$nodePath" | Out-File -FilePath $env:GITHUB_ENV -Append
           "VSCODE_PATH=$vscodePath" | Out-File -FilePath $env:GITHUB_ENV -Append
+          
+          # Also update PATH so that Node.js, npm, npx, and VSCode can be called directly
+          $newPath = "$env:PATH;$nodePath;$vscodePath"
+          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
+          # Persist the updated PATH to make it available for subsequent steps
+          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
 
 #      - name: Check Env PATH variable
 #        shell: powershell
 #        run: echo $env:PATH
 
-      - name: Verify Installation
-        run: |
-          & "C:\Program Files\Microsoft VS Code\bin\code" --version
-          & "C:\Program Files\nodejs\node.exe" --version
-        shell: powershell
+#      - name: Verify VSCode and Node.js Installation
+#        shell: powershell
+#        run: |
+#          # Use the exported paths
+#          & "$env:VSCODE_PATH\code.exe" --version
+#          & "$env:NODE_PATH\node.exe" --version
 
       - name: Verify VSCode and Node.js Installation
         shell: powershell
         run: |
-          # Use the exported paths
-          & "$env:VSCODE_PATH\code.exe" --version
-          & "$env:NODE_PATH\node.exe" --version
+          code --version
+          node --version
 
       - name: Clone kai-ci repo
         shell: powershell
