@@ -36,44 +36,19 @@ jobs:
         run: choco install nodejs -y
         shell: powershell
 
-      - name: Define and Export Node.js and VSCode Paths
+      - name: Define Node.js and VSCode Paths
         shell: powershell
         run: |
-          # Define local variables for paths
+          
           $nodePath = 'C:\Program Files\nodejs'
           $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
           
-          # Check Node.js Path
-          if (-Not (Test-Path $nodePath)) {
-          Write-Error "Node.js installation path not found at: $nodePath"
-          exit 1
-          }
-          # Check VSCode Path
-          if (-Not (Test-Path $vscodePath)) {
-          Write-Error "VSCode installation path not found at: $vscodePath"
-          exit 1
-          }
-          
-          # Export the paths so they can be used in subsequent steps
-          "NODE_PATH=$nodePath" | Out-File -FilePath $env:GITHUB_ENV -Append
-          "VSCODE_PATH=$vscodePath" | Out-File -FilePath $env:GITHUB_ENV -Append
-          
-          # Also update PATH so that Node.js, npm, npx, and VSCode can be called directly
+          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
           $newPath = "$env:PATH;$nodePath;$vscodePath"
           [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
+          
           # Persist the updated PATH to make it available for subsequent steps
           "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-#      - name: Check Env PATH variable
-#        shell: powershell
-#        run: echo $env:PATH
-
-#      - name: Verify VSCode and Node.js Installation
-#        shell: powershell
-#        run: |
-#          # Use the exported paths
-#          & "$env:VSCODE_PATH\code.exe" --version
-#          & "$env:NODE_PATH\node.exe" --version
 
       - name: Verify VSCode and Node.js Installation
         shell: powershell
@@ -92,7 +67,7 @@ jobs:
       - name: Install npm dependencies
         shell: powershell
         run: |
-          & "$env:NODE_PATH\npm.cmd" install .
+          npm install .
 
       - name: Run tests
         shell: powershell
