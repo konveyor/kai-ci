@@ -55,6 +55,11 @@ jobs:
         run: |
           code --version
           node --version
+      - name: Close All VSCode Instances
+        shell: powershell
+        run: |
+          # Close all running instances of VSCode
+          Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
 
       - name: Clone kai-ci repo
         shell: powershell
