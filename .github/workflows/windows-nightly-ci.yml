@@ -21,25 +21,25 @@ jobs:
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
 
-#      - name: Install Chocolatey
-#        run: |
-#          Set-ExecutionPolicy Bypass -Scope Process -Force;
-#          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-#          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-#        shell: powershell
-#
-#      - name: Install VSCode
-#        run: choco install vscode -y
-#        shell: powershell
-#
-#      - name: Install Node.js
-#        run: choco install nodejs -y
-#        shell: powershell
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        shell: powershell
 
-#      - name: Update PATH for VSCode
-#        shell: powershell
-#        run: |
-#          $env:PATH += ";C:\Program Files\Microsoft VS Code\bin"
+      - name: Install VSCode
+        run: choco install vscode -y
+        shell: powershell
+
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
+
+      - name: Update PATH for VSCode
+        shell: powershell
+        run: |
+          $env:PATH += ";C:\Program Files\Microsoft VS Code\bin"
 
       - name: Check Env PATH variable
         shell: powershell
