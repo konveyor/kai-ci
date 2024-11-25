@@ -81,7 +81,7 @@ jobs:
         working-directory: ./kai-ci-temp/kai-ci
         run: |
           Copy-Item -Path .env.example -Destination .env
-          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/bin/Code.exe'" | Set-Content .env
+          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" | Set-Content .env
 
       - name: Run tests
         shell: powershell
@@ -108,6 +108,11 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+      - name: Clean Up Temporary Directory
+        shell: powershell
+        run: |
+          Remove-Item -Recurse -Force ./kai-ci-temp
 
 
   stop-ec2-instance:
