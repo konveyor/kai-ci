@@ -52,7 +52,7 @@ def rename_extracted_folder(base_folder, target_folder_name):
 def clone_repository(app_name, repository_url, branch):
     clone_dir = os.path.join('data', f'{app_name}')
     git.Repo.clone_from(repository_url, clone_dir, branch=branch)
-    logger.info(f"Repository {app_name} cloned into 'data' with branch 'main'")
+    logger.info(f"Repository {app_name} {branch} cloned into 'data'")
 
 
 def unzip_file(zip_path, extract_folder):
