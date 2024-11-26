@@ -113,6 +113,7 @@ jobs:
         shell: powershell
         run: |
           Remove-Item -Recurse -Force ./kai-ci-temp
+        if: always()
 
 
   stop-ec2-instance:
