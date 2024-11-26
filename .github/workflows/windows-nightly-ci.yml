@@ -109,7 +109,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Clean Up Temporary Directory
+      - name: Clean Up Kai Temp Directory
         shell: powershell
         run: |
           Remove-Item -Recurse -Force ./kai-ci-temp
