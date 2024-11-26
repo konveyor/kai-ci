@@ -16,28 +16,42 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
 
-  configure-instance:
+#  configure-instance:
+#    needs: start-ec2-instance
+#    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+#    env:
+#      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+#    steps:
+#      - name: Set nonadmin user password and configure auto-login
+#        shell: powershell
+#        run: |
+#          # Enable nonadmin user and set password
+#          net user nonadmin /active:yes
+#          net user nonadmin $env:NONADMIN_PASSWORD
+#
+#          # Set nonadmin as default login and enable auto login
+#          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultUserName" -Value "nonadmin" -Force
+#          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value "1" -Force
+
+
+  run-tests:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     env:
       NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
     steps:
-      - name: Set nonadmin user password and configure auto-login
+
+      - name: Set nonadmin Password
         shell: powershell
         run: |
-          # Enable nonadmin user and set password
-          net user nonadmin /active:yes
-          net user nonadmin $env:NONADMIN_PASSWORD
+          net user nonadmin $env:NONADMIN_PASSWORD  
 
-          # Set nonadmin as default login and enable auto login
-          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultUserName" -Value "nonadmin" -Force
-          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value "1" -Force
-
-
-  run-tests:
-    needs: [start-ec2-instance, configure-instance]
-    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
-    steps:
+      - name: Switch to nonadmin User
+        shell: powershell
+        run: |
+          $password = ConvertTo-SecureString -String $env:NONADMIN_PASSWORD -AsPlainText -Force
+          $credential = New-Object System.Management.Automation.PSCredential('nonadmin', $password)
+          Start-Process -FilePath "powershell.exe" -ArgumentList "-NoExit" -Credential $credential
 
 #      - name: Install Chocolatey
 #        run: |
