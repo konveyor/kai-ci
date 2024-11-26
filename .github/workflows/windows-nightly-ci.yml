@@ -37,50 +37,50 @@ jobs:
   run-tests:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
-    env:
-      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+#    env:
+#      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
     steps:
 
-      - name: Set nonadmin Password
-        shell: powershell
-        run: |
-          net user nonadmin $env:NONADMIN_PASSWORD  
-
-      - name: Switch to nonadmin User
-        shell: powershell
-        run: |
-          $password = ConvertTo-SecureString -String $env:NONADMIN_PASSWORD -AsPlainText -Force
-          $credential = New-Object System.Management.Automation.PSCredential('nonadmin', $password)
-          Start-Process -FilePath "powershell.exe" -ArgumentList "-NoExit" -Credential $credential
-
-#      - name: Install Chocolatey
-#        run: |
-#          Set-ExecutionPolicy Bypass -Scope Process -Force;
-#          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-#          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-#        shell: powershell
-#
-#      - name: Install VSCode
-#        run: choco install vscode -y
-#        shell: powershell
-#
-#      - name: Install Node.js
-#        run: choco install nodejs -y
-#        shell: powershell
-#
-#      - name: Define Node.js and VSCode Paths
+#      - name: Set nonadmin Password
 #        shell: powershell
 #        run: |
+#          net user nonadmin $env:NONADMIN_PASSWORD
 #
-#          $nodePath = 'C:\Program Files\nodejs'
-#          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
-#
-#          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
-#          $newPath = "$env:PATH;$nodePath;$vscodePath"
-#          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
-#
-#          # Persist the updated PATH to make it available for subsequent steps
-#          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+#      - name: Switch to nonadmin User
+#        shell: powershell
+#        run: |
+#          $password = ConvertTo-SecureString -String $env:NONADMIN_PASSWORD -AsPlainText -Force
+#          $credential = New-Object System.Management.Automation.PSCredential('nonadmin', $password)
+#          Start-Process powershell -ArgumentList "-NoExit -Command `"Set-ExecutionPolicy Bypass -Scope Process; Invoke-Expression -Command .\test_script.ps1`"" -Credential $credential
+
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        shell: powershell
+
+      - name: Install VSCode
+        run: choco install vscode -y
+        shell: powershell
+
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
+
+      - name: Define Node.js and VSCode Paths
+        shell: powershell
+        run: |
+
+          $nodePath = 'C:\Program Files\nodejs'
+          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
+
+          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
+          $newPath = "$env:PATH;$nodePath;$vscodePath"
+          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
+
+          # Persist the updated PATH to make it available for subsequent steps
+          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Print PATH Environment Variable
         shell: powershell
