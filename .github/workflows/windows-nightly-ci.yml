@@ -15,6 +15,7 @@ jobs:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+
   configure-instance:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
@@ -34,7 +35,7 @@ jobs:
 
 
   run-tests:
-    needs: start-ec2-instance
+    needs: configure-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
 
