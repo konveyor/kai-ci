@@ -15,7 +15,7 @@ jobs:
         <powershell>
         # Enable nonadmin user, set it as the default login, and set its password
         net user nonadmin /active:yes
-        net user nonadmin ${{ secrets.NONADMIN_PASSWORD }}
+        net user nonadmin Dog8code
         New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultUserName" -Value "nonadmin" -Force
         </powershell>
     secrets:
