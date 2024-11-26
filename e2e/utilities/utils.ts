@@ -32,7 +32,7 @@ export function getKAIPluginName(): string {
 export async function cleanupRepo() {
   if (fs.existsSync(repoDir)) {
     try {
-      await execPromise(`rm -rf "${repoDir}"`);
+      fs.rmSync(repoDir, { recursive: true, force: true });
     } catch (error) {
       console.error('Error while cleaning up cloned repository:', error);
     }
