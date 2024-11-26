@@ -35,7 +35,7 @@ jobs:
 
 
   run-tests:
-    needs: configure-instance
+    needs: [start-ec2-instance, configure-instance]
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
 
