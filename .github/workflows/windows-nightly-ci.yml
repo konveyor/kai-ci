@@ -67,30 +67,35 @@ jobs:
           # Close all running instances of VSCode
           Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
 
+      - name: Create Temporary Work Directory
+        shell: powershell
+        run: |
+          # Creating a directory outside System32 for better permissions
+          New-Item -Path "C:\actions-runner\work" -ItemType Directory -Force
+
       - name: Clone kai-ci repo
         shell: powershell
         run: |
-          mkdir ./kai-ci-temp
-          cd ./kai-ci-temp
+          cd C:\actions-runner\work
           git clone https://github.com/konveyor/kai-ci.git
 
       - name: Install npm dependencies
         shell: powershell
-        working-directory: ./kai-ci-temp/kai-ci
+        working-directory: C:\actions-runner\work\kai-ci
         run: |
           npm install .
           npm ci
 
       - name: Copy .env.example to .env and update executable path
         shell: powershell
-        working-directory: ./kai-ci-temp/kai-ci
+        working-directory: C:\actions-runner\work\kai-ci
         run: |
           Copy-Item -Path .env.example -Destination .env
           (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" | Set-Content .env
 
       - name: Run tests
         shell: powershell
-        working-directory: ./kai-ci-temp/kai-ci
+        working-directory: C:\actions-runner\work\kai-ci
         run: |
           try {
             npx playwright test  
@@ -117,7 +122,7 @@ jobs:
       - name: Clean Up Kai Temp Directory
         shell: powershell
         run: |
-          Remove-Item -Recurse -Force ./kai-ci-temp
+          Remove-Item -Recurse -Force C:\actions-runner\work\kai-ci
         if: always()
 
 
