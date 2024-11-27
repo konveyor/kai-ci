@@ -100,13 +100,20 @@ jobs:
           NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
         run: |
           # Stop the GitHub Actions Runner service
-          Stop-Service actions.runner.*
+          $serviceName = Get-Service -Name 'actions.runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+          
+          if (-not $serviceName) {
+            Write-Error "GitHub Actions runner service not found."
+            exit 1
+          }
+
+          # Stop the GitHub Actions Runner service
+          Stop-Service -Name $serviceName -Force
 
           # Update the service to use the nonadmin user credentials
-          $serviceName = Get-Service | Where-Object { $_.Name -like 'actions.runner.*' } | Select-Object -ExpandProperty Name
           $username = "nonadmin"
           $password = $env:NONADMIN_PASSWORD
           sc.exe config $serviceName obj= ".\$username" password= "$password"
 
           # Start the GitHub Actions Runner service again
-          Start-Service $serviceName
+          Start-Service -Name $serviceName
