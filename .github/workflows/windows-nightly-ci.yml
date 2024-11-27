@@ -41,7 +41,7 @@ jobs:
         run: |
 
           $nodePath = 'C:\Program Files\nodejs'
-          $vscodePath = 'C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe'
+          $vscodePath = 'C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/'
 
           # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
           $newPath = "$env:PATH;$nodePath;$vscodePath"
