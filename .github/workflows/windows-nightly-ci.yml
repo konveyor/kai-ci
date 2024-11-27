@@ -16,143 +16,75 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
 
-#  configure-instance:
-#    needs: start-ec2-instance
-#    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    env:
-#      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
-#    steps:
-#      - name: Set nonadmin user password and configure auto-login
-#        shell: powershell
-#        run: |
-#          # Enable nonadmin user and set password
-#          net user nonadmin /active:yes
-#          net user nonadmin $env:NONADMIN_PASSWORD
-#
-#          # Set nonadmin as default login and enable auto login
-#          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultUserName" -Value "nonadmin" -Force
-#          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value "1" -Force
-
-
   run-tests:
-    needs: start-ec2-instance
+    needs: [start-ec2-instance]
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    env:
-#      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+    env:
+      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
     steps:
-
-#      - name: Set nonadmin Password
-#        shell: powershell
-#        run: |
-#          net user nonadmin $env:NONADMIN_PASSWORD
-#
-#      - name: Switch to nonadmin User
-#        shell: powershell
-#        run: |
-#          $password = ConvertTo-SecureString -String $env:NONADMIN_PASSWORD -AsPlainText -Force
-#          $credential = New-Object System.Management.Automation.PSCredential('nonadmin', $password)
-#          Start-Process powershell -ArgumentList "-NoExit -Command `"Set-ExecutionPolicy Bypass -Scope Process; Invoke-Expression -Command .\test_script.ps1`"" -Credential $credential
-
-      - name: Install Chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-        shell: powershell
-
-      - name: Install VSCode
-        run: choco install vscode -y
-        shell: powershell
-
-      - name: Install Node.js
-        run: choco install nodejs -y
-        shell: powershell
-
-      - name: Define Node.js and VSCode Paths
+      - name: Create Temporary Working Directory
         shell: powershell
         run: |
+          # Create a new directory under C:\Users\Public\work which doesn't require elevated permissions
+          New-Item -Path 'C:\Users\Public\work' -ItemType Directory -Force
 
-          $nodePath = 'C:\Program Files\nodejs'
-          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
-
-          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
-          $newPath = "$env:PATH;$nodePath;$vscodePath"
-          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
-
-          # Persist the updated PATH to make it available for subsequent steps
-          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-      - name: Print PATH Environment Variable
+      - name: Run Commands as Non-Admin User in Single PowerShell Session
         shell: powershell
+        working-directory: C:\Users\Public\work
         run: |
-          Write-Output "Updated PATH: $env:PATH"
+# Define the password as a secure string
+          $password = ConvertTo-SecureString -String $env:NONADMIN_PASSWORD -AsPlainText -Force
+# Create a credential object
+          $credential = New-Object System.Management.Automation.PSCredential('nonadmin', $password)
+          
+# Start a new PowerShell session as the non-admin user and execute all commands
+          Start-Process powershell -Credential $credential -ArgumentList '-NoExit -Command "
+# Set Execution Policy and install Chocolatey
+            Set-ExecutionPolicy Bypass -Scope Process;
+            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+            iex ((New-Object System.Net.WebClient).DownloadString(''https://community.chocolatey.org/install.ps1''));
+          
+            # Install VSCode
+#            choco install vscode -y;
 
-      - name: Verify VSCode and Node.js Installation
-        shell: powershell
-        run: |
-          code --version
-          node --version
+            # Install Node.js
+#            choco install nodejs -y;
 
-      - name: Close All VSCode Instances
-        shell: powershell
-        run: |
-          # Close all running instances of VSCode
-          Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
+            # Define Node.js and VSCode Paths
+#            $nodePath = ''C:\Program Files\nodejs'';
+#            $vscodePath = ''C:\Program Files\Microsoft VS Code\bin'';
+#            $newPath = "$env:PATH;$nodePath;$vscodePath";
+#            [System.Environment]::SetEnvironmentVariable(''PATH'', $newPath, [System.EnvironmentVariableTarget]::Process);
+#            "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append;
 
-      - name: Clone kai-ci repo
-        shell: powershell
-        run: |
-          mkdir ./kai-ci-temp
-          cd ./kai-ci-temp
-          git clone https://github.com/konveyor/kai-ci.git
-
-      - name: Install npm dependencies
-        shell: powershell
-        working-directory: ./kai-ci-temp/kai-ci
-        run: |
-          npm install .
-          npm ci
-
-      - name: Copy .env.example to .env and update executable path
-        shell: powershell
-        working-directory: ./kai-ci-temp/kai-ci
-        run: |
-          Copy-Item -Path .env.example -Destination .env
-          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" | Set-Content .env
-
-      - name: Run tests
-        shell: powershell
-        working-directory: ./kai-ci-temp/kai-ci
-        run: |
-          try {
-            npx playwright test  
-          } catch {
-            Write-Host "Playwright tests failed, but continuing workflow." # to continue running even if the tests run fail
-          }
-
-      - name: Upload screenshots
-        uses: actions/upload-artifact@v4
-        with:
-          name: vscode-screenshots
-          path: |
-            vscode-initialized-screenshot.png
-            kai-installed-screenshot.png
-        if: always()
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
-
-      - name: Clean Up Kai Temp Directory
-        shell: powershell
-        run: |
-          Remove-Item -Recurse -Force ./kai-ci-temp
-        if: always()
-
-
+            # Verify VSCode and Node.js Installation
+            code --version;
+            node --version;
+          
+            # Clone kai-ci Repo
+            mkdir ./kai-ci-temp;
+            cd ./kai-ci-temp;
+            git clone https://github.com/konveyor/kai-ci.git;
+          
+            # Run Tests
+            cd kai-ci;
+            npm install .;
+            npm ci;
+               
+            # copy .ev.example to .env
+            Copy-Item -Path .env.example -Destination .env
+            (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe'" | Set-Content .env
+               
+            # run tests
+            try {
+              npx playwright test;
+            } catch {
+              Write-Host ''Playwright tests failed, but continuing workflow.'';
+            }
+          
+          # Clean up Temporary Working Directory
+            Remove-Item -Recurse -Force C:\Users\Public\work;
+          "'
   stop-ec2-instance:
     needs: [ start-ec2-instance,run-tests ]
     if: always()
