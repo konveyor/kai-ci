@@ -90,13 +90,16 @@ jobs:
           NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
         run: |
           try {
-            # List all services to debug what services are running
-            Write-Output "Listing all available services to find the GitHub Actions Runner service..."
+            # List all services with detailed information to identify the runner service
+            Write-Output "Listing all available services to identify the GitHub Actions Runner service..."
             Get-Service | Select-Object Name, DisplayName, Status, StartName
 
-            # Attempt to find the GitHub Actions Runner service more reliably
-            $serviceName = Get-Service | Where-Object { $_.Name -like '*actions.runner*' } | Select-Object -ExpandProperty Name
-
+            # Attempt to find the GitHub Actions Runner service with a more generalized matching
+            Write-Output "Attempting to find the GitHub Actions Runner service..."
+            $serviceName = Get-Service | Where-Object {
+                $_.DisplayName -like '*GitHub*Runner*' -or $_.Name -like '*actions.runner*' 
+            } | Select-Object -ExpandProperty Name -First 1
+          
             if (-not $serviceName) {
               Write-Error "GitHub Actions runner service not found."
               exit 1
