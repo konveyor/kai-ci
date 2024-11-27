@@ -79,3 +79,34 @@ jobs:
         run: |
           echo "EC2 Instance ID: ${{ steps.ec2.outputs.ec2-instance-id }}"
           echo "Label : ${{ steps.ec2.outputs.label }}"
+
+  configure-ec2:
+    needs: provision-ec2
+    runs-on: ${{ needs.provision-ec2.outputs.label }}
+    steps:
+      - name: Set Default Login to Non-Admin User (Windows Specific)
+        if: ${{ inputs.ec2-os-type == 'windows' }}
+        shell: powershell
+        run: |
+          # Enable nonadmin user and set as default login
+          net user nonadmin /active:yes
+          reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d nonadmin /f
+          reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
+
+      - name: Configure GitHub Runner Service to Run as Non-Admin User
+        if: ${{ inputs.ec2-os-type == 'windows' }}
+        shell: powershell
+        env:
+          NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
+        run: |
+          # Stop the GitHub Actions Runner service
+          Stop-Service actions.runner.*
+
+          # Update the service to use the nonadmin user credentials
+          $serviceName = Get-Service | Where-Object { $_.Name -like 'actions.runner.*' } | Select-Object -ExpandProperty Name
+          $username = "nonadmin"
+          $password = $env:NONADMIN_PASSWORD
+          sc.exe config $serviceName obj= ".\$username" password= "$password"
+
+          # Start the GitHub Actions Runner service again
+          Start-Service $serviceName

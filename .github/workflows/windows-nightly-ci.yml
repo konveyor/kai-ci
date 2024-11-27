@@ -16,71 +16,39 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
 
-#  configure-instance:
-#    needs: start-ec2-instance
-#    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    env:
-#      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
-#    steps:
-#      - name: Set nonadmin user password and configure auto-login
-#        shell: powershell
-#        run: |
-#          # Enable nonadmin user and set password
-#          net user nonadmin /active:yes
-#          net user nonadmin $env:NONADMIN_PASSWORD
-#
-#          # Set nonadmin as default login and enable auto login
-#          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultUserName" -Value "nonadmin" -Force
-#          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value "1" -Force
-
-
   run-tests:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    env:
-#      NONADMIN_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
     steps:
 
-#      - name: Set nonadmin Password
-#        shell: powershell
+#      - name: Install Chocolatey
 #        run: |
-#          net user nonadmin $env:NONADMIN_PASSWORD
+#          Set-ExecutionPolicy Bypass -Scope Process -Force;
+#          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+#          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+#        shell: powershell
 #
-#      - name: Switch to nonadmin User
+#      - name: Install VSCode
+#        run: choco install vscode -y
+#        shell: powershell
+#
+#      - name: Install Node.js
+#        run: choco install nodejs -y
+#        shell: powershell
+#
+#      - name: Define Node.js and VSCode Paths
 #        shell: powershell
 #        run: |
-#          $password = ConvertTo-SecureString -String $env:NONADMIN_PASSWORD -AsPlainText -Force
-#          $credential = New-Object System.Management.Automation.PSCredential('nonadmin', $password)
-#          Start-Process powershell -ArgumentList "-NoExit -Command `"Set-ExecutionPolicy Bypass -Scope Process; Invoke-Expression -Command .\test_script.ps1`"" -Credential $credential
-
-      - name: Install Chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-        shell: powershell
-
-      - name: Install VSCode
-        run: choco install vscode -y
-        shell: powershell
-
-      - name: Install Node.js
-        run: choco install nodejs -y
-        shell: powershell
-
-      - name: Define Node.js and VSCode Paths
-        shell: powershell
-        run: |
-
-          $nodePath = 'C:\Program Files\nodejs'
-          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
-
-          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
-          $newPath = "$env:PATH;$nodePath;$vscodePath"
-          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
-
-          # Persist the updated PATH to make it available for subsequent steps
-          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+#
+#          $nodePath = 'C:\Program Files\nodejs'
+#          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
+#
+#          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
+#          $newPath = "$env:PATH;$nodePath;$vscodePath"
+#          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
+#
+#          # Persist the updated PATH to make it available for subsequent steps
+#          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Print PATH Environment Variable
         shell: powershell
