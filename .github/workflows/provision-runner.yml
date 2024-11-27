@@ -94,14 +94,14 @@ jobs:
             Write-Output "Listing all available services to identify the GitHub Actions Runner service..."
             Get-Service | Select-Object Name, DisplayName, Status, StartName
 
-            # Attempt to find the GitHub Actions Runner service with a more generalized matching
+            # Attempt to find the GitHub Actions Runner service with a broader match
             Write-Output "Attempting to find the GitHub Actions Runner service..."
             $serviceName = Get-Service | Where-Object {
-                $_.DisplayName -like '*GitHub*Runner*' -or $_.Name -like '*actions.runner*' 
+                ($_.DisplayName -like '*GitHub*Runner*') -or ($_.Name -like '*actions.runner*') -or ($_.DisplayName -like '*actions*') -or ($_.Name -like '*runner*')
             } | Select-Object -ExpandProperty Name -First 1
           
             if (-not $serviceName) {
-              Write-Error "GitHub Actions runner service not found."
+              Write-Error "GitHub Actions runner service not found. Please verify the runner service name."
               exit 1
             }
 
