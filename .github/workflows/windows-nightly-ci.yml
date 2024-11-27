@@ -21,64 +21,65 @@ jobs:
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
 
-#      - name: Install Chocolatey
-#        run: |
-#          Set-ExecutionPolicy Bypass -Scope Process -Force;
-#          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-#          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-#        shell: powershell
-#
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        shell: powershell
+
 #      - name: Install VSCode
 #        run: choco install vscode -y
 #        shell: powershell
-#
-#      - name: Install Node.js
-#        run: choco install nodejs -y
-#        shell: powershell
-#
-#      - name: Define Node.js and VSCode Paths
-#        shell: powershell
-#        run: |
-#
-#          $nodePath = 'C:\Program Files\nodejs'
-#          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
-#
-#          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
-#          $newPath = "$env:PATH;$nodePath;$vscodePath"
-#          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
-#
-#          # Persist the updated PATH to make it available for subsequent steps
-#          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Check Visual Studio Code and Node.js Installation Paths
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
+#
+      - name: Define Node.js and VSCode Paths
         shell: powershell
         run: |
-          # Check if Visual Studio Code is installed and print the installation path
-          $vscodePaths = @(
-              'C:\Program Files\Microsoft VS Code\Code.exe',
-              'C:\Users\*\AppData\Local\Programs\Microsoft VS Code\Code.exe'
-          )
 
-          $vscodeInstalled = $false
-          foreach ($path in $vscodePaths) {
-              $resolvedPaths = Get-ChildItem -Path $path -ErrorAction SilentlyContinue
-              foreach ($resolvedPath in $resolvedPaths) {
-                  Write-Output "VSCode is installed at: $($resolvedPath.FullName)"
-                  $vscodeInstalled = $true
-              }
-          }
+          $nodePath = 'C:\Program Files\nodejs'
+          $vscodePath = 'C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe'
 
-          if (-not $vscodeInstalled) {
-              Write-Output "VSCode is not installed."
-          }
+          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
+          $newPath = "$env:PATH;$nodePath;$vscodePath"
+          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
 
-          # Check if Node.js is installed and print the installation path
-          try {
-              $nodejsPath = (& where.exe node)
-              Write-Output "Node.js is installed at: $nodejsPath"
-          } catch {
-              Write-Output "Node.js is not installed."
-          }
+          # Persist the updated PATH to make it available for subsequent steps
+          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+#      - name: Check Visual Studio Code and Node.js Installation Paths
+#        shell: powershell
+#        run: |
+#          # Check if Visual Studio Code is installed and print the installation path
+#          $vscodePaths = @(
+#              'C:\Program Files\Microsoft VS Code\Code.exe',
+#              'C:\Users\*\AppData\Local\Programs\Microsoft VS Code\Code.exe'
+#          )
+#
+#          $vscodeInstalled = $false
+#
+#          foreach ($path in $vscodePaths) {
+#              $resolvedPaths = Get-ChildItem -Path $path -ErrorAction SilentlyContinue
+#              foreach ($resolvedPath in $resolvedPaths) {
+#                  Write-Output "VSCode is installed at: $($resolvedPath.FullName)"
+#                  $vscodeInstalled = $true
+#              }
+#          }
+#
+#          if (-not $vscodeInstalled) {
+#              Write-Output "VSCode is not installed."
+#          }
+#
+#          # Check if Node.js is installed and print the installation path
+#          try {
+#              $nodejsPath = (& where.exe node)
+#              Write-Output "Node.js is installed at: $nodejsPath"
+#          } catch {
+#              Write-Output "Node.js is not installed."
+#          }
 
       - name: Print Current Logged-In User
         shell: powershell
