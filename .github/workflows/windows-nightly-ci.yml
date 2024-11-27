@@ -81,12 +81,10 @@ jobs:
 #              Write-Output "Node.js is not installed."
 #          }
 
-      - name: Print Current Logged-In User
+      - name: Verify Current User
         shell: powershell
         run: |
-          # Print the current logged-in user
-          Write-Output "Current User: $(whoami)"
-          Write-Output "Environment User: $env:USERNAME"
+          whoami
 
       - name: Print PATH Environment Variable
         shell: powershell
