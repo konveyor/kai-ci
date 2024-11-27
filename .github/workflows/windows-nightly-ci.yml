@@ -28,6 +28,54 @@ jobs:
           # Create a new directory under C:\Users\Public\work which doesn't require elevated permissions
           New-Item -Path 'C:\Users\Public\work' -ItemType Directory -Force
 
+      - name: Create Script File for Commands
+        shell: powershell
+        working-directory: C:\Users\Public\work
+        run: |
+          $scriptContent = @'
+          # Set Execution Policy and install Chocolatey
+          Set-ExecutionPolicy Bypass -Scope Process;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          # iex ((New-Object System.Net.WebClient).DownloadString(''https://community.chocolatey.org/install.ps1''));
+          
+          # Install VSCode
+          # choco install vscode -y;
+          
+          # Install Node.js
+          # choco install nodejs -y;
+          
+          # Define Node.js and VSCode Paths
+          # $nodePath = ''C:\Program Files\nodejs'';
+          # $vscodePath = ''C:\Program Files\Microsoft VS Code\bin'';
+          # $newPath = "$env:PATH;$nodePath;$vscodePath";
+          # [System.Environment]::SetEnvironmentVariable(''PATH'', $newPath, [System.EnvironmentVariableTarget]::Process);
+          # "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append;
+          
+          # Verify VSCode and Node.js Installation
+          code --version;
+          node --version;
+          
+          # Clone kai-ci Repo
+          mkdir ./kai-ci-temp;
+          cd ./kai-ci-temp;
+          git clone https://github.com/konveyor/kai-ci.git;
+          
+          # Run Tests
+          cd kai-ci;
+          npm install .;
+          npm ci;
+          try {
+            npx playwright test;
+          } catch {
+            Write-Host ''Playwright tests failed, but continuing workflow.'';
+          }
+          
+          # Clean up Temporary Working Directory
+          Remove-Item -Recurse -Force C:\Users\Public\work;
+          '@
+          
+          $scriptContent | Out-File -FilePath C:\Users\Public\work\run_commands.ps1 -Force
+
       - name: Run Commands as Non-Admin User in Single PowerShell Session
         shell: powershell
         working-directory: C:\Users\Public\work
@@ -37,54 +85,10 @@ jobs:
           # Create a credential object
           $credential = New-Object System.Management.Automation.PSCredential('nonadmin', $password)
           
-          # Start a new PowerShell session as the non-admin user and execute all commands
-          Start-Process powershell -Credential $credential -ArgumentList '-NoExit -Command "
-          # Set Execution Policy and install Chocolatey
-          Set-ExecutionPolicy Bypass -Scope Process;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-          iex ((New-Object System.Net.WebClient).DownloadString(''https://community.chocolatey.org/install.ps1''));
-          
-          # Install VSCode
-          #choco install vscode -y;
+          # Start a new PowerShell session as the non-admin user and execute the script
+          Start-Process powershell -Credential $credential -ArgumentList '-NoExit -File C:\Users\Public\work\run_commands.ps1'
 
-          # Install Node.js
-          #choco install nodejs -y;
 
-          # Define Node.js and VSCode Paths
-          #$nodePath = ''C:\Program Files\nodejs'';
-          #$vscodePath = ''C:\Program Files\Microsoft VS Code\bin'';
-          #$newPath = "$env:PATH;$nodePath;$vscodePath";
-          #[System.Environment]::SetEnvironmentVariable(''PATH'', $newPath, [System.EnvironmentVariableTarget]::Process);
-          #"PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append;
-
-          # Verify VSCode and Node.js Installation
-          code --version;
-          node --version;
-        
-          # Clone kai-ci Repo
-          mkdir ./kai-ci-temp;
-          cd ./kai-ci-temp;
-          git clone https://github.com/konveyor/kai-ci.git;
-        
-          # Run Tests
-          cd kai-ci;
-          npm install .;
-          npm ci;
-             
-          # copy .ev.example to .env
-          Copy-Item -Path .env.example -Destination .env
-          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe'" | Set-Content .env
-             
-          # run tests
-          try {
-            npx playwright test;
-          } catch {
-            Write-Host ''Playwright tests failed, but continuing workflow.'';
-          }
-        
-          #Clean up Temporary Working Directory
-          Remove-Item -Recurse -Force C:\Users\Public\work;
-          "'
   stop-ec2-instance:
     needs: [ start-ec2-instance,run-tests ]
     if: always()
