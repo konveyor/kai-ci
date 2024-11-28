@@ -115,6 +115,7 @@ jobs:
         run: |
           cd C:\actions-runner\work
           git clone https://github.com/konveyor/kai-ci.git
+          cd ./kai-ci
           git checkout windows-vm
 
       - name: Install npm dependencies
