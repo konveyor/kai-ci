@@ -9,10 +9,11 @@ test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
 
   test.beforeAll(async () => {
-    test.setTimeout(60000);
-    const executablePath =
-      process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
-    vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
+    if (!vscodeApp) {
+      test.setTimeout(60000);
+      const executablePath = process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
+      vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
+    }
   });
 
   test('Should launch VSCode and check window title', async () => {
