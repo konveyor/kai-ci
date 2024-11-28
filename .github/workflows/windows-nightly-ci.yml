@@ -128,7 +128,9 @@ jobs:
         working-directory: C:\actions-runner\work\kai-ci
         run: |
           Copy-Item -Path .env.example -Destination .env
-          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" | Set-Content .env
+          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" |
+          ForEach-Object { $_ -replace "DEFAULT_VSIX_DOWNLOAD_URL=.*", "DEFAULT_VSIX_DOWNLOAD_URL='https://github.com/konveyor/editor-extensions/releases/download/v0.0.1-dev%2B20241022/konveyor-windows-0.0.1.vsix'" } |
+          Set-Content .env
 
       - name: Run tests
         shell: powershell
