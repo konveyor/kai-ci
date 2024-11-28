@@ -1,4 +1,4 @@
-name: Provision Windows VM using reusable workflow
+name: Windows Nightly Run
 
 on: [push]
 
@@ -82,10 +82,6 @@ jobs:
 #              Write-Output "Node.js is not installed."
 #          }
 
-#      - name: Verify Current User
-#        shell: powershell
-#        run: |
-#          whoami
 
       - name: Print PATH Environment Variable
         shell: powershell
