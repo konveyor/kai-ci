@@ -136,11 +136,7 @@ jobs:
         shell: powershell
         working-directory: C:\actions-runner\work\kai-ci
         run: |
-          try {
-            npx playwright test  
-          } catch {
-            Write-Host "Playwright tests failed, but continuing workflow." # to continue running even if the tests run fail
-          }
+          npx playwright test  
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
