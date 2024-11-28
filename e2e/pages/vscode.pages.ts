@@ -83,7 +83,7 @@ class VSCode {
 
       // Check if extension is already installed
       const installedExtensions = execSync('code --list-extensions').toString();
-      if (!installedExtensions.includes('konveyor-windows')) {
+      if (!installedExtensions.includes('konveyor')) {
         execSync(`code --install-extension "${vsixFilePath}"`, { stdio: 'inherit' });
         console.log('Extension installed successfully.');
 
