@@ -42,9 +42,9 @@ class VSCode {
           const basePath = process.cwd();
           vsixFilePath = path.resolve(basePath, vsixFilePath);
         }
-
         console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
         await VSCode.installExtensionFromVSIX(vsixFilePath);
+        await new Promise(resolve => setTimeout(resolve, 5000));
       } else {
         console.warn(
           'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
