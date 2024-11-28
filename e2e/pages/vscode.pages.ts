@@ -38,7 +38,6 @@ class VSCode {
     try {
       let vsixFilePath = getKAIPluginName();
       if (vsixFilePath) {
-
         if (getOSInfo() == 'windows') {
           const basePath = process.cwd();
           vsixFilePath = path.resolve(basePath, vsixFilePath);
