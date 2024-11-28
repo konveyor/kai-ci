@@ -82,10 +82,10 @@ jobs:
 #              Write-Output "Node.js is not installed."
 #          }
 
-      - name: Verify Current User
-        shell: powershell
-        run: |
-          whoami
+#      - name: Verify Current User
+#        shell: powershell
+#        run: |
+#          whoami
 
       - name: Print PATH Environment Variable
         shell: powershell
@@ -147,22 +147,22 @@ jobs:
         with:
           name: vscode-screenshots
           path: |
-            vscode-initialized-screenshot.png
-            kai-installed-screenshot.png
+            C:\actions-runner\work\kai-ci\vscode-initialized-screenshot.png
+            C:\actions-runner\work\kai-ci\kai-installed-screenshot.png
         if: always()
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: test-results
-          path: test-results/
+          name: playwright-report
+          path: C:\actions-runner\work\kai-ci\playwright-report\
           retention-days: 30
 
-      - name: Clean Up Kai Temp Directory
-        shell: powershell
-        run: |
-          Remove-Item -Recurse -Force C:\actions-runner\work\kai-ci
-        if: always()
+#      - name: Clean Up Kai Temp Directory
+#        shell: powershell
+#        run: |
+#          Remove-Item -Recurse -Force C:\actions-runner
+#        if: always()
 
 
 #  stop-ec2-instance:
