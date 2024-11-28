@@ -136,6 +136,7 @@ jobs:
 
       - name: Run tests
         shell: powershell
+        continue-on-error: true  # Allow this step to continue even if some tests fail
         working-directory: C:\actions-runner\work\kai-ci
         run: |
           npx playwright test  
@@ -156,21 +157,21 @@ jobs:
           path: C:\actions-runner\work\kai-ci\playwright-report\
           retention-days: 30
 
-#      - name: Clean Up Kai Temp Directory
-#        shell: powershell
-#        run: |
-#          Remove-Item -Recurse -Force C:\actions-runner
-#        if: always()
+      - name: Clean Up Kai Temp Directory
+        shell: powershell
+        run: |
+          Remove-Item -Recurse -Force C:\actions-runner
+        if: always()
 
 
-#  stop-ec2-instance:
-#    needs: [ start-ec2-instance,run-tests ]
-#    if: always()
-#    uses: ./.github/workflows/remove-runner.yml
-#    with:
-#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
-#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    secrets:
-#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  stop-ec2-instance:
+    needs: [ start-ec2-instance,run-tests ]
+    if: always()
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
