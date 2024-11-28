@@ -6,7 +6,7 @@ import {
 } from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
-import { getKAIPluginName } from '../utilities/utils';
+import { getKAIPluginName, getOSInfo } from '../utilities/utils';
 import * as path from 'path';
 
 class VSCode {
@@ -36,8 +36,14 @@ class VSCode {
     }
 
     try {
-      const vsixFilePath = getKAIPluginName();
+      let vsixFilePath = getKAIPluginName();
       if (vsixFilePath) {
+
+        if (getOSInfo() == 'windows') {
+          const basePath = process.cwd();
+          vsixFilePath = path.resolve(basePath, vsixFilePath);
+        }
+
         console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
         await VSCode.installExtensionFromVSIX(vsixFilePath);
       } else {
