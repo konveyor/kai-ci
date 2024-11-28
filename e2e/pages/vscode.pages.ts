@@ -85,7 +85,6 @@ class VSCode {
       const installedExtensions = execSync('code --list-extensions').toString();
       if (!installedExtensions.includes('konveyor')) {
         execSync(`code --install-extension "${vsixFilePath}"`, { stdio: 'inherit' });
-        execSync(`code --force-reload`, { stdio: 'inherit' });  // Reload VSCode to pick up new extensions
         console.log('Extension installed successfully.');
 
         // Adding delay to ensure the extension loads
