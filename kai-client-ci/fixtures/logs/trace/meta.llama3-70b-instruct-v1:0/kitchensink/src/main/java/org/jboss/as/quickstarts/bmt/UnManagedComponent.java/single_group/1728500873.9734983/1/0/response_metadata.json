@@ -1,0 +1,9 @@
+{
+    "usage": {
+        "prompt_tokens": 6952,
+        "completion_tokens": 1,
+        "total_tokens": 6953
+    },
+    "stop_reason": "stop",
+    "model_id": "meta.llama3-70b-instruct-v1:0"
+}
