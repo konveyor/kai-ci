@@ -95,7 +95,7 @@ jobs:
           try {
             # Initial delay to allow the GitHub Actions Runner service to start
             Write-Output "Waiting for GitHub Actions Runner service to initialize..."
-            Start-Sleep -Seconds 30
+            Start-Sleep -Seconds 90
 
             # Inform about stopping the GitHub Actions Runner service
             Write-Output "Stopping GitHub Actions Runner service..."
@@ -108,13 +108,15 @@ jobs:
             # Loop until the service is successfully reconfigured or maximum retries are reached
             while (-not $success -and $retryCount -lt $maxRetries) {
               try {
-                # Get the GitHub Actions Runner service name
-                $serviceName = Get-Service -Name 'actions.runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+                # Get the GitHub Actions Runner service name dynamically using wildcard
+                $serviceName = Get-Service -Name '*actions.runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
           
-                # If the service is not found, retry after a delay
+                # If the service is not found, print available services and retry after a delay
                 if (-not $serviceName) {
-                  Write-Error "GitHub Actions runner service not found. Retrying in 20 seconds..."
-                  Start-Sleep -Seconds 20
+                  Write-Error "GitHub Actions runner service not found. Printing available services..."
+                  Get-Service | Select-Object -Property Name, Status
+                  Write-Error "Retrying in 30 seconds..."
+                  Start-Sleep -Seconds 30
                   $retryCount++
                   continue
                 }
@@ -142,12 +144,12 @@ jobs:
                 } else {
                   Write-Output "Service is not running as nonadmin, retrying..."
                   $retryCount++
-                  Start-Sleep -Seconds 20
+                  Start-Sleep -Seconds 30
                 }
               } catch {
                 # Handle errors during reconfiguration and retry
-                Write-Output "An error occurred: $_.Exception.Message. Retrying in 20 seconds..."
-                Start-Sleep -Seconds 20
+                Write-Output "An error occurred: $_.Exception.Message. Retrying in 30 seconds..."
+                Start-Sleep -Seconds 30
                 $retryCount++
               }
             }
