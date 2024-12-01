@@ -93,52 +93,71 @@ jobs:
           NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
         run: |
           try {
+            # Initial delay to allow the GitHub Actions Runner service to start
+            Write-Output "Waiting for GitHub Actions Runner service to initialize..."
+            Start-Sleep -Seconds 30
+
+            # Inform about stopping the GitHub Actions Runner service
             Write-Output "Stopping GitHub Actions Runner service..."
+          
+            # Initialize retry count and max retry values for attempts to stop and reconfigure the service
             $retryCount = 0
             $maxRetries = 5
             $success = $false
 
+            # Loop until the service is successfully reconfigured or maximum retries are reached
             while (-not $success -and $retryCount -lt $maxRetries) {
               try {
+                # Get the GitHub Actions Runner service name
                 $serviceName = Get-Service -Name 'actions.runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+          
+                # If the service is not found, retry after a delay
                 if (-not $serviceName) {
-                  Write-Error "GitHub Actions runner service not found. Retrying in 10 seconds..."
-                  Start-Sleep -Seconds 10
+                  Write-Error "GitHub Actions runner service not found. Retrying in 20 seconds..."
+                  Start-Sleep -Seconds 20
                   $retryCount++
                   continue
                 }
 
+                # Stop the runner service forcefully
                 Stop-Service -Name $serviceName -Force
                 Write-Output "Service stopped: $serviceName"
 
+                # Reconfigure the service to use the non-admin user credentials
                 Write-Output "Reconfiguring the service to use nonadmin user..."
                 sc.exe config $serviceName obj= ".\nonadmin" password= "$env:NONADMIN_PASSWORD"
                 Write-Output "Service reconfiguration command executed."
 
+                # Start the GitHub Actions Runner service again
                 Start-Service -Name $serviceName
                 Write-Output "Service restarted successfully."
 
+                # Verify that the service is running under the non-admin user
                 $updatedService = Get-Service -Name $serviceName | Select-Object Name, StartName
                 Write-Output "Service details: $($updatedService.Name) - Running as $($updatedService.StartName)"
 
-                if ($updatedService.StartName -eq ".\\nonadmin") {
+                # Set success flag if the service is running as non-admin
+                if ($updatedService.StartName -eq ".\nonadmin") {
                   $success = $true
                 } else {
                   Write-Output "Service is not running as nonadmin, retrying..."
                   $retryCount++
-                  Start-Sleep -Seconds 10
+                  Start-Sleep -Seconds 20
                 }
               } catch {
-                Write-Output "An error occurred: $_.Exception.Message. Retrying in 10 seconds..."
-                Start-Sleep -Seconds 10
+                # Handle errors during reconfiguration and retry
+                Write-Output "An error occurred: $_.Exception.Message. Retrying in 20 seconds..."
+                Start-Sleep -Seconds 20
                 $retryCount++
               }
             }
 
+            # Throw an error if reconfiguration fails after all retries
             if (-not $success) {
               throw "Failed to configure the runner service to run as nonadmin user after $maxRetries retries."
             }
           } catch {
+            # Handle the case where reconfiguration fails completely
             Write-Host "Failed to configure the runner service: $_.Exception.Message"
             exit 1
           }
