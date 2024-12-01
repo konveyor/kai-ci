@@ -97,6 +97,22 @@ jobs:
             Write-Output "Waiting for GitHub Actions Runner service to initialize..."
             Start-Sleep -Seconds 90
 
+            # Print the current user context
+            Write-Output "Current User Context:"
+            whoami
+
+            # Print all available services after initial wait
+            Write-Output "Listing all services after initial wait:"
+            Get-Service | Select-Object -Property Name, Status
+
+            # Print the GitHub Actions runner installation directory
+            Write-Output "Checking runner installation directory..."
+            Get-ChildItem -Path "C:\actions-runner" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName, Name
+
+            # Print all running processes to check for runner process
+            Write-Output "Listing all running processes to identify runner..."
+            Get-Process | Select-Object -Property Id, ProcessName
+
             # Inform about stopping the GitHub Actions Runner service
             Write-Output "Stopping GitHub Actions Runner service..."
           
@@ -108,8 +124,8 @@ jobs:
             # Loop until the service is successfully reconfigured or maximum retries are reached
             while (-not $success -and $retryCount -lt $maxRetries) {
               try {
-                # Get the GitHub Actions Runner service name dynamically using wildcard
-                $serviceName = Get-Service -Name '*actions.runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+                # Get the GitHub Actions Runner service name dynamically using broader wildcard
+                $serviceName = Get-Service -Name '*runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
           
                 # If the service is not found, print available services and retry after a delay
                 if (-not $serviceName) {
