@@ -77,15 +77,6 @@ jobs:
           ec2-image-id: ${{ inputs.ec2-image-id }}
           subnet-id: ${{ inputs.subnet-id }}
           security-group-id: ${{ inputs.security-group-id }}
-          user-data: |
-            <powershell>
-            net user nonadmin ${{ secrets.nonadmin-password }} /add
-            net localgroup Users nonadmin /add
-
-            # Install GitHub Actions runner as non-admin user (if needed)
-            $userCredential = New-Object System.Management.Automation.PSCredential("nonadmin", (ConvertTo-SecureString "${{ secrets.nonadmin-password }}" -AsPlainText -Force))
-            Start-Process -FilePath "powershell.exe" -ArgumentList "-command <GitHub runner setup script>" -Credential $userCredential
-            </powershell>
 
       - name: Output EC2 Instance ID
         run: |
@@ -96,6 +87,11 @@ jobs:
     needs: provision-ec2
     runs-on: ${{ needs.provision-ec2.outputs.label }}
     steps:
+      - name: Wait for Runner Initialization
+        run: |
+          echo "Waiting for GitHub Actions Runner to initialize..."
+          sleep 120
+
       - name: Reconfigure Runner Service to Use Non-Admin User
         shell: powershell
         env:
@@ -109,19 +105,19 @@ jobs:
               Write-Error "GitHub Actions runner service not found."
               exit 1
             }
-
+  
             Stop-Service -Name $serviceName -Force
             Write-Output "Service stopped: $serviceName"
-
+  
             # Update the service to use the nonadmin user credentials
             Write-Output "Reconfiguring the service to use nonadmin user..."
             sc.exe config $serviceName obj= ".\nonadmin" password= "$env:NONADMIN_PASSWORD"
             Write-Output "Service reconfiguration command executed."
-
+  
             # Start the GitHub Actions Runner service again
             Start-Service -Name $serviceName
             Write-Output "Service restarted successfully."
-
+  
             # Verify service configuration
             $updatedService = Get-Service -Name $serviceName | Select-Object Name, StartName
             Write-Output "Service details: $($updatedService.Name) - Running as $($updatedService.StartName)"
