@@ -107,11 +107,19 @@ jobs:
 
             # Print the GitHub Actions runner installation directory
             Write-Output "Checking runner installation directory..."
-            Get-ChildItem -Path "C:\actions-runner" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName, Name
+            if (Test-Path -Path "C:\actions-runner") {
+              Get-ChildItem -Path "C:\actions-runner" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName, Name
+            } else {
+              Write-Error "Runner installation directory not found at expected path: C:\actions-runner"
+            }
 
-            # Print all running processes to check for runner process
-            Write-Output "Listing all running processes to identify runner..."
-            Get-Process | Select-Object -Property Id, ProcessName
+            # Print all running processes to check for runner process by keyword
+            Write-Output "Searching for running processes related to runner..."
+            Get-Process | Where-Object { $_.ProcessName -like '*runner*' -or $_.ProcessName -like '*actions*' } | Select-Object -Property Id, ProcessName
+
+            # Print environment variables to diagnose context issues
+            Write-Output "Listing environment variables:"
+            Get-ChildItem Env:
 
             # Inform about stopping the GitHub Actions Runner service
             Write-Output "Stopping GitHub Actions Runner service..."
