@@ -108,9 +108,22 @@ jobs:
             # Print the GitHub Actions runner installation directory
             Write-Output "Checking runner installation directory..."
             if (Test-Path -Path "C:\actions-runner") {
+              Write-Output "Runner directory found, listing contents..."
               Get-ChildItem -Path "C:\actions-runner" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName, Name
             } else {
               Write-Error "Runner installation directory not found at expected path: C:\actions-runner"
+              Write-Output "Attempting to reinstall GitHub Actions runner..."
+
+              # Attempt to download and install the GitHub Actions runner manually
+              New-Item -ItemType Directory -Force -Path "C:\actions-runner"
+              Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip"
+              Write-Output "Extracting runner package..."
+              Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner"
+              Remove-Item "C:\actions-runner\actions-runner.zip"
+
+              Write-Output "Running GitHub Actions runner configuration script..."
+              Start-Process -FilePath "C:\actions-runner\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO", "--token YOUR_TOKEN" -Wait
+              Write-Output "Runner configuration completed."
             }
 
             # Print all running processes to check for runner process by keyword
