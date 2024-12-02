@@ -47,6 +47,7 @@ def clone_repository(app_name, repository_url, branch):
 
 
 def unzip_file(zip_path, extract_folder):
+    extract_folder = winapi_path(extract_folder)
     try:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_folder)
@@ -85,3 +86,35 @@ def set_executable_permissions(file_path):
         logger.error(f'File not found: {file_path}')
     except Exception as e:
         logger.error(f'Failed to set executable permissions for {file_path}: {e}')
+
+
+def on_rmtree_error(func, path, exc_info):
+    """"
+    Error handler for ``shutil.rmtree``.
+    This happens mostly on windows
+    If the error is due to an access error (read only file)
+    it attempts to add write permission and then retries.
+
+    If the error is for another reason it re-raises the error.
+
+    Usage : ``shutil.rmtree(path, onerror=onerror)``
+    """
+    import stat
+    if not os.access(path, os.W_OK):
+        os.chmod(path, stat.S_IWUSR)
+        func(path)
+    else:
+        raise
+
+def winapi_path(dos_path, encoding=None):
+    """
+    Fix to avoid path too long errors while extracting kai in Windows
+    """
+    path = os.path.abspath(dos_path)
+
+    if path.startswith("\\\\"):
+        path = "\\\\?\\UNC\\" + path[2:]
+    else:
+        path = "\\\\?\\" + path
+
+    return path

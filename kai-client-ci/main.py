@@ -7,11 +7,12 @@ from datetime import datetime
 import kai_eval_handler
 import kai_handler
 from consts import KAI_FOLDER, KAI_FILES_FOLDER
-from files import zip_folder
+from files import zip_folder, on_rmtree_error
 from logger import get_logger
 from upload import upload
 
 logger = get_logger(__name__)
+
 
 def append_to_json_file(file_path, new_data):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -24,8 +25,9 @@ def append_to_json_file(file_path, new_data):
 
 
 if __name__ == '__main__':
+
     if os.path.exists('data'):
-        shutil.rmtree('data')
+        shutil.rmtree('data', onerror=on_rmtree_error)
     os.makedirs('data')
 
     if os.path.exists(KAI_FILES_FOLDER):
