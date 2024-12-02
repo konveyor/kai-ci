@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test-and-evaluate:
-    name: Run e2e test
+    name: Run demo and evaluation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
