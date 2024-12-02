@@ -38,7 +38,7 @@ on:
       github-token:
         description: 'Personal Access Token For GH'
         required: true
-      testuser-password:
+      nonadmin-password:
         description: 'Password for the non-admin user'
         required: true
     outputs:
