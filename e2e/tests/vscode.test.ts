@@ -11,7 +11,8 @@ test.describe('VSCode Tests', () => {
   test.beforeAll(async () => {
     if (!vscodeApp) {
       test.setTimeout(60000);
-      const executablePath = process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
+      const executablePath =
+        process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
       vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
     }
   });

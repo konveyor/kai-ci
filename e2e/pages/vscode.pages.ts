@@ -42,9 +42,9 @@ class VSCode {
           const basePath = process.cwd();
           vsixFilePath = path.resolve(basePath, vsixFilePath);
         }
+
         console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
         await VSCode.installExtensionFromVSIX(vsixFilePath);
-        await new Promise(resolve => setTimeout(resolve, 5000));
       } else {
         console.warn(
           'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
@@ -69,36 +69,23 @@ class VSCode {
    * Installs an extension from a VSIX file using the VSCode CLI.
    * This method is static because it is independent of the instance.
    */
-  private static async installExtensionFromVSIX(vsixFilePath: string): Promise<void> {
+  private static async installExtensionFromVSIX(
+    vsixFilePath: string
+  ): Promise<void> {
     await downloadLatestKAIPlugin();
 
     try {
-      const osInfo = getOSInfo();
-      if (osInfo === 'windows') {
-        const basePath = process.cwd();
-        vsixFilePath = path.resolve(basePath, vsixFilePath);
-      }
-
+      // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
-
-      // Check if extension is already installed
-      const installedExtensions = execSync('code --list-extensions').toString();
-      if (!installedExtensions.includes('konveyor')) {
-        execSync(`code --install-extension "${vsixFilePath}"`, { stdio: 'inherit' });
-        console.log('Extension installed successfully.');
-
-        // Adding delay to ensure the extension loads
-        await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 10 seconds
-      } else {
-        console.log('Extension is already installed. Skipping installation.');
-      }
-
+      execSync(`code --install-extension "${vsixFilePath}"`, {
+        stdio: 'inherit',
+      });
+      console.log('Extension installed successfully.');
     } catch (error) {
-      console.error('Error during extension installation:', error);
+      console.error('Error installing the VSIX extension:', error);
       throw error;
     }
   }
-
 
   /**
    * Closes the VSCode instance.
