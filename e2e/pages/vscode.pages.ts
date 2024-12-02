@@ -90,7 +90,7 @@ class VSCode {
   public async extensionInstalled(){
     const installedExtensions = execSync('code --list-extensions').toString();
     console.log(`Installed extensions: ${installedExtensions}`)
-    return installedExtensions.includes("konveyor");
+    return installedExtensions.includes("konveyor") ? true : false;
   }
 
   /**
