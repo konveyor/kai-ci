@@ -87,72 +87,38 @@ jobs:
     needs: provision-ec2
     runs-on: ${{ needs.provision-ec2.outputs.label }}
     steps:
-      - name: Set up and Configure GitHub Actions Runner as Non-Admin
+      - name: Setup GitHub Actions Runner as Non-Admin User
         shell: powershell
         env:
           NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
         run: |
           try {
-            # Initial delay to allow EC2 instance to fully initialize
-            Write-Output "Waiting for EC2 instance services to initialize..."
-            Start-Sleep -Seconds 90
+            # Log in as non-admin and set up runner
+            $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
+            $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
 
-            # STEP 1: Verify Current User Context
-            Write-Output "Current User Context:"
-            whoami
+            # Run the complete setup process as the non-admin user
+            Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
+              Write-Output "Setting up GitHub Actions Runner as non-admin user..."
 
-            # STEP 2: Create actions-runner directory
-            Write-Output "Checking if runner directory exists..."
-            if (-not (Test-Path -Path "C:\actions-runner")) {
-              Write-Output "Creating runner directory..."
-              New-Item -ItemType Directory -Force -Path "C:\actions-runner" -Verbose
-            } else {
-              Write-Output "Runner directory already exists."
-            }
-
-            # STEP 3: Download GitHub Actions Runner
-            Write-Output "Downloading GitHub Actions runner..."
-            Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip" -Verbose
-
-            # STEP 4: Extract the Runner Package
-            Write-Output "Extracting runner package..."
-            Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner" -Verbose
-            Remove-Item "C:\actions-runner\actions-runner.zip" -Verbose
-
-            # STEP 5: Configure Runner - Run as Administrator Initially
-            Write-Output "Configuring GitHub Actions runner..."
-            & "C:\actions-runner\config.cmd" --url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN
-
-            # STEP 6: List Services to Verify
-            Write-Output "Listing all services after initial setup:"
-            Get-Service | Select-Object -Property Name, Status
-
-            # STEP 7: Switch to Non-Admin for Service Configuration
-            Write-Output "Reconfiguring runner service to run as non-admin..."
-            $serviceName = Get-Service -Name '*runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
-          
-            if ($serviceName) {
-              $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
-              sc.exe config $serviceName obj= ".\nonadmin" password= "$env:NONADMIN_PASSWORD"
-              Write-Output "Service reconfiguration command executed."
-          
-              # STEP 8: Restart the Runner Service
-              Start-Service -Name $serviceName
-              Write-Output "Service restarted successfully."
-
-              # STEP 9: Validate the Service is Running as Non-Admin
-              $updatedService = Get-Service -Name $serviceName | Select-Object Name, StartName
-              Write-Output "Service details: $($updatedService.Name) - Running as $($updatedService.StartName)"
-
-              if ($updatedService.StartName -eq ".\\nonadmin") {
-                Write-Output "Service is successfully running as non-admin user."
-              } else {
-                Write-Error "Service is not running as nonadmin, further investigation needed."
+              # Step 1: Create actions-runner directory
+              if (-not (Test-Path -Path "C:\actions-runner")) {
+                New-Item -ItemType Directory -Force -Path "C:\actions-runner"
               }
-            } else {
-              Write-Error "GitHub Actions runner service was not found."
-            }
+
+              # Step 2: Download GitHub Actions Runner
+              Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip" -Verbose
+
+              # Step 3: Extract the Runner Package
+              Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner"
+              Remove-Item "C:\actions-runner\actions-runner.zip"
+
+              # Step 4: Configure the Runner
+              & "C:\actions-runner\config.cmd" --url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN
+
+              Write-Output "Runner setup as non-admin completed successfully."
+            } -Credential $credential -NoNewWindow -Wait
           } catch {
-            Write-Host "Failed during runner setup: $_.Exception.Message"
+            Write-Error "Failed to setup the runner as non-admin user: $_.Exception.Message"
             exit 1
           }
