@@ -87,55 +87,49 @@ jobs:
     needs: provision-ec2
     runs-on: ${{ needs.provision-ec2.outputs.label }}
     steps:
-      - name: Set Up GitHub Actions Runner as Non-Admin User
+      - name: Setup GitHub Actions Runner as Non-Admin User
         shell: powershell
         env:
           NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
         run: |
           try {
-            # Initial delay to allow the GitHub Actions Runner service to start
-            Write-Output "Waiting for GitHub Actions Runner service to initialize..."
-            Start-Sleep -Seconds 90
-
-            # Log in as non-admin user
+            # Initial delay to allow the EC2 instance to fully initialize
+            Write-Output "Waiting for EC2 instance services to initialize..."
+            Start-Sleep -Seconds 60
+  
+            # Step 1: Create runner directory as non-admin
             $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
             $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
-
-            # Step 1: Create runner directory as non-admin
-            Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
+            Start-Process -FilePath "powershell.exe" -Credential $credential -ArgumentList "-Command", {
               if (-not (Test-Path -Path 'C:\actions-runner')) {
                 New-Item -ItemType Directory -Force -Path 'C:\actions-runner'
                 Write-Output "Runner directory created."
               } else {
                 Write-Output "Runner directory already exists."
               }
-            } -Credential $credential -NoNewWindow -Wait
-
-            # Step 2: Download GitHub Actions runner as non-admin
-            Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
+  
+              # Step 2: Download GitHub Actions Runner
               Write-Output "Downloading GitHub Actions runner..."
               Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip"
-              Write-Output "Download complete."
-            } -Credential $credential -NoNewWindow -Wait
-
-            # Step 3: Extract runner package as non-admin
-            Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
+  
+              # Step 3: Extract the Runner Package
               Write-Output "Extracting GitHub Actions runner package..."
               Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner"
               Remove-Item "C:\actions-runner\actions-runner.zip"
               Write-Output "Extraction complete."
-            } -Credential $credential -NoNewWindow -Wait
-
-            # Step 4: Configure GitHub Actions runner as non-admin
-            Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
+  
+              # Step 4: Configure the Runner
               Write-Output "Configuring the GitHub Actions runner..."
-              & "C:\actions-runner\config.cmd" --url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN
-              Write-Output "Runner configuration completed."
-            } -Credential $credential -NoNewWindow -Wait
-
-            # Step 5: Run the GitHub Actions runner as non-admin
-            Start-Process -FilePath "C:\actions-runner\run.cmd" -Credential $credential -NoNewWindow
-            Write-Output "Runner is now running under non-admin user."
+              Set-Location -Path "C:\actions-runner"
+              Start-Process -FilePath "config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN" -NoNewWindow -Wait
+  
+              # Step 5: Run the GitHub Actions Runner
+              Write-Output "Starting the GitHub Actions runner..."
+              Start-Process -FilePath "run.cmd" -NoNewWindow
+            } -NoNewWindow -Wait
+  
+            Write-Output "GitHub Actions Runner setup complete as non-admin user."
+  
           } catch {
             Write-Error "Failed to set up the runner as non-admin user: $_.Exception.Message"
             exit 1
