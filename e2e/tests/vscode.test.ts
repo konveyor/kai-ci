@@ -5,12 +5,14 @@ import { cleanupRepo } from '../utilities/utils';
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
 
+
+test.describe.configure({ mode: 'serial' });
 test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
 
   test.beforeAll(async () => {
     console.log(`[beforeAll] Called at: ${new Date().toISOString()}`);
-    test.setTimeout(60000);
+    test.setTimeout(120000);
       const executablePath =
         process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
       vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
