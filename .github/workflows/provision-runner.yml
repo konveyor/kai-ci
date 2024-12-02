@@ -105,57 +105,48 @@ jobs:
             Write-Output "Listing all services after initial wait:"
             Get-Service | Select-Object -Property Name, Status
 
-            # Print the GitHub Actions runner installation directory
-            Write-Output "Checking runner installation directory..."
-            if (Test-Path -Path "C:\actions-runner") {
-              Write-Output "Runner directory found, listing contents..."
-              Get-ChildItem -Path "C:\actions-runner" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName, Name
-            } else {
-              Write-Error "Runner installation directory not found at expected path: C:\actions-runner"
-              Write-Output "Attempting to reinstall GitHub Actions runner..."
-
-              # Attempt to create the directory for GitHub Actions runner installation
-              Write-Output "Creating runner installation directory..."
+            Write-Output "Checking if runner directory exists..."
+            if (-not (Test-Path -Path "C:\actions-runner")) {
+              Write-Output "Runner directory not found, creating directory..."
               try {
                 New-Item -ItemType Directory -Force -Path "C:\actions-runner" -Verbose
-                Write-Output "Directory created successfully."
+                Write-Output "Runner directory created successfully."
               } catch {
-                Write-Error "Failed to create directory: $_.Exception.Message"
+                Write-Error "Failed to create runner directory: $_.Exception.Message"
                 exit 1
               }
+            } else {
+              Write-Output "Runner directory already exists."
+            }
 
-              # Attempt to download and install the GitHub Actions runner manually
-              try {
+            # Download and install the GitHub Actions runner manually as non-admin user
+            try {
+              Write-Output "Running GitHub Actions runner installation as non-admin user..."
+              $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
+              $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
+          
+              # Download runner
+              Start-Process -FilePath "powershell.exe" -ArgumentList {
                 Write-Output "Downloading GitHub Actions runner package..."
-                Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip" -Verbose -ErrorAction Stop
+                Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip" -Verbose
                 Write-Output "Download completed successfully."
-              } catch {
-                Write-Error "Failed to download runner package: $_.Exception.Message"
-                exit 1
-              }
+              } -Credential $credential -NoNewWindow -Wait
 
-              # Attempt to extract the runner package
-              try {
+              # Extract runner
+              Start-Process -FilePath "powershell.exe" -ArgumentList {
                 Write-Output "Extracting runner package..."
-                Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner" -Verbose -ErrorAction Stop
+                Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner" -Verbose
                 Remove-Item "C:\actions-runner\actions-runner.zip"
                 Write-Output "Extraction completed successfully."
-              } catch {
-                Write-Error "Failed to extract runner package: $_.Exception.Message"
-                exit 1
-              }
+              } -Credential $credential -NoNewWindow -Wait
 
-              # Attempt to run the GitHub Actions runner configuration script as non-admin
-              try {
-                Write-Output "Running GitHub Actions runner configuration script as non-admin user..."
-                $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
-                $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
-                Start-Process -FilePath "C:\actions-runner\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO", "--token YOUR_TOKEN" -Credential $credential -NoNewWindow -Wait
-                Write-Output "Runner configuration completed."
-              } catch {
-                Write-Error "Failed to configure the runner as non-admin: $_.Exception.Message"
-                exit 1
-              }
+              # Configure runner
+              Start-Process -FilePath "C:\actions-runner\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO", "--token YOUR_TOKEN" -Credential $credential -NoNewWindow -Wait
+              Write-Output "Runner configuration completed as non-admin user."
+
+            } catch {
+              Write-Error "Failed to install or configure the runner: $_.Exception.Message"
+              exit 1
             }
 
             # Print all running processes to check for runner process by keyword
