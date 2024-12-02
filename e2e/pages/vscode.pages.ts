@@ -78,9 +78,9 @@ class VSCode {
       // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
       const result = execSync(`code --install-extension "${vsixFilePath}"`, {
-        stdio: 'pipe',
+        stdio: 'inherit',
       });
-      console.log(`Extension installed successfully.\nCommand output: ${result.toString()}`);
+      console.log('Extension installed successfully.');
     } catch (error) {
       console.error('Error installing the VSIX extension:', error);
       throw error;
