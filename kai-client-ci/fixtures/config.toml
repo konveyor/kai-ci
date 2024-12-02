@@ -1,8 +1,8 @@
  log_level = "info"
 file_log_level = "debug"
-log_dir = "./kai-logs/"
+log_dir = "../logs/"
 demo_mode = false
 [models]
 provider = "ChatBedrock"
 [models.args]
-model_id = "meta.llama3-1-70b-instruct-v1:0"
+model_id = "us.meta.llama3-1-70b-instruct-v1:0"

@@ -1,19 +1,10 @@
-import json
-import platform
 import shutil
 import stat
-import sys
-import time
 import zipfile
-from datetime import datetime
-import logging
 import os
-import pandas as pd
-
 import git
 
 import requests
-from dotenv import load_dotenv
 
 from logger import get_logger
 
@@ -32,9 +23,9 @@ def download_file(url, file_path):
 
 
 def rename_extracted_folder(base_folder, target_folder_name):
-    '''
+    """
         Renames the extracted source code folder which is in format konveyor-kai-[uid] to a standard name 'kai'
-    '''
+    """
     extracted_folders = [
         folder for folder in os.listdir(base_folder)
         if os.path.isdir(os.path.join(base_folder, folder)) and folder.startswith('konveyor-kai-')
@@ -56,6 +47,7 @@ def clone_repository(app_name, repository_url, branch):
 
 
 def unzip_file(zip_path, extract_folder):
+    extract_folder = winapi_path(extract_folder)
     try:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_folder)
@@ -64,11 +56,11 @@ def unzip_file(zip_path, extract_folder):
         logger.error(f'Failed to extract {zip_path}')
 
 
-def zip_folder(file_path, file_name):
+def zip_folder(input_dir, file_name, output_dir):
     zip_filename = f'{file_name}.zip'
-    zip_path = os.path.join('data', zip_filename)
+    zip_path = os.path.join(output_dir, zip_filename)
 
-    shutil.make_archive(zip_path.replace('.zip', ''), 'zip', file_path)
+    shutil.make_archive(zip_path.replace('.zip', ''), 'zip', input_dir)
     logger.info(f'Repository compressed into {zip_path}')
     return zip_path
 
@@ -94,3 +86,35 @@ def set_executable_permissions(file_path):
         logger.error(f'File not found: {file_path}')
     except Exception as e:
         logger.error(f'Failed to set executable permissions for {file_path}: {e}')
+
+
+def on_rmtree_error(func, path, exc_info):
+    """"
+    Error handler for ``shutil.rmtree``.
+    This happens mostly on windows
+    If the error is due to an access error (read only file)
+    it attempts to add write permission and then retries.
+
+    If the error is for another reason it re-raises the error.
+
+    Usage : ``shutil.rmtree(path, onerror=onerror)``
+    """
+    import stat
+    if not os.access(path, os.W_OK):
+        os.chmod(path, stat.S_IWUSR)
+        func(path)
+    else:
+        raise
+
+def winapi_path(dos_path, encoding=None):
+    """
+    Fix to avoid path too long errors while extracting kai in Windows
+    """
+    path = os.path.abspath(dos_path)
+
+    if path.startswith("\\\\"):
+        path = "\\\\?\\UNC\\" + path[2:]
+    else:
+        path = "\\\\?\\" + path
+
+    return path

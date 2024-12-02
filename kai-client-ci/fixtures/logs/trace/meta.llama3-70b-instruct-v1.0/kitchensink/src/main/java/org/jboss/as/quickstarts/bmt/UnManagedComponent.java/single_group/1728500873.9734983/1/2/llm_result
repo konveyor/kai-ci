@@ -1,0 +1,59 @@
+================================== Ai Message ==================================
+
+## Reasoning
+
+To migrate the `UnManagedComponent` class to Quarkus, we need to address the issues mentioned in the incidents. Here's the step-by-step reasoning:
+
+1. Incident 0: Replace `javax.inject` import with `jakarta.inject`. This is a straightforward replacement, as Quarkus uses the Jakarta EE namespace.
+
+2. Incident 1 and 2: Replace `javax.persistence` import with `jakarta.persistence`. Similar to the previous step, this is a namespace change.
+
+3. Incident 3 and 4: Replace `javax.transaction` import with `jakarta.transaction`. Again, this is a namespace change.
+
+No other changes are required in this step, as the class is already using CDI annotations (`@ApplicationScoped` and `@Inject`) and doesn't have any other Java EE dependencies.
+
+## Updated File
+```java
+package org.jboss.as.quickstarts.bmt;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import io.quarkus.logging.Log;
+
+/**
+ * A class for updating a database table within a JTA transaction. Since the class is only a simple CDI bean the developer is
+ * responsible for both controlling the life cycle of the Entity Manager and for transaction demarcation.
+ *
+ * @author Mike Musgrove
+ */
+@ApplicationScoped
+public class UnManagedComponent {
+    /**
+     * Inject a UserTransaction for manual transaction demarcation (this object is thread safe)
+     */
+    @Inject
+    @PersistenceUnit("primary")
+    private EntityManager entityManager;
+
+    public String updateKeyValueDatabase(String key, String value) {
+        try {
+            Log.info("Beginning user-managed transaction");
+            QuarkusTransaction.begin();
+
+            // make some transactional changes
+            String result = updateKeyValueDatabaseLogic(key, value);
+
+            QuarkusTransaction.commit();
+
+            return result;
+        } catch (Exception e) {
+            QuarkusTransaction.rollback();
+
+            // An application cannot handle any of the other exceptions raised by begin and commit so we just catch the generic exception.
+            // The meaning of the other exceptions is:
+            // NotSupportedException - the thread is already associated with a transaction
+            // HeuristicRollbackException - should not happen since the example is interacting with a single database
+            // HeuristicMixedException - should not happen since the example is interacting with a single database
+            // SystemException - the TM raised an unexpected error. There is no standard way
