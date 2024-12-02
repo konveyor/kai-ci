@@ -22,6 +22,10 @@ test.describe('VSCode Tests', () => {
     await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
   });
 
+  test('Extension is successfully installed', async () => {
+    expect(vscodeApp.extensionInstalled()).toBe(true)
+  });
+
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
     const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
