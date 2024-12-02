@@ -97,62 +97,92 @@ jobs:
             Write-Output "Waiting for GitHub Actions Runner service to initialize..."
             Start-Sleep -Seconds 90
 
-            # Run everything from here under the non-admin context
-            $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
-            $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
+            # Print the current user context
+            Write-Output "Current User Context:"
+            whoami
 
-            # Creating a new PowerShell session under the non-admin user to execute all commands
-            Write-Output "Switching to non-admin context for further operations..."
-            $session = New-PSSession -Credential $credential
+            # Print all available services after initial wait
+            Write-Output "Listing all services after initial wait:"
+            Get-Service | Select-Object -Property Name, Status
 
-            # Script block to run as non-admin
-            $scriptBlock = {
-              # Print the current user context
-              Write-Output "Current User Context:"
-              whoami
-
-              # Create runner installation directory if it doesn't exist
-              Write-Output "Checking if runner directory exists..."
-              if (-not (Test-Path -Path "C:\actions-runner")) {
-                Write-Output "Runner directory not found, creating directory..."
-                try {
-                  New-Item -ItemType Directory -Force -Path "C:\actions-runner" -Verbose
-                  Write-Output "Runner directory created successfully."
-                } catch {
-                  Write-Error "Failed to create runner directory: $_.Exception.Message"
-                  exit 1
-                }
-              } else {
-                Write-Output "Runner directory already exists."
-              }
-
-              # Download and install the GitHub Actions runner manually
+            # Create runner installation directory if it doesn't exist
+            Write-Output "Checking if runner directory exists..."
+            if (-not (Test-Path -Path "C:\actions-runner")) {
+              Write-Output "Runner directory not found, creating directory..."
               try {
+                New-Item -ItemType Directory -Force -Path "C:\actions-runner" -Verbose
+                Write-Output "Runner directory created successfully."
+              } catch {
+                Write-Error "Failed to create runner directory: $_.Exception.Message"
+                exit 1
+              }
+            } else {
+              Write-Output "Runner directory already exists."
+            }
+
+            # Download and install the GitHub Actions runner manually as non-admin user
+            try {
+              Write-Output "Running GitHub Actions runner installation as non-admin user..."
+              $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
+              $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
+          
+              # Download runner
+              Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
                 Write-Output "Downloading GitHub Actions runner package..."
                 Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip" -Verbose
                 Write-Output "Download completed successfully."
+              } -Credential $credential -NoNewWindow -Wait
 
-                # Extract runner
+              # Extract runner
+              Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
                 Write-Output "Extracting runner package..."
                 Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner" -Verbose
                 Remove-Item "C:\actions-runner\actions-runner.zip"
                 Write-Output "Extraction completed successfully."
+              } -Credential $credential -NoNewWindow -Wait
 
-                # Configure runner
-                Write-Output "Running GitHub Actions runner configuration script..."
-                Start-Process -FilePath "C:\actions-runner\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO", "--token YOUR_TOKEN" -Wait -RedirectStandardOutput "C:\actions-runner\config-output.log" -RedirectStandardError "C:\actions-runner\config-error.log"
-                Write-Output "Runner configuration completed."
+              # Configure runner
+              Start-Process -FilePath "C:\actions-runner\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO", "--token YOUR_TOKEN" -Credential $credential -NoNewWindow -Wait
+              Write-Output "Runner configuration completed as non-admin user."
 
-              } catch {
-                Write-Error "Failed to install or configure the runner: $_.Exception.Message"
-                exit 1
-              }
+            } catch {
+              Write-Error "Failed to install or configure the runner: $_.Exception.Message"
+              exit 1
+            }
+
+            # Print all running processes to check for runner process by keyword
+            Write-Output "Searching for running processes related to runner..."
+            Get-Process | Where-Object { $_.ProcessName -like '*runner*' -or $_.ProcessName -like '*actions*' } | Select-Object -Property Id, ProcessName
+
+            # Print environment variables to diagnose context issues
+            Write-Output "Listing environment variables:"
+            Get-ChildItem Env:
+
+            # Inform about stopping the GitHub Actions Runner service
+            Write-Output "Stopping GitHub Actions Runner service..."
           
-              # Stopping and reconfiguring the runner service to run as non-admin
-              Write-Output "Stopping GitHub Actions Runner service..."
-              $serviceName = Get-Service -Name '*runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+            # Initialize retry count and max retry values for attempts to stop and reconfigure the service
+            $retryCount = 0
+            $maxRetries = 5
+            $success = $false
+
+            # Loop until the service is successfully reconfigured or maximum retries are reached
+            while (-not $success -and $retryCount -lt $maxRetries) {
+              try {
+                # Get the GitHub Actions Runner service name dynamically using broader wildcard
+                $serviceName = Get-Service -Name '*runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
           
-              if ($serviceName) {
+                # If the service is not found, print available services and retry after a delay
+                if (-not $serviceName) {
+                  Write-Error "GitHub Actions runner service not found. Printing available services..."
+                  Get-Service | Select-Object -Property Name, Status
+                  Write-Error "Retrying in 30 seconds..."
+                  Start-Sleep -Seconds 30
+                  $retryCount++
+                  continue
+                }
+
+                # Stop the runner service forcefully
                 Stop-Service -Name $serviceName -Force
                 Write-Output "Service stopped: $serviceName"
 
@@ -169,22 +199,26 @@ jobs:
                 $updatedService = Get-Service -Name $serviceName | Select-Object Name, StartName
                 Write-Output "Service details: $($updatedService.Name) - Running as $($updatedService.StartName)"
 
-                if ($updatedService.StartName -eq ".\\nonadmin") {
-                  Write-Output "Service successfully running as non-admin user."
+                # Set success flag if the service is running as non-admin
+                if ($updatedService.StartName -eq ".\nonadmin") {
+                  $success = $true
                 } else {
-                  Write-Output "Service is not running as nonadmin, please verify manually."
+                  Write-Output "Service is not running as nonadmin, retrying..."
+                  $retryCount++
+                  Start-Sleep -Seconds 30
                 }
-              } else {
-                Write-Error "GitHub Actions runner service not found."
+              } catch {
+                # Handle errors during reconfiguration and retry
+                Write-Output "An error occurred: $_.Exception.Message. Retrying in 30 seconds..."
+                Start-Sleep -Seconds 30
+                $retryCount++
               }
             }
 
-            # Invoke the script block as the non-admin user
-            Invoke-Command -Session $session -ScriptBlock $scriptBlock
-
-            # Remove the PowerShell session
-            Remove-PSSession -Session $session
-
+            # Throw an error if reconfiguration fails after all retries
+            if (-not $success) {
+              throw "Failed to configure the runner service to run as nonadmin user after $maxRetries retries."
+            }
           } catch {
             # Handle the case where reconfiguration fails completely
             Write-Host "Failed to configure the runner service: $_.Exception.Message"
