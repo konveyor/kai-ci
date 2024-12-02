@@ -9,8 +9,10 @@ export default defineConfig({
 
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  retries: 0,
-  workers: process.env.CI ? 1 : undefined,
+  // retries: process.env.CI ? 2 : 0,
+  // workers: process.env.CI ? 1 : undefined,
+  retries: 0, // No retries to avoid `beforeAll` repeating due to flaky test retries
+  workers: 1, // Single worker to prevent multiple executions of `beforeAll`
   reporter: 'html',
 
   use: {

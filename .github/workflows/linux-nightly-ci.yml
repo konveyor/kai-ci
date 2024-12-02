@@ -8,7 +8,11 @@ on:
 jobs:
   main-nightly:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        job: [ 1 ] # Single job to avoid parallel runs
+      max-parallel: 1
+      
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
