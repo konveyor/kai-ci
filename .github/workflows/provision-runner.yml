@@ -39,7 +39,7 @@ on:
         description: 'Personal Access Token For GH'
         required: true
       nonadmin-password:
-        description: 'Password for the nonadmin user'
+        description: 'Password for the non-admin user'
         required: true
     outputs:
       instance_label:
@@ -77,60 +77,33 @@ jobs:
           ec2-image-id: ${{ inputs.ec2-image-id }}
           subnet-id: ${{ inputs.subnet-id }}
           security-group-id: ${{ inputs.security-group-id }}
+          user-data: |
+            <powershell>
+            # Step 1: Create the test user
+            net user testuser ${{ secrets.nonadmin-password }} /add
+            net localgroup "Remote Desktop Users" testuser /add
+            net localgroup "Users" testuser /add
+
+            # Step 2: Download and set up the GitHub Actions runner as the non-admin user
+            $runnerPath = "C:\actions-runner"
+            if (-not (Test-Path -Path $runnerPath)) {
+              New-Item -ItemType Directory -Force -Path $runnerPath
+            }
+            Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "$runnerPath\actions-runner.zip"
+            Expand-Archive -Path "$runnerPath\actions-runner.zip" -DestinationPath $runnerPath
+            Remove-Item "$runnerPath\actions-runner.zip"
+
+            # Step 3: Configure the runner with test user credentials
+            $password = ConvertTo-SecureString -String "${{ secrets.nonadmin-password }}" -AsPlainText -Force
+            $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "testuser", $password
+
+            Start-Process -FilePath "$runnerPath\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO --token ${{ secrets.github-token }}" -Credential $credential -NoNewWindow -Wait
+
+            # Step 4: Run the GitHub Actions runner as the test user
+            Start-Process -FilePath "$runnerPath\run.cmd" -Credential $credential -NoNewWindow
+            </powershell>
 
       - name: Output EC2 Instance ID
         run: |
           echo "EC2 Instance ID: ${{ steps.ec2.outputs.ec2-instance-id }}"
           echo "Label : ${{ steps.ec2.outputs.label }}"
-
-  configure-ec2:
-    needs: provision-ec2
-    runs-on: ${{ needs.provision-ec2.outputs.label }}
-    steps:
-      - name: Setup GitHub Actions Runner as Non-Admin User
-        shell: powershell
-        env:
-          NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
-        run: |
-          try {
-            # Initial delay to allow the EC2 instance to fully initialize
-            Write-Output "Waiting for EC2 instance services to initialize..."
-            Start-Sleep -Seconds 60
-  
-            # Step 1: Create runner directory as non-admin
-            $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
-            $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
-            Start-Process -FilePath "powershell.exe" -Credential $credential -ArgumentList "-Command", {
-              if (-not (Test-Path -Path 'C:\actions-runner')) {
-                New-Item -ItemType Directory -Force -Path 'C:\actions-runner'
-                Write-Output "Runner directory created."
-              } else {
-                Write-Output "Runner directory already exists."
-              }
-  
-              # Step 2: Download GitHub Actions Runner
-              Write-Output "Downloading GitHub Actions runner..."
-              Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip"
-  
-              # Step 3: Extract the Runner Package
-              Write-Output "Extracting GitHub Actions runner package..."
-              Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner"
-              Remove-Item "C:\actions-runner\actions-runner.zip"
-              Write-Output "Extraction complete."
-  
-              # Step 4: Configure the Runner
-              Write-Output "Configuring the GitHub Actions runner..."
-              Set-Location -Path "C:\actions-runner"
-              Start-Process -FilePath "config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN" -NoNewWindow -Wait
-  
-              # Step 5: Run the GitHub Actions Runner
-              Write-Output "Starting the GitHub Actions runner..."
-              Start-Process -FilePath "run.cmd" -NoNewWindow
-            } -NoNewWindow -Wait
-  
-            Write-Output "GitHub Actions Runner setup complete as non-admin user."
-  
-          } catch {
-            Write-Error "Failed to set up the runner as non-admin user: $_.Exception.Message"
-            exit 1
-          }
