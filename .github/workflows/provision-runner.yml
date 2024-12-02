@@ -87,140 +87,72 @@ jobs:
     needs: provision-ec2
     runs-on: ${{ needs.provision-ec2.outputs.label }}
     steps:
-      - name: Reconfigure Runner Service to Use Non-Admin User
+      - name: Set up and Configure GitHub Actions Runner as Non-Admin
         shell: powershell
         env:
           NONADMIN_PASSWORD: ${{ secrets.nonadmin-password }}
         run: |
           try {
-            # Initial delay to allow the GitHub Actions Runner service to start
-            Write-Output "Waiting for GitHub Actions Runner service to initialize..."
+            # Initial delay to allow EC2 instance to fully initialize
+            Write-Output "Waiting for EC2 instance services to initialize..."
             Start-Sleep -Seconds 90
 
-            # Print the current user context
+            # STEP 1: Verify Current User Context
             Write-Output "Current User Context:"
             whoami
 
-            # Print all available services after initial wait
-            Write-Output "Listing all services after initial wait:"
-            Get-Service | Select-Object -Property Name, Status
-
-            # Create runner installation directory if it doesn't exist
+            # STEP 2: Create actions-runner directory
             Write-Output "Checking if runner directory exists..."
             if (-not (Test-Path -Path "C:\actions-runner")) {
-              Write-Output "Runner directory not found, creating directory..."
-              try {
-                New-Item -ItemType Directory -Force -Path "C:\actions-runner" -Verbose
-                Write-Output "Runner directory created successfully."
-              } catch {
-                Write-Error "Failed to create runner directory: $_.Exception.Message"
-                exit 1
-              }
+              Write-Output "Creating runner directory..."
+              New-Item -ItemType Directory -Force -Path "C:\actions-runner" -Verbose
             } else {
               Write-Output "Runner directory already exists."
             }
 
-            # Download and install the GitHub Actions runner manually as non-admin user
-            try {
-              Write-Output "Running GitHub Actions runner installation as non-admin user..."
+            # STEP 3: Download GitHub Actions Runner
+            Write-Output "Downloading GitHub Actions runner..."
+            Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip" -Verbose
+
+            # STEP 4: Extract the Runner Package
+            Write-Output "Extracting runner package..."
+            Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner" -Verbose
+            Remove-Item "C:\actions-runner\actions-runner.zip" -Verbose
+
+            # STEP 5: Configure Runner - Run as Administrator Initially
+            Write-Output "Configuring GitHub Actions runner..."
+            & "C:\actions-runner\config.cmd" --url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN
+
+            # STEP 6: List Services to Verify
+            Write-Output "Listing all services after initial setup:"
+            Get-Service | Select-Object -Property Name, Status
+
+            # STEP 7: Switch to Non-Admin for Service Configuration
+            Write-Output "Reconfiguring runner service to run as non-admin..."
+            $serviceName = Get-Service -Name '*runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+          
+            if ($serviceName) {
               $password = ConvertTo-SecureString "$env:NONADMIN_PASSWORD" -AsPlainText -Force
-              $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
+              sc.exe config $serviceName obj= ".\nonadmin" password= "$env:NONADMIN_PASSWORD"
+              Write-Output "Service reconfiguration command executed."
           
-              # Download runner
-              Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
-                Write-Output "Downloading GitHub Actions runner package..."
-                Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "C:\actions-runner\actions-runner.zip" -Verbose
-                Write-Output "Download completed successfully."
-              } -Credential $credential -NoNewWindow -Wait
+              # STEP 8: Restart the Runner Service
+              Start-Service -Name $serviceName
+              Write-Output "Service restarted successfully."
 
-              # Extract runner
-              Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", {
-                Write-Output "Extracting runner package..."
-                Expand-Archive -Path "C:\actions-runner\actions-runner.zip" -DestinationPath "C:\actions-runner" -Verbose
-                Remove-Item "C:\actions-runner\actions-runner.zip"
-                Write-Output "Extraction completed successfully."
-              } -Credential $credential -NoNewWindow -Wait
+              # STEP 9: Validate the Service is Running as Non-Admin
+              $updatedService = Get-Service -Name $serviceName | Select-Object Name, StartName
+              Write-Output "Service details: $($updatedService.Name) - Running as $($updatedService.StartName)"
 
-              # Configure runner
-              Start-Process -FilePath "C:\actions-runner\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO", "--token YOUR_TOKEN" -Credential $credential -NoNewWindow -Wait
-              Write-Output "Runner configuration completed as non-admin user."
-
-            } catch {
-              Write-Error "Failed to install or configure the runner: $_.Exception.Message"
-              exit 1
-            }
-
-            # Print all running processes to check for runner process by keyword
-            Write-Output "Searching for running processes related to runner..."
-            Get-Process | Where-Object { $_.ProcessName -like '*runner*' -or $_.ProcessName -like '*actions*' } | Select-Object -Property Id, ProcessName
-
-            # Print environment variables to diagnose context issues
-            Write-Output "Listing environment variables:"
-            Get-ChildItem Env:
-
-            # Inform about stopping the GitHub Actions Runner service
-            Write-Output "Stopping GitHub Actions Runner service..."
-          
-            # Initialize retry count and max retry values for attempts to stop and reconfigure the service
-            $retryCount = 0
-            $maxRetries = 5
-            $success = $false
-
-            # Loop until the service is successfully reconfigured or maximum retries are reached
-            while (-not $success -and $retryCount -lt $maxRetries) {
-              try {
-                # Get the GitHub Actions Runner service name dynamically using broader wildcard
-                $serviceName = Get-Service -Name '*runner*' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
-          
-                # If the service is not found, print available services and retry after a delay
-                if (-not $serviceName) {
-                  Write-Error "GitHub Actions runner service not found. Printing available services..."
-                  Get-Service | Select-Object -Property Name, Status
-                  Write-Error "Retrying in 30 seconds..."
-                  Start-Sleep -Seconds 30
-                  $retryCount++
-                  continue
-                }
-
-                # Stop the runner service forcefully
-                Stop-Service -Name $serviceName -Force
-                Write-Output "Service stopped: $serviceName"
-
-                # Reconfigure the service to use the non-admin user credentials
-                Write-Output "Reconfiguring the service to use nonadmin user..."
-                sc.exe config $serviceName obj= ".\nonadmin" password= "$env:NONADMIN_PASSWORD"
-                Write-Output "Service reconfiguration command executed."
-
-                # Start the GitHub Actions Runner service again
-                Start-Service -Name $serviceName
-                Write-Output "Service restarted successfully."
-
-                # Verify that the service is running under the non-admin user
-                $updatedService = Get-Service -Name $serviceName | Select-Object Name, StartName
-                Write-Output "Service details: $($updatedService.Name) - Running as $($updatedService.StartName)"
-
-                # Set success flag if the service is running as non-admin
-                if ($updatedService.StartName -eq ".\nonadmin") {
-                  $success = $true
-                } else {
-                  Write-Output "Service is not running as nonadmin, retrying..."
-                  $retryCount++
-                  Start-Sleep -Seconds 30
-                }
-              } catch {
-                # Handle errors during reconfiguration and retry
-                Write-Output "An error occurred: $_.Exception.Message. Retrying in 30 seconds..."
-                Start-Sleep -Seconds 30
-                $retryCount++
+              if ($updatedService.StartName -eq ".\\nonadmin") {
+                Write-Output "Service is successfully running as non-admin user."
+              } else {
+                Write-Error "Service is not running as nonadmin, further investigation needed."
               }
-            }
-
-            # Throw an error if reconfiguration fails after all retries
-            if (-not $success) {
-              throw "Failed to configure the runner service to run as nonadmin user after $maxRetries retries."
+            } else {
+              Write-Error "GitHub Actions runner service was not found."
             }
           } catch {
-            # Handle the case where reconfiguration fails completely
-            Write-Host "Failed to configure the runner service: $_.Exception.Message"
+            Write-Host "Failed during runner setup: $_.Exception.Message"
             exit 1
           }
