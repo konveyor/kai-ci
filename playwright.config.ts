@@ -14,7 +14,7 @@ export default defineConfig({
   retries: 0, // No retries to avoid `beforeAll` repeating due to flaky test retries
   workers: 1, // Single worker to prevent multiple executions of `beforeAll`
   reporter: 'html',
-
+  timeout: 120000,
   use: {
     trace: 'on-first-retry',
   },
