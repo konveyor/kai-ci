@@ -38,7 +38,7 @@ on:
       github-token:
         description: 'Personal Access Token For GH'
         required: true
-      nonadmin-password:
+      testuser-password:
         description: 'Password for the non-admin user'
         required: true
     outputs:
@@ -77,7 +77,7 @@ jobs:
           ec2-image-id: ${{ inputs.ec2-image-id }}
           subnet-id: ${{ inputs.subnet-id }}
           security-group-id: ${{ inputs.security-group-id }}
-          user-data: |
+          pre-runner-script: |
             <powershell>
             # Step 1: Create the test user
             net user testuser ${{ secrets.nonadmin-password }} /add
