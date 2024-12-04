@@ -1,40 +1,26 @@
-import { test as base } from '@playwright/test';
-import { expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
 import { cleanupRepo } from '../utilities/utils';
 
-let vscodeAppInstance: VSCode | null = null;
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
 
-const test = base.extend<{ vscodeApp: VSCode }>({
-  // Declare the custom 'vscodeApp' fixture
-  vscodeApp: async ({}, use) => {
+test.describe('VSCode Tests', () => {
+  let vscodeApp: VSCode;
+
+  test.beforeAll(async () => {
+    test.setTimeout(60000);
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
-    const vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
-    await use(vscodeApp); // Makes the instance available for the tests
-  },
-});
+    vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
+  });
 
-test.describe('VSCode Tests', () => {
-  // let vscodeApp: VSCode;
-  // test.beforeAll(async () => {
-  //   test.setTimeout(60000);
-  //   console.log("=========vscode instance===")
-  //   console.log(vscodeAppInstance);
-  //   console.log("==========")
-  //   vscodeApp = await getVSCodeApp();
-  // });
-
-  test('Should launch VSCode and check window title', async ({ vscodeApp }) => {
+  test('Should launch VSCode and check window title', async () => {
     const window = vscodeApp.getWindow();
     await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
   });
 
-  test('Should open Extensions tab and verify installed extension', async ({
-    vscodeApp,
-  }) => {
+  test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
     const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
     await kaiTab.click();
@@ -47,7 +33,7 @@ test.describe('VSCode Tests', () => {
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 
-  test('Set Up Konevyor and Start analyzer', async ({ vscodeApp }) => {
+  test('Set Up Konevyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
     await vscodeApp.openSetUpKonveyor();
     await window.waitForTimeout(5000);
