@@ -25,7 +25,8 @@ const CHART_COLORS = {
   lightPurpleTransparent: 'rgb(199, 171, 255, 0.5)',
 };
 
-const kaiPerformanceJSON = 'https://kaiqe.s3.us-east-1.amazonaws.com/report.json';
+const kaiPerformanceJSON =
+  'https://kaiqe.s3.us-east-1.amazonaws.com/report.json';
 
 function createDatePicker() {
   const datePicker = document.getElementById('date-picker');
