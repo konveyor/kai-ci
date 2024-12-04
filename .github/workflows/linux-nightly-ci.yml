@@ -1,9 +1,6 @@
 name: Run Playwright tests nightly on main branch
 
-on:
-  schedule:
-    - cron: "5 3 * * *"
-  workflow_dispatch:
+on: push
 
 jobs:
   main-nightly:
