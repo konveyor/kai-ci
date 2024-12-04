@@ -43,7 +43,7 @@ class VSCode {
           vsixFilePath = path.resolve(basePath, vsixFilePath);
         }
 
-        console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
+        // console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
         await VSCode.installExtensionFromVSIX(vsixFilePath);
       } else {
         console.warn(
@@ -72,10 +72,25 @@ class VSCode {
   private static async installExtensionFromVSIX(
     vsixFilePath: string
   ): Promise<void> {
+    const extensionId = 'konveyor.konveyor';
+
+    try {
+      const installedExtensions = execSync('code --list-extensions', {
+        encoding: 'utf-8',
+      });
+      if (installedExtensions.includes(extensionId)) {
+        console.log(
+          'Extension "konveyor.konveyor" is already installed. Skipping installation.'
+        );
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking installed extensions:', error);
+    }
+
     await downloadLatestKAIPlugin();
 
     try {
-      // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
       execSync(`code --install-extension "${vsixFilePath}"`, {
         stdio: 'inherit',
