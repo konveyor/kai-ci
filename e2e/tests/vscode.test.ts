@@ -5,6 +5,8 @@ import { cleanupRepo, uninstallExtension } from '../utilities/utils';
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
 
+test.describe.configure({ mode: 'serial' });
+
 test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
 
