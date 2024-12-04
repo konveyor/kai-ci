@@ -108,6 +108,7 @@ class VSCode {
     if (!this.window) {
       throw new Error('VSCode window is not initialized.');
     }
+    console.log("============window code ===========");
     return this.window;
   }
 
