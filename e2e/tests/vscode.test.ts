@@ -11,6 +11,9 @@ async function getVSCodeApp(): Promise<VSCode> {
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
     vscodeAppInstance = await VSCode.init(executablePath, repoUrl, 'coolstore');
+    console.log("=========vscode instance===")
+    console.log(vscodeAppInstance);
+    console.log("==========")
   }
   return vscodeAppInstance;
 }
