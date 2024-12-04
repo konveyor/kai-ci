@@ -79,9 +79,6 @@ class VSCode {
         encoding: 'utf-8',
       });
       if (installedExtensions.includes(extensionId)) {
-        console.log(
-          'Extension "konveyor.konveyor" is already installed. Skipping installation.'
-        );
         return;
       }
     } catch (error) {

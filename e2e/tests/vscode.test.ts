@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
-import { cleanupRepo } from '../utilities/utils';
+import { cleanupRepo, uninstallExtension } from '../utilities/utils';
 
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
@@ -46,5 +46,6 @@ test.describe('VSCode Tests', () => {
 
   test.afterAll(async () => {
     await cleanupRepo();
+    await uninstallExtension();
   });
 });
