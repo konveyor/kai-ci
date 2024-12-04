@@ -11,9 +11,6 @@ async function getVSCodeApp(): Promise<VSCode> {
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
     vscodeAppInstance = await VSCode.init(executablePath, repoUrl, 'coolstore');
-    console.log("=========vscode instance===")
-    console.log(vscodeAppInstance);
-    console.log("==========")
   }
   return vscodeAppInstance;
 }
@@ -22,6 +19,9 @@ test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
   test.beforeAll(async () => {
     test.setTimeout(60000);
+    console.log("=========vscode instance===")
+    console.log(vscodeAppInstance);
+    console.log("==========")
     vscodeApp = await getVSCodeApp();
   });
 
