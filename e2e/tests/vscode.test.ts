@@ -2,18 +2,24 @@ import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
 import { cleanupRepo } from '../utilities/utils';
 
+let vscodeAppInstance: VSCode | null = null;
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
 
-test.describe('VSCode Tests', () => {
-  let vscodeApp: VSCode;
-
-  test.beforeAll(async () => {
-    console.log("======how many times=====");
-    test.setTimeout(60000);
+async function getVSCodeApp(): Promise<VSCode> {
+  if (!vscodeAppInstance) {
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
-    vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
+    vscodeAppInstance = await VSCode.init(executablePath, repoUrl, 'coolstore');
+  }
+  return vscodeAppInstance;
+}
+
+test.describe('VSCode Tests', () => {
+  let vscodeApp: VSCode;
+  test.beforeAll(async () => {
+    test.setTimeout(60000);
+    vscodeApp = await getVSCodeApp();
   });
 
   test('Should launch VSCode and check window title', async () => {
