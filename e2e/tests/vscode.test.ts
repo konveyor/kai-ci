@@ -44,6 +44,7 @@ test.describe('VSCode Tests', () => {
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
+    await window.screenshot({ path: 'start-analyzer-screenshot.png' });
   });
 
   test.afterAll(async () => {
