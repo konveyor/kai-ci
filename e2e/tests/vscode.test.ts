@@ -37,6 +37,7 @@ test.describe('VSCode Tests', () => {
 
   test('Set Up Konevyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
+    await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
     await window.waitForTimeout(5000);
     await window.getByRole('button', { name: ' Start Analyzer' }).click();
