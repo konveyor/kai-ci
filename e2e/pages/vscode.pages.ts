@@ -54,8 +54,7 @@ class VSCode {
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
         executablePath: executablePath,
-        args: [path.resolve(cloneDir),
-          '--disable-workspace-trust'],
+        args: [path.resolve(cloneDir), '--disable-workspace-trust'],
       });
 
       const window = await vscodeApp.firstWindow();
@@ -165,10 +164,10 @@ class VSCode {
 
     await window.keyboard.type('welcome: open walkthrough');
     await window.waitForTimeout(500);
-  
+
     await window.keyboard.press('Enter');
     await window.waitForTimeout(500);
-  
+
     await window.keyboard.type('set up konveyor');
     await window.keyboard.press('Enter');
   }
