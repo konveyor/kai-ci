@@ -58,6 +58,24 @@ class VSCode {
       });
 
       const window = await vscodeApp.firstWindow();
+
+    // Check if the "Trust Author" dialog appears
+    const trustDialogSelector = '.vscode-dialog';
+    const trustButtonSelector = 'button[aria-label="Yes, I trust the author"]';
+ 
+
+    // Wait for the dialog to appear, but don't block indefinitely
+    const dialog = await window.locator(trustDialogSelector).first();
+    const isDialogVisible = await dialog.isVisible();
+
+    if (isDialogVisible) {
+      console.log('Trust dialog appeared, clicking "Yes" to trust the author.');
+      const trustButton = window.locator(trustButtonSelector);
+      await trustButton.click();
+    } else {
+      console.log('Trust dialog did not appear, continuing...');
+    }
+
       return new VSCode(vscodeApp, window);
     } catch (error) {
       console.error('Error launching VSCode:', error);
