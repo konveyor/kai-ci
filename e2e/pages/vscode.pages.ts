@@ -59,6 +59,7 @@ class VSCode {
       });
 
       const window = await vscodeApp.firstWindow();
+      await window.setViewportSize({ width: 1920, height: 1080 });
       return new VSCode(vscodeApp, window);
     } catch (error) {
       console.error('Error launching VSCode:', error);
