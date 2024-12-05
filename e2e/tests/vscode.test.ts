@@ -10,6 +10,8 @@ test.describe('VSCode Tests', () => {
   let isVscodeInitialized = false;
 
   test.beforeAll(async () => {
+    console.log("==========isVscodeInitialized=======")
+    console.log(isVscodeInitialized);
     if (!isVscodeInitialized) {
     test.setTimeout(60000);
     const executablePath =
