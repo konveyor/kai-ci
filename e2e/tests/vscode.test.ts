@@ -7,24 +7,18 @@ const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
 
 test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
-  let isVscodeInitialized = false;
 
   test.beforeAll(async () => {
-    console.log("==========isVscodeInitialized=======")
-    console.log(isVscodeInitialized);
-    if (!isVscodeInitialized) {
     test.setTimeout(60000);
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
     vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
-    isVscodeInitialized = true;
-    }
   });
 
-  test('Should launch VSCode and check window title', async () => {
-    const window = vscodeApp.getWindow();
-    // await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
-  });
+  // test('Should launch VSCode and check window title', async () => {
+  //   const window = vscodeApp.getWindow();
+  //   await window.waitForTimeout(5000);
+  // });
 
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
