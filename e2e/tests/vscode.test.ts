@@ -1,20 +1,22 @@
 import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
-import { cleanupRepo, uninstallExtension } from '../utilities/utils';
+import { cleanupRepo } from '../utilities/utils';
 
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
 
-test.describe.configure({ mode: 'serial' });
-
 test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
+  let isVscodeInitialized = false;
 
   test.beforeAll(async () => {
+    if (!isVscodeInitialized) {
     test.setTimeout(60000);
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
     vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
+    isVscodeInitialized = true;
+    }
   });
 
   test('Should launch VSCode and check window title', async () => {
@@ -48,6 +50,5 @@ test.describe('VSCode Tests', () => {
 
   test.afterAll(async () => {
     await cleanupRepo();
-    await uninstallExtension();
   });
 });

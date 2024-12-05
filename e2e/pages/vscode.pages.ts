@@ -13,7 +13,7 @@ class VSCode {
   private readonly vscodeApp?: ElectronApplication;
   private readonly window?: Page;
 
-  private constructor(vscodeApp: ElectronApplication, window: Page) {
+  public constructor(vscodeApp: ElectronApplication, window: Page) {
     this.vscodeApp = vscodeApp;
     this.window = window;
   }
