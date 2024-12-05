@@ -50,6 +50,5 @@ test.describe('VSCode Tests', () => {
 
   test.afterAll(async () => {
     await cleanupRepo();
-    // await uninstallExtension();
   });
 });
