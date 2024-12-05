@@ -54,7 +54,8 @@ class VSCode {
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
         executablePath: executablePath,
-        args: [path.resolve(cloneDir)],
+        args: [path.resolve(cloneDir),
+          '--disable-workspace-trust'],
       });
 
       const window = await vscodeApp.firstWindow();
