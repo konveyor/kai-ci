@@ -39,15 +39,13 @@ test.describe('VSCode Tests', () => {
     const window = vscodeApp.getWindow();
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
-    await window.screenshot({ path: 'start-analyzer-screenshot4.png' });
     await window.waitForTimeout(5000);
     await window.getByRole('button', { name: 'Start Analyzer' }).click();
     await window.waitForTimeout(5000);
-    await window.screenshot({ path: 'start-analyzer-screenshot5.png' });
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
-    await window.screenshot({ path: 'start-analyzer-screenshot6.png' });
+    await window.screenshot({ path: 'start-analyzer-screenshot.png' });
   });
 
   test.afterAll(async () => {

@@ -75,12 +75,6 @@ jobs:
           vscode-initialized-screenshot.png
           kai-installed-screenshot.png
           start-analyzer-screenshot.png
-          start-analyzer-screenshot1.png
-          start-analyzer-screenshot2.png
-          start-analyzer-screenshot3.png
-          start-analyzer-screenshot4.png
-          start-analyzer-screenshot5.png
-          start-analyzer-screenshot6.png
       if: always()  # This ensures the upload runs regardless of previous step results
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

@@ -59,7 +59,6 @@ class VSCode {
       });
 
       const window = await vscodeApp.firstWindow();
-      // await window.setViewportSize({ width: 1920, height: 1080 });
       return new VSCode(vscodeApp, window);
     } catch (error) {
       console.error('Error launching VSCode:', error);
@@ -163,19 +162,15 @@ class VSCode {
     const window = this.getWindow();
     await window.keyboard.press('Control+Shift+P');
     await window.waitForTimeout(1000);
-    await window.screenshot({ path: 'start-analyzer-screenshot.png' });
 
     await window.keyboard.type('welcome: open walkthrough');
     await window.waitForTimeout(500);
-    await window.screenshot({ path: 'start-analyzer-screenshot1.png' });
-
+  
     await window.keyboard.press('Enter');
     await window.waitForTimeout(500);
-    await window.screenshot({ path: 'start-analyzer-screenshot2.png' });
-
+  
     await window.keyboard.type('set up konveyor');
     await window.keyboard.press('Enter');
-    await window.screenshot({ path: 'start-analyzer-screenshot3.png' });
   }
 }
 
