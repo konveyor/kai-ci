@@ -43,7 +43,7 @@ class VSCode {
           vsixFilePath = path.resolve(basePath, vsixFilePath);
         }
 
-        // console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
+        console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
         await VSCode.installExtensionFromVSIX(vsixFilePath);
       } else {
         console.warn(

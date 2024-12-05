@@ -21,7 +21,7 @@ test.describe('VSCode Tests', () => {
 
   test('Should launch VSCode and check window title', async () => {
     const window = vscodeApp.getWindow();
-    await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
+    // await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
   });
 
   test('Should open Extensions tab and verify installed extension', async () => {
