@@ -166,12 +166,15 @@ class VSCode {
 
     await window.keyboard.type('welcome: open walkthrough');
     await window.waitForTimeout(500);
+    await window.screenshot({ path: 'start-analyzer-screenshot1.png' });
 
     await window.keyboard.press('Enter');
     await window.waitForTimeout(500);
+    await window.screenshot({ path: 'start-analyzer-screenshot2.png' });
 
     await window.keyboard.type('set up konveyor');
     await window.keyboard.press('Enter');
+    await window.screenshot({ path: 'start-analyzer-screenshot3.png' });
   }
 }
 
