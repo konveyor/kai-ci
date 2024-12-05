@@ -15,13 +15,15 @@ test.describe('VSCode Tests', () => {
     vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
   });
 
-  // test('Should launch VSCode and check window title', async () => {
-  //   const window = vscodeApp.getWindow();
-  //   await window.waitForTimeout(5000);
-  // });
+  test('Should launch VSCode and check window title', async () => {
+    const window = vscodeApp.getWindow();
+    await window.waitForTimeout(5000);
+    await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
+  });
 
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
+    await window.waitForTimeout(5000);
     const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
     await kaiTab.click();
     await window.waitForTimeout(500);
