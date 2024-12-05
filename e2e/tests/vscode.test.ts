@@ -41,7 +41,7 @@ test.describe('VSCode Tests', () => {
     await vscodeApp.openSetUpKonveyor();
     await window.screenshot({ path: 'start-analyzer-screenshot4.png' });
     await window.waitForTimeout(5000);
-    await window.getByRole('button', { name: ' Start Analyzer' }).click();
+    await window.getByRole('button', { name: 'Start Analyzer' }).click();
     await window.waitForTimeout(5000);
     await window.screenshot({ path: 'start-analyzer-screenshot5.png' });
     await window
@@ -52,6 +52,6 @@ test.describe('VSCode Tests', () => {
 
   test.afterAll(async () => {
     await cleanupRepo();
-    await uninstallExtension();
+    // await uninstallExtension();
   });
 });
