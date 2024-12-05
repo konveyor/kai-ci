@@ -162,6 +162,7 @@ class VSCode {
     const window = this.getWindow();
     await window.keyboard.press('Control+Shift+P');
     await window.waitForTimeout(1000);
+    await window.screenshot({ path: 'start-analyzer-screenshot.png' });
 
     await window.keyboard.type('welcome: open walkthrough');
     await window.waitForTimeout(500);
