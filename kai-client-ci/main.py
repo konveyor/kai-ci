@@ -9,7 +9,7 @@ import kai_handler
 from consts import KAI_FOLDER, KAI_FILES_FOLDER
 from files import zip_folder, on_rmtree_error
 from logger import get_logger
-from upload import upload
+import s3_handler
 
 logger = get_logger(__name__)
 
@@ -25,14 +25,11 @@ def append_to_json_file(file_path, new_data):
 
 
 if __name__ == '__main__':
-
-    if os.path.exists('data'):
-        shutil.rmtree('data', onerror=on_rmtree_error)
-    os.makedirs('data')
-
-    if os.path.exists(KAI_FILES_FOLDER):
-        shutil.rmtree(KAI_FILES_FOLDER)
-    os.makedirs(KAI_FILES_FOLDER)
+    folders = ['data', 'output', KAI_FILES_FOLDER]
+    for folder in folders:
+        if os.path.exists(folder):
+            shutil.rmtree(folder, onerror=on_rmtree_error)
+        os.makedirs(folder)
 
     start = time.time()
 
@@ -57,6 +54,7 @@ if __name__ == '__main__':
         'demoExecutionTime': demo_end - demo_start,
         'evaluationExecutionTime': evaluation_end - evaluation_start
     }
+    s3_handler.download("report.json", "data/report.json")
     try:
         kai_eval_handler.generate_report()
         with open("data/kai-report.json", 'r', encoding='utf-8') as file:
@@ -65,14 +63,21 @@ if __name__ == '__main__':
     except Exception as e:
         logger.error(e)
     finally:
-        append_to_json_file('./output/report.json', json_report)
+        append_to_json_file('./data/report.json', json_report)
 
     os.rename(f"{KAI_FOLDER}/logs", 'data/logs')
 
     if os.path.exists(f"{KAI_FOLDER}/example/kai-analyzer.log"):
         os.rename(f"{KAI_FOLDER}/example/kai-analyzer.log", 'data/logs/kai-analyzer.log')
-
-    zip_path = zip_folder('data', datetime.now().strftime('%Y-%m-%d--%H-%M'), 'output')
-    report_data_url = upload(zip_path)
-    logger.info(f'Report data uploaded to {report_data_url}')
+    try:
+        zip_name = datetime.now().strftime('%Y-%m-%d--%H-%M')
+        zip_path = zip_folder('data', zip_name, 'output')
+        report_data_url = s3_handler.upload(zip_path, zip_path)
+        logger.info(f'Run data uploaded to {report_data_url}')
+        s3_handler.delete('report.json')
+        s3_handler.upload('./data/report.json', "report.json")
+        logger.info(f'JSON report updated')
+    except Exception as e:
+        logger.error(f"Data uploading failed")
+        logger.error(e)
     logger.info(f'Test execution took {time.time() - start} seconds')

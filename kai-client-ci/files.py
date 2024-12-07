@@ -1,3 +1,4 @@
+import platform
 import shutil
 import stat
 import zipfile
@@ -110,6 +111,9 @@ def winapi_path(dos_path, encoding=None):
     """
     Fix to avoid path too long errors while extracting kai in Windows
     """
+    if platform.system().lower() != "windows":
+        return dos_path
+
     path = os.path.abspath(dos_path)
 
     if path.startswith("\\\\"):
