@@ -45,8 +45,8 @@ jobs:
           # Redirect all output streams
           Start-Transcript -Path 'C:\actions-runner\work\run-tests-transcript.log' -Append
 
-          code --version
-          node --version
+          code --version *> C:\actions-runner\work\run-tests-output.log 2> C:\actions-runner\work\run-tests-error.log
+          node --version *> C:\actions-runner\work\run-tests-output.log 2>> C:\actions-runner\work\run-tests-error.log
 
           Stop-Transcript
           "@
