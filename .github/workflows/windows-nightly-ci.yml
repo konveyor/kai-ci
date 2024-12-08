@@ -82,7 +82,17 @@ jobs:
         run: |
           $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
-          Start-Process -FilePath "powershell.exe" -ArgumentList "-File C:\actions-runner\work\run-tests.ps1" -Credential $credential -NoNewWindow -Wait
+
+          # Redirect output to log file
+          $logPath = "C:\actions-runner\work\run-tests.log"
+          Start-Process -FilePath "powershell.exe" `
+                        -ArgumentList "-File C:\actions-runner\work\run-tests.ps1 *>&1 | Out-File -FilePath $logPath -Append" `
+                        -Credential $credential `
+                        -NoNewWindow `
+                        -Wait
+
+          # Output log file to GitHub Actions
+          Get-Content -Path $logPath -Wait
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, run-tests ]
