@@ -31,47 +31,8 @@ jobs:
           }
           
           $scriptContent = @"
-
-          # Define Node.js and VSCode Paths
-          $nodePath = 'C:\Program Files\nodejs'
-          #$vscodePath = 'C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe'
-          $newPath = "$env:PATH;$nodePath;$vscodePath"
-          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
-          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-          # Print Current User
-          Write-Output "Current User: $(whoami)"
-
-          # Verify VSCode and Node.js Installation
           code --version
           node --version
-
-          # Close All VSCode Instances
-          Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
-
-          # Create Temporary Work Directory
-          New-Item -Path "C:\actions-runner\work" -ItemType Directory -Force
-
-          # Clone kai-ci repo
-          cd C:\actions-runner\work
-          git clone https://github.com/konveyor/kai-ci.git
-          cd ./kai-ci
-
-          # Install npm dependencies
-          npm install .
-          npm ci
-
-          # Copy .env.example to .env and update executable path
-          Copy-Item -Path .env.example -Destination .env
-          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" |
-          ForEach-Object { $_ -replace "DEFAULT_VSIX_DOWNLOAD_URL=.*", "DEFAULT_VSIX_DOWNLOAD_URL='https://github.com/konveyor/editor-extensions/releases/download/v0.0.1-dev%2B20241022/konveyor-windows-0.0.1.vsix'" } |
-          Set-Content .env
-
-          # Run tests
-          npx playwright test
-
-          # Clean Up Kai Temp Directory
-          Remove-Item -Recurse -Force C:\actions-runner
           "@
 
           $scriptPath = "C:\actions-runner\work\run-tests.ps1"
