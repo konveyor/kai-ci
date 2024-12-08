@@ -83,15 +83,15 @@ jobs:
           $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
 
-          # Redirect output to separate log files
+          # Run the test script and redirect output
+          $scriptPath = "C:\actions-runner\work\run-tests.ps1"
           $logPathOut = "C:\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\actions-runner\work\run-tests-error.log"
+
           Start-Process -FilePath "powershell.exe" `
-                        -ArgumentList "-File C:\actions-runner\work\run-tests.ps1" `
+                        -ArgumentList "-ExecutionPolicy Bypass -File $scriptPath *> $logPathOut 2> $logPathErr" `
                         -Credential $credential `
                         -NoNewWindow `
-                        -RedirectStandardOutput $logPathOut `
-                        -RedirectStandardError $logPathErr `
                         -Wait
 
           # Output log files to GitHub Actions
@@ -99,6 +99,7 @@ jobs:
           Get-Content -Path $logPathOut
           Write-Output "--- Standard Error ---"
           Get-Content -Path $logPathErr
+
 
 
   stop-ec2-instance:
