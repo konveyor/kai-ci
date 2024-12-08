@@ -56,8 +56,8 @@ jobs:
           $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
 
           # Redirect output to separate log files
-          $logPathOut = "$runnerDir\run-tests-output.log"
-          $logPathErr = "$runnerDir\run-tests-error.log"
+          $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
+          $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
 
           # Run script inline
           Start-Process -FilePath "powershell.exe" `
