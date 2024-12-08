@@ -59,9 +59,14 @@ jobs:
           $logPathOut = "C:\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\actions-runner\work\run-tests-error.log"
 
-          # Using PSExec for non-admin execution
-          $psexecPath = "C:\Path\To\PsExec.exe"  # Ensure PsExec is available
-          & $psexecPath -accepteula -u nonadmin -p $password -w "C:\actions-runner\work" powershell.exe -File $scriptPath > $logPathOut 2> $logPathErr
+          # Run script using Start-Process for non-admin execution
+          Start-Process -FilePath "powershell.exe" `
+                        -ArgumentList "-File $scriptPath" `
+                        -Credential $credential `
+                        -NoNewWindow `
+                        -RedirectStandardOutput $logPathOut `
+                        -RedirectStandardError $logPathErr `
+                        -Wait
 
           # Output log files to GitHub Actions
           Write-Output "--- Standard Output ---"
