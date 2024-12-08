@@ -96,9 +96,9 @@ jobs:
 
           # Output log files to GitHub Actions
           Write-Output "--- Standard Output ---"
-          Get-Content -Path $logPathOut -Wait
+          Get-Content -Path $logPathOut
           Write-Output "--- Standard Error ---"
-          Get-Content -Path $logPathErr -Wait
+          Get-Content -Path $logPathErr
 
 
   stop-ec2-instance:
