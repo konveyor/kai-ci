@@ -83,30 +83,19 @@ jobs:
           $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
 
-          # Execute the script as non-admin user
-          $scriptPath = "C:\actions-runner\work\run-tests.ps1"
+          # Redirect output to separate log files
           $logPathOut = "C:\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\actions-runner\work\run-tests-error.log"
 
-          # Inline redirection within the test script execution
-          Start-Process -FilePath "powershell.exe" `
-                        -ArgumentList "-Command Start-Transcript -Path $logPathOut; . $scriptPath; Stop-Transcript" `
-                        -Credential $credential `
-                        -NoNewWindow `
-                        -Wait
+          # Using PSExec for non-admin execution
+          $psexecPath = "C:\Path\To\PsExec.exe"  # Ensure PsExec is available
+          & $psexecPath -accepteula -u nonadmin -p $password -w "C:\actions-runner\work" powershell.exe -File $scriptPath > $logPathOut 2> $logPathErr
 
           # Output log files to GitHub Actions
-          Write-Output "--- Standard Output and Commands ---"
-          Get-Content -Path $logPathOut
-
+          Write-Output "--- Standard Output ---"
+          Get-Content -Path $logPathOut -Wait
           Write-Output "--- Standard Error ---"
-          if (Test-Path $logPathErr) {
-            Get-Content -Path $logPathErr
-          } else {
-            Write-Output "No errors encountered."
-          }
-
-
+          Get-Content -Path $logPathErr -Wait
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, run-tests ]
