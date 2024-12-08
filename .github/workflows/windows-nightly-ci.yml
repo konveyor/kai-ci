@@ -83,22 +83,28 @@ jobs:
           $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
 
-          # Run the test script and redirect output
+          # Execute the script as non-admin user
           $scriptPath = "C:\actions-runner\work\run-tests.ps1"
           $logPathOut = "C:\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\actions-runner\work\run-tests-error.log"
 
+          # Inline redirection within the test script execution
           Start-Process -FilePath "powershell.exe" `
-                        -ArgumentList "-ExecutionPolicy Bypass -File $scriptPath *> $logPathOut 2> $logPathErr" `
+                        -ArgumentList "-Command Start-Transcript -Path $logPathOut; . $scriptPath; Stop-Transcript" `
                         -Credential $credential `
                         -NoNewWindow `
                         -Wait
 
           # Output log files to GitHub Actions
-          Write-Output "--- Standard Output ---"
+          Write-Output "--- Standard Output and Commands ---"
           Get-Content -Path $logPathOut
+
           Write-Output "--- Standard Error ---"
-          Get-Content -Path $logPathErr
+          if (Test-Path $logPathErr) {
+            Get-Content -Path $logPathErr
+          } else {
+            Write-Output "No errors encountered."
+          }
 
 
 
