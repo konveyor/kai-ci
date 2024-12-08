@@ -42,8 +42,13 @@ jobs:
           }
           
           $scriptContent = @"
+          # Redirect all output streams
+          Start-Transcript -Path 'C:\actions-runner\work\run-tests-transcript.log' -Append
+
           code --version
           node --version
+
+          Stop-Transcript
           "@
 
           $scriptPath = "C:\actions-runner\work\run-tests.ps1"
