@@ -60,23 +60,51 @@ jobs:
           $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
 
-          # Redirect output to separate log files
+          # Paths for script and logs
+          $scriptPath = "C:\actions-runner\work\run-tests.ps1"
           $logPathOut = "C:\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\actions-runner\work\run-tests-error.log"
+
+          # Log debug info before running the script
+          Write-Output "Checking script path: $scriptPath"
+          if (-not (Test-Path $scriptPath)) {
+            Write-Error "Script not found at path: $scriptPath"
+            exit 1
+          }
+
+          Write-Output "Checking output log path: $logPathOut"
+          if (-not (Test-Path $logPathOut)) {
+            New-Item -Path $logPathOut -ItemType File -Force | Out-Null
+          }
+
+          Write-Output "Checking error log path: $logPathErr"
+          if (-not (Test-Path $logPathErr)) {
+            New-Item -Path $logPathErr -ItemType File -Force | Out-Null
+          }
 
           # Run script using Start-Process for non-admin execution
           Start-Process -FilePath "powershell.exe" `
                         -ArgumentList "-File $scriptPath" `
                         -Credential $credential `
                         -NoNewWindow `
-                        -RedirectStandardOutput "C:\actions-runner\work\run-tests-output.log" `
-                        -RedirectStandardError "C:\actions-runner\work\run-tests-error.log" `
+                        -RedirectStandardOutput $logPathOut `
+                        -RedirectStandardError $logPathErr `
+                        -Wait
 
           # Output log files to GitHub Actions
-          Write-Output "--- Test Run Output ---"
-          Get-Content -Path $logPathOut
-          Write-Output "--- Test Run Error ---"
-          Get-Content -Path $logPathErr
+          if ((Test-Path $logPathOut) -and (Get-Content $logPathOut | Measure-Object -Line).Lines -gt 0) {
+            Write-Output "--- Standard Output ---"
+            Get-Content -Path $logPathOut
+          } else {
+            Write-Output "No output was written to the standard output log."
+          }
+
+          if ((Test-Path $logPathErr) -and (Get-Content $logPathErr | Measure-Object -Line).Lines -gt 0) {
+            Write-Output "--- Standard Error ---"
+            Get-Content -Path $logPathErr
+          } else {
+            Write-Output "No output was written to the standard error log."
+          }
 
 #  stop-ec2-instance:
 #    needs: [ start-ec2-instance, run-tests ]
