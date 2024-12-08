@@ -1,0 +1,87 @@
+name: Windows Nightly Run
+
+on: [push]
+
+jobs:
+  start-ec2-instance:
+    uses: ./.github/workflows/provision-runner.yml
+    with:
+      ec2-image-id: ami-01fa2492704e48175
+      ec2-instance-type: t2.micro
+      security-group-id: sg-0a3e6b53e86d0e69d
+      subnet-id: subnet-06113672589e7e836
+      ec2-os-type: windows
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+
+  run-tests:
+    needs: start-ec2-instance
+    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    steps:
+      - name: Install nodeJS
+        shell: powershell
+        run: |
+          if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+              Set-ExecutionPolicy Bypass -Scope Process -Force
+              [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+              iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          }
+
+          choco install nodejs -y
+
+      - name: Write Test Script
+        shell: powershell
+        run: |
+          # Ensure the directory exists
+          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+          if (-not (Test-Path -Path $runnerDir)) {
+            New-Item -Path $runnerDir -ItemType Directory -Force
+          }
+
+          $scriptContent = @"
+          code --version
+          node --version
+          "@
+
+          $scriptPath = "$runnerDir\run-tests.ps1"
+          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
+
+      - name: Run Test Script as Non-Admin
+        shell: powershell
+        run: |
+          $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
+          $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
+
+          # Redirect output to separate log files
+          $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
+          $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+
+          # Run script inline
+          Start-Process -FilePath "powershell.exe" `
+                        -ArgumentList "-ExecutionPolicy Bypass -File $scriptPath" `
+                        -Credential $credential `
+                        -WorkingDirectory "C:\Users\nonadmin\Documents\actions-runner\work" `
+                        -NoNewWindow `
+                        -RedirectStandardOutput $logPathOut `
+                        -RedirectStandardError $logPathErr `
+                        -Wait
+
+          # Output log files to GitHub Actions
+          Write-Output "--- Run Output ---"
+          Get-Content -Path $logPathOut
+          Write-Output "--- Run Error ---"
+          Get-Content -Path $logPathErr
+#  stop-ec2-instance:
+#    needs: [ start-ec2-instance, run-tests ]
+#    if: always()
+#    uses: ./.github/workflows/remove-runner.yml
+#    with:
+#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+#    secrets:
+#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
