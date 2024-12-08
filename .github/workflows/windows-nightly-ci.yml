@@ -24,20 +24,15 @@ jobs:
       - name: Write Test Script
         shell: powershell
         run: |
+          
+          # Ensure the directory exists
+          if (-not (Test-Path -Path "C:\actions-runner\work")) {
+            New-Item -Path "C:\actions-runner\work" -ItemType Directory -Force
+          }
+          
           $scriptContent = @"
-          # Install Chocolatey
-          # Set-ExecutionPolicy Bypass -Scope Process -Force;
-          # [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-          # iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-          # Install Node.js
-          # choco install nodejs -y
-
-          # Install VSCode
-          # choco install vscode -y
 
           # Define Node.js and VSCode Paths
-          
           $nodePath = 'C:\Program Files\nodejs'
           #$vscodePath = 'C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe'
           $newPath = "$env:PATH;$nodePath;$vscodePath"
