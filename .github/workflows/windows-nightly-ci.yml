@@ -86,13 +86,16 @@ jobs:
           # Redirect output to log file
           $logPath = "C:\actions-runner\work\run-tests.log"
           Start-Process -FilePath "powershell.exe" `
-                        -ArgumentList "-File C:\actions-runner\work\run-tests.ps1 *>&1 | Out-File -FilePath $logPath -Append" `
+                        -ArgumentList "-File C:\actions-runner\work\run-tests.ps1" `
                         -Credential $credential `
                         -NoNewWindow `
+                        -RedirectStandardOutput $logPath `
+                        -RedirectStandardError $logPath `
                         -Wait
 
           # Output log file to GitHub Actions
           Get-Content -Path $logPath -Wait
+
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, run-tests ]
