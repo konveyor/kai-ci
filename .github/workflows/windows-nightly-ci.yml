@@ -35,23 +35,18 @@ jobs:
       - name: Write Test Script
         shell: powershell
         run: |
-          
           # Ensure the directory exists
-          if (-not (Test-Path -Path "C:\actions-runner\work")) {
-            New-Item -Path "C:\actions-runner\work" -ItemType Directory -Force
+          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+          if (-not (Test-Path -Path $runnerDir)) {
+            New-Item -Path $runnerDir -ItemType Directory -Force
           }
-          
+
           $scriptContent = @"
-          # Redirect all output streams
-          Start-Transcript -Path 'C:\actions-runner\work\run-tests-transcript.log' -Append
-
-          code --version *> C:\actions-runner\work\run-tests-output.log 2> C:\actions-runner\work\run-tests-error.log
-          node --version *> C:\actions-runner\work\run-tests-output.log 2>> C:\actions-runner\work\run-tests-error.log
-
-          Stop-Transcript
+          code --version
+          node --version
           "@
 
-          $scriptPath = "C:\actions-runner\work\run-tests.ps1"
+          $scriptPath = "$runnerDir\run-tests.ps1"
           $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
       - name: Run Test Script as Non-Admin
@@ -60,52 +55,23 @@ jobs:
           $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
 
-          # Paths for script and logs
-          $scriptPath = "C:\actions-runner\work\run-tests.ps1"
-          $logPathOut = "C:\actions-runner\work\run-tests-output.log"
-          $logPathErr = "C:\actions-runner\work\run-tests-error.log"
+          # Redirect output to separate log files
+          $logPathOut = "$runnerDir\run-tests-output.log"
+          $logPathErr = "$runnerDir\run-tests-error.log"
 
-          # Log debug info before running the script
-          Write-Output "Checking script path: $scriptPath"
-          if (-not (Test-Path $scriptPath)) {
-            Write-Error "Script not found at path: $scriptPath"
-            exit 1
-          }
-
-          Write-Output "Checking output log path: $logPathOut"
-          if (-not (Test-Path $logPathOut)) {
-            New-Item -Path $logPathOut -ItemType File -Force | Out-Null
-          }
-
-          Write-Output "Checking error log path: $logPathErr"
-          if (-not (Test-Path $logPathErr)) {
-            New-Item -Path $logPathErr -ItemType File -Force | Out-Null
-          }
-
-          # Run script using Start-Process for non-admin execution
+          # Run script inline
           Start-Process -FilePath "powershell.exe" `
                         -ArgumentList "-File $scriptPath" `
                         -Credential $credential `
                         -NoNewWindow `
                         -RedirectStandardOutput $logPathOut `
                         -RedirectStandardError $logPathErr `
-                        -Wait
 
           # Output log files to GitHub Actions
-          if ((Test-Path $logPathOut) -and (Get-Content $logPathOut | Measure-Object -Line).Lines -gt 0) {
-            Write-Output "--- Standard Output ---"
-            Get-Content -Path $logPathOut
-          } else {
-            Write-Output "No output was written to the standard output log."
-          }
-
-          if ((Test-Path $logPathErr) -and (Get-Content $logPathErr | Measure-Object -Line).Lines -gt 0) {
-            Write-Output "--- Standard Error ---"
-            Get-Content -Path $logPathErr
-          } else {
-            Write-Output "No output was written to the standard error log."
-          }
-
+          Write-Output "--- Run Output ---"
+          Get-Content -Path $logPathOut
+          Write-Output "--- Run Error ---"
+          Get-Content -Path $logPathErr
 #  stop-ec2-instance:
 #    needs: [ start-ec2-instance, run-tests ]
 #    if: always()
