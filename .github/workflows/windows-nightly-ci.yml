@@ -64,13 +64,13 @@ jobs:
                         -ArgumentList "-File $scriptPath" `
                         -Credential $credential `
                         -NoNewWindow `
-                        -RedirectStandardOutput $logPathOut `
-                        -RedirectStandardError $logPathErr `
+                        -RedirectStandardOutput "C:\actions-runner\work\run-tests-output.log" `
+                        -RedirectStandardError "C:\actions-runner\work\run-tests-error.log" `
 
           # Output log files to GitHub Actions
-          Write-Output "--- Standard Output ---"
+          Write-Output "--- Test Run Output ---"
           Get-Content -Path $logPathOut
-          Write-Output "--- Standard Error ---"
+          Write-Output "--- Test Run Error ---"
           Get-Content -Path $logPathErr
 
 #  stop-ec2-instance:
