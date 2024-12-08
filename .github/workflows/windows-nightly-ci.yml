@@ -81,7 +81,7 @@ jobs:
         shell: powershell
         run: |
           $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
-          $credential = New-Object System.Management.Automation.PSCredential("testuser", $password)
+          $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
           Start-Process -FilePath "powershell.exe" -ArgumentList "-File C:\actions-runner\work\run-tests.ps1" -Credential $credential -NoNewWindow -Wait
 
   stop-ec2-instance:
