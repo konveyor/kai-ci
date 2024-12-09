@@ -21,15 +21,20 @@ jobs:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
-      - name: Install nodeJS
+      - name: Install PsExec
         shell: powershell
         run: |
-          if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-              Set-ExecutionPolicy Bypass -Scope Process -Force
-              [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
-              iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          # Install PsExec
+          $psExecUrl = "https://download.sysinternals.com/files/SysinternalsSuite.zip"
+          $destination = "C:\tools"
+          $zipPath = "$destination\SysinternalsSuite.zip"
+  
+          if (-not (Test-Path -Path $destination)) {
+            New-Item -Path $destination -ItemType Directory -Force
           }
-          choco install nodejs -y
+  
+          Invoke-WebRequest -Uri $psExecUrl -OutFile $zipPath
+          Expand-Archive -Path $zipPath -DestinationPath $destination -Force
 
       - name: Write Test Script
         shell: powershell
@@ -39,52 +44,34 @@ jobs:
           if (-not (Test-Path -Path $runnerDir)) {
             New-Item -Path $runnerDir -ItemType Directory -Force
           }
-
+  
+          # Create the test script
           $scriptContent = @"
           code --version
           node --version
           "@
-
+  
           $scriptPath = "$runnerDir\run-tests.ps1"
           $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
-      - name: Run Test Script as Non-Admin
+      - name: Run Test Script with PsExec
         shell: powershell
         run: |
-          $password = ConvertTo-SecureString -String "${{ secrets.NONADMIN_PASSWORD }}" -AsPlainText -Force
-          $credential = New-Object System.Management.Automation.PSCredential("nonadmin", $password)
-
-          # Redirect output to separate log files
+          $psExecPath = "C:\tools\PsExec64.exe"
+          $scriptPath = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests.ps1"
           $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-
-          # Debug: Test if paths are accessible
-          Write-Output "Testing access to log file paths..." | Out-File $logPathOut -Append
-          if (-Not (Test-Path -Path $logPathOut)) {
-              Write-Output "Log path $logPathOut is not accessible!" | Out-File $logPathErr -Append
-              exit 1
-          }
-
-          # Run script inline with LoadUserProfile
-          Start-Process -FilePath "powershell.exe" `
-                        -ArgumentList "-ExecutionPolicy Bypass -File $scriptPath" `
-                        -Credential $credential `
-                        -LoadUserProfile `
-                        -RedirectStandardOutput $logPathOut `
-                        -RedirectStandardError $logPathErr `
-                        -Wait
-
-          # Verify log file population
-          if ((Get-Content $logPathOut).Length -eq 0) {
-              Write-Output "Log file $logPathOut is empty!" | Out-File $logPathErr -Append
-              exit 1
-          }
-
+          
+          # Run the test script as the nonadmin user
+          & $psExecPath -accepteula -u nonadmin -p "${{ secrets.NONADMIN_PASSWORD }}" -d powershell.exe `
+            -ExecutionPolicy Bypass -File $scriptPath > $logPathOut 2> $logPathErr
+  
           # Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
           Write-Output "--- Run Error ---"
           Get-Content -Path $logPathErr
+
 
 #  stop-ec2-instance:
 #    needs: [ start-ec2-instance, run-tests ]
