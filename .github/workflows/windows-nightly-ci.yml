@@ -1,0 +1,86 @@
+name: Windows Nightly Run
+
+on: [push]
+
+jobs:
+  start-ec2-instance:
+    uses: ./.github/workflows/provision-runner.yml
+    with:
+      ec2-image-id: ami-01fa2492704e48175
+      ec2-instance-type: t2.micro
+      security-group-id: sg-0a3e6b53e86d0e69d
+      subnet-id: subnet-06113672589e7e836
+      ec2-os-type: windows
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+
+  run-tests:
+    needs: start-ec2-instance
+    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    steps:
+      - name: Install PsExec
+        shell: powershell
+        run: |
+          # Install PsExec
+          $psExecUrl = "https://download.sysinternals.com/files/SysinternalsSuite.zip"
+          $destination = "C:\tools"
+          $zipPath = "$destination\SysinternalsSuite.zip"
+  
+          if (-not (Test-Path -Path $destination)) {
+            New-Item -Path $destination -ItemType Directory -Force
+          }
+  
+          Invoke-WebRequest -Uri $psExecUrl -OutFile $zipPath
+          Expand-Archive -Path $zipPath -DestinationPath $destination -Force
+
+      - name: Write Test Script
+        shell: powershell
+        run: |
+          # Ensure the directory exists
+          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+          if (-not (Test-Path -Path $runnerDir)) {
+            New-Item -Path $runnerDir -ItemType Directory -Force
+          }
+  
+          # Create the test script
+          $scriptContent = @"
+          code --version
+          node --version
+          "@
+  
+          $scriptPath = "$runnerDir\run-tests.ps1"
+          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
+
+      - name: Run Test Script with PsExec
+        shell: powershell
+        run: |
+          $psExecPath = "C:\tools\PsExec64.exe"
+          $scriptPath = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests.ps1"
+          $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
+          $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+          
+          # Run the test script as the nonadmin user
+          & $psExecPath -accepteula -u nonadmin -p "pass123!" powershell.exe `
+          -ExecutionPolicy Bypass -File $scriptPath > $logPathOut 2> $logPathErr
+          
+          # Output log files to GitHub Actions
+          Write-Output "--- Run Output ---"
+          Get-Content -Path $logPathOut
+          Write-Output "--- Run Error ---"
+          Get-Content -Path $logPathErr
+
+
+#  stop-ec2-instance:
+#    needs: [ start-ec2-instance, run-tests ]
+#    if: always()
+#    uses: ./.github/workflows/remove-runner.yml
+#    with:
+#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+#    secrets:
+#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
