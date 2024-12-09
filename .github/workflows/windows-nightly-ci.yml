@@ -63,8 +63,7 @@ jobs:
           Start-Process -FilePath "powershell.exe" `
                         -ArgumentList "-ExecutionPolicy Bypass -File $scriptPath" `
                         -Credential $credential `
-                        -WorkingDirectory "C:\Users\nonadmin\Documents\actions-runner\work" `
-                        -NoNewWindow `
+                        -LoadUserProfile `
                         -RedirectStandardOutput $logPathOut `
                         -RedirectStandardError $logPathErr `
                         -Wait
