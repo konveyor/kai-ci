@@ -29,7 +29,6 @@ jobs:
               [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
               iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
           }
-
           choco install nodejs -y
 
       - name: Write Test Script
@@ -59,7 +58,14 @@ jobs:
           $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
 
-          # Run script inline
+          # Debug: Test if paths are accessible
+          Write-Output "Testing access to log file paths..." | Out-File $logPathOut -Append
+          if (-Not (Test-Path -Path $logPathOut)) {
+              Write-Output "Log path $logPathOut is not accessible!" | Out-File $logPathErr -Append
+              exit 1
+          }
+
+          # Run script inline with LoadUserProfile
           Start-Process -FilePath "powershell.exe" `
                         -ArgumentList "-ExecutionPolicy Bypass -File $scriptPath" `
                         -Credential $credential `
@@ -68,11 +74,18 @@ jobs:
                         -RedirectStandardError $logPathErr `
                         -Wait
 
+          # Verify log file population
+          if ((Get-Content $logPathOut).Length -eq 0) {
+              Write-Output "Log file $logPathOut is empty!" | Out-File $logPathErr -Append
+              exit 1
+          }
+
           # Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
           Write-Output "--- Run Error ---"
           Get-Content -Path $logPathErr
+
 #  stop-ec2-instance:
 #    needs: [ start-ec2-instance, run-tests ]
 #    if: always()
