@@ -61,19 +61,28 @@ jobs:
           $psExecPath = "C:\tools\PsExec64.exe"
           $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-        
-          # Debug: Print the PsExec command
-          Write-Output "Executing PsExec: & '$psExecPath' -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"code --version > '$logPathOut' 2> '$logPathErr'\""
+          $tempOutput = "C:\Users\nonadmin\Documents\actions-runner\work\psexec-output.log"
           
-          # Run PsExec to directly execute the command
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "code --version > \"C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log\" 2> \"C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log\""
-            
+          # Debug: Print the PsExec command
+          Write-Output "Executing PsExec with Start-Process using absolute paths..."
+          
+          # Prepare the command for Start-Process
+          $psExecCommand = "$psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command `"code --version > 'C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log' 2> 'C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log'`""
+          
+          # Run the command using Start-Process
+          Start-Process -FilePath "powershell.exe" `
+          -ArgumentList "-NoProfile -Command $psExecCommand" `
+          -RedirectStandardOutput $tempOutput `
+          -RedirectStandardError $logPathErr `
+          -Wait `
+          -NoNewWindow
+          
           # Debug: Check if log files exist
           if (-Not (Test-Path -Path $logPathOut)) {
           Write-Output "Log file does not exist: $logPathOut"
-            exit 1
+          exit 1
           }
-
+          
           # Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
@@ -82,14 +91,15 @@ jobs:
 
 
 
-#  stop-ec2-instance:
-#    needs: [ start-ec2-instance, run-tests ]
-#    if: always()
-#    uses: ./.github/workflows/remove-runner.yml
-#    with:
-#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
-#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    secrets:
-#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+
+  stop-ec2-instance:
+    needs: [ start-ec2-instance, run-tests ]
+    if: always()
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
