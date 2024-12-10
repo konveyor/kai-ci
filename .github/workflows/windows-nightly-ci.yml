@@ -36,45 +36,50 @@ jobs:
           Invoke-WebRequest -Uri $psExecUrl -OutFile $zipPath
           Expand-Archive -Path $zipPath -DestinationPath $destination -Force
 
-      - name: Write Test Script
-        shell: powershell
-        run: |
-          # Ensure the directory exists
-          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
-          if (-not (Test-Path -Path $runnerDir)) {
-            New-Item -Path $runnerDir -ItemType Directory -Force
-          }
-  
-          # Create the test script
-          $scriptContent = @"
-          # Redirect output directly in the script
-          code --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-          node --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-          "@
-  
-          $scriptPath = "$runnerDir\run-tests.ps1"
-          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
+#      - name: Write Test Script
+#        shell: powershell
+#        run: |
+#          # Ensure the directory exists
+#          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+#          if (-not (Test-Path -Path $runnerDir)) {
+#            New-Item -Path $runnerDir -ItemType Directory -Force
+#          }
+#
+#          # Create the test script
+#          $scriptContent = @"
+#          # Redirect output directly in the script
+#          code --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+#          node --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+#          "@
+#
+#          $scriptPath = "$runnerDir\run-tests.ps1"
+#          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
       - name: Run Test Script with PsExec
         shell: powershell
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
-          $scriptPath = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests.ps1"
           $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
         
           # Debug: Print the new command
-          Write-Output "& $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -File \"$scriptPath\""
+          Write-Output "Executing PsExec: & '$psExecPath' -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"code --version\""
           
-          # Run PsExec with corrected options
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -File "$scriptPath"
-        
+          # Run PsExec to directly execute the command
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "code --version > '$logPathOut' 2> '$logPathErr'"
+            
+          # Debug: Check if log files exist
+          if (-Not (Test-Path -Path $logPathOut)) {
+          Write-Output "Log file does not exist: $logPathOut"
+            exit 1
+          }
+
           # Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
-          
           Write-Output "--- Run Error ---"
           Get-Content -Path $logPathErr
+
 
 
 #  stop-ec2-instance:
