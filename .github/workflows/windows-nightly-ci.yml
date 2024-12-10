@@ -62,11 +62,11 @@ jobs:
           $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
         
-          # Debug: Print the new command
-          Write-Output "Executing PsExec: & '$psExecPath' -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"code --version\""
+          # Debug: Print the PsExec command
+          Write-Output "Executing PsExec: & '$psExecPath' -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"code --version > '$logPathOut' 2> '$logPathErr'\""
           
           # Run PsExec to directly execute the command
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "code --version > '$logPathOut' 2> '$logPathErr'"
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "code --version > \"C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log\" 2> \"C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log\""
             
           # Debug: Check if log files exist
           if (-Not (Test-Path -Path $logPathOut)) {
