@@ -47,8 +47,9 @@ jobs:
   
           # Create the test script
           $scriptContent = @"
-          code --version
-          node --version
+          # Redirect output directly in the script
+          code --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+          node --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
           "@
   
           $scriptPath = "$runnerDir\run-tests.ps1"
@@ -63,10 +64,7 @@ jobs:
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
           
           # Run the test script as the nonadmin user
-          $psExecOutput = & $psExecPath -accepteula -u nonadmin -p "pass123!" powershell.exe -File $scriptPath
-
-          # Write PsExec's output to the log file
-          $psExecOutput | Out-File -FilePath $logPathOut -Append
+          & $psExecPath -accepteula -u nonadmin -p "pass123!" powershell.exe -File $scriptPath 
           
           # Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
