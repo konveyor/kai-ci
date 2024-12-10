@@ -63,8 +63,7 @@ jobs:
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
           
           # Run the test script as the nonadmin user
-          & $psExecPath -accepteula -u nonadmin -p "pass123!" -i powershell.exe `
-          -ExecutionPolicy Bypass -File $scriptPath > $logPathOut 2> $logPathErr
+          & $psExecPath -accepteula -u nonadmin -p "pass123!" powershell.exe ` -File $scriptPath > $logPathOut 2> $logPathErr
           
           # Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
