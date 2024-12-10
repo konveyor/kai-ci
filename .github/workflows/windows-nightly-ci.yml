@@ -62,15 +62,23 @@ jobs:
           $scriptPath = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests.ps1"
           $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
           $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+        
+          # Debug: Print the command
+          echo "Executing PsExec: & '$psExecPath' -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"& { & '$scriptPath' }\""
           
-          # Run the test script as the nonadmin user
-          echo "executing: & '$psExecPath' -accepteula -u nonadmin -p 'pass123!' powershell.exe -File '$scriptPath'"
-          & $psExecPath -accepteula -u nonadmin -p "pass123!" -v powershell.exe -File $scriptPath
+          # Properly quote the PsExec command
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "& { & '$scriptPath' }"
+            
+            # Debug: Check if log files exist
+          if (-Not (Test-Path -Path $logPathOut)) {
+            Write-Output "Log file does not exist: $logPathOut"
+            exit 1
+          }
           
           # Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
-          Write-Output "--- Run Error ---"`
+          Write-Output "--- Run Error ---"
           Get-Content -Path $logPathErr
 
 
