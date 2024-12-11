@@ -21,20 +21,6 @@ jobs:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
-      - name: Install PsExec
-        shell: powershell
-        run: |
-          # Install PsExec
-          $psExecUrl = "https://download.sysinternals.com/files/SysinternalsSuite.zip"
-          $destination = "C:\tools"
-          $zipPath = "$destination\SysinternalsSuite.zip"
-  
-          if (-not (Test-Path -Path $destination)) {
-            New-Item -Path $destination -ItemType Directory -Force
-          }
-  
-          Invoke-WebRequest -Uri $psExecUrl -OutFile $zipPath
-          Expand-Archive -Path $zipPath -DestinationPath $destination -Force
 
 #      - name: Write Test Script
 #        shell: powershell
@@ -74,9 +60,11 @@ jobs:
           Start-Process -FilePath "powershell.exe" `
           -ArgumentList "-Command code --version > '$logPathOut' 2> '$logPathErr'" `
           -Credential $Credential `
+          -RedirectStandardOutput "C:\Users\nonadmin\Documents\actions-runner\work\process-output.log" `
+          -RedirectStandardError "C:\Users\nonadmin\Documents\actions-runner\work\process-error.log" `
           -NoNewWindow `
           -Wait
-          
+                  
           # Debug: Check if log files exist
           if (-Not (Test-Path -Path $logPathOut)) {
             Write-Output "Log file does not exist: $logPathOut"
