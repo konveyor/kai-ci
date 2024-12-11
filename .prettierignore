@@ -4,5 +4,7 @@
 out
 gen
 kai-client-ci/.idea
+kai-client-ci/venv
 kai-client-ci/output
 kai-client-ci/fixtures
+kai-client-ci/kai_files

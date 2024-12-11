@@ -113,7 +113,7 @@ def run_demo():
     else:
         logger.error(f"run_demo.py failed with return code {result.returncode}: \n{result.stderr}")
 
-def get_python_venv_executable():
+def get_python_venv_executable() -> str:
     """
         :return: python venv executable path which is kai_files/kai
     """
