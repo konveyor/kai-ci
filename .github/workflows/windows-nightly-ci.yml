@@ -58,24 +58,29 @@ jobs:
       - name: Run Test Script with PsExec
         shell: powershell
         run: |
-          $psExecPath = "C:\tools\PsExec64.exe"
-          $logPathOut = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log"
-          $logPathErr = "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-          $tempOutput = "C:\Users\nonadmin\Documents\actions-runner\work\psexec-output.log"
+          $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+          $logPathOut = "$logDir\run-tests-output.log"
+          $logPathErr = "$logDir\run-tests-error.log"
           
-          # Debug: Print the PsExec command
-          Write-Output "Executing PsExec with Start-Process using absolute paths..."
+          # Ensure the directory exists
+          if (-Not (Test-Path -Path $logDir)) {
+          New-Item -Path $logDir -ItemType Directory -Force
+          }
           
-          # Prepare the command for Start-Process
-          $psExecCommand = "$psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command `"code --version > 'C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log' 2> 'C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log'`""
+          # Debug: Print the Start-Process command
+          Write-Output "Executing Start-Process as nonadmin with directory creation..."
           
-          # Run the command using Start-Process
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
+          # Run the command
+          Start-Process -FilePath "powershell.exe" `
+          -ArgumentList "-Command code --version > '$logPathOut' 2> '$logPathErr'" `
+          -Credential $Credential `
+          -NoNewWindow `
+          -Wait
           
           # Debug: Check if log files exist
           if (-Not (Test-Path -Path $logPathOut)) {
-          Write-Output "Log file does not exist: $logPathOut"
-          exit 1
+            Write-Output "Log file does not exist: $logPathOut"
+            exit 1
           }
           
           # Output log files to GitHub Actions
