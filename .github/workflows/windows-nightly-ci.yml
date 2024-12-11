@@ -70,12 +70,7 @@ jobs:
           $psExecCommand = "$psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command `"code --version > 'C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log' 2> 'C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log'`""
           
           # Run the command using Start-Process
-          Start-Process -FilePath "powershell.exe" `
-          -ArgumentList "-NoProfile -Command $psExecCommand" `
-          -RedirectStandardOutput $tempOutput `
-          -RedirectStandardError $logPathErr `
-          -Wait `
-          -NoNewWindow
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
           
           # Debug: Check if log files exist
           if (-Not (Test-Path -Path $logPathOut)) {
