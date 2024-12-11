@@ -1,0 +1,92 @@
+name: Windows Nightly Run
+
+on: [push]
+
+jobs:
+  start-ec2-instance:
+    uses: ./.github/workflows/provision-runner.yml
+    with:
+      ec2-image-id: ami-01fa2492704e48175
+      ec2-instance-type: t2.micro
+      security-group-id: sg-0a3e6b53e86d0e69d
+      subnet-id: subnet-06113672589e7e836
+      ec2-os-type: windows
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+
+  run-tests:
+    needs: start-ec2-instance
+    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    steps:
+
+#      - name: Write Test Script
+#        shell: powershell
+#        run: |
+#          # Ensure the directory exists
+#          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+#          if (-not (Test-Path -Path $runnerDir)) {
+#            New-Item -Path $runnerDir -ItemType Directory -Force
+#          }
+#
+#          # Create the test script
+#          $scriptContent = @"
+#          # Redirect output directly in the script
+#          code --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+#          node --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+#          "@
+#
+#          $scriptPath = "$runnerDir\run-tests.ps1"
+#          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
+
+      - name: Run Test Script with PsExec
+        shell: powershell
+        run: |
+          $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+          $logPathOut = "$logDir\run-tests-output.log"
+          $logPathErr = "$logDir\run-tests-error.log"
+          
+          # Ensure the directory exists
+          if (-Not (Test-Path -Path $logDir)) {
+          New-Item -Path $logDir -ItemType Directory -Force
+          }
+          
+          # Debug: Print the Start-Process command
+          Write-Output "Executing Start-Process as nonadmin with directory creation..."
+          
+          # Run the command
+          Start-Process -FilePath "powershell.exe" `
+          -ArgumentList "-Command code --version > '$logPathOut' 2> '$logPathErr'" `
+          -Credential $Credential `
+          -RedirectStandardOutput "C:\Users\nonadmin\Documents\actions-runner\work\process-output.log" `
+          -RedirectStandardError "C:\Users\nonadmin\Documents\actions-runner\work\process-error.log" `
+          -NoNewWindow `
+                  
+          # Debug: Check if log files exist
+          if (-Not (Test-Path -Path $logPathOut)) {
+            Write-Output "Log file does not exist: $logPathOut"
+            exit 1
+          }
+          
+          # Output log files to GitHub Actions
+          Write-Output "--- Run Output ---"
+          Get-Content -Path $logPathOut
+          Write-Output "--- Run Error ---"
+          Get-Content -Path $logPathErr
+
+
+
+
+#  stop-ec2-instance:
+#    needs: [ start-ec2-instance, run-tests ]
+#    if: always()
+#    uses: ./.github/workflows/remove-runner.yml
+#    with:
+#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+#    secrets:
+#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
