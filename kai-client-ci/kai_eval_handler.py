@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from consts import KAI_EVAL_FOLDER
+from consts import KAI_EVAL_FOLDER, COOLSTORE_FOLDER
 from files import clone_repository
 from kai_handler import get_python_venv_executable
 from logger import get_logger
@@ -24,7 +24,8 @@ def parse_kai_logs():
         [
             os.path.join("../../", python_venv_executable),
             "parse_kai_logs.py",
-            "../../fixtures/logs",  # input_dir TODO (abrugaro): replace with kai logs once run_demo works
+            "../kai/example/analysis/coolstore/output.yaml",  # input file
+            f"../../{COOLSTORE_FOLDER}",  # repository path
             "../../data/kai-logs-parsed.yaml"  # output
         ],
         cwd="kai_files/kai-eval",
@@ -45,8 +46,8 @@ def evaluate():
         "evaluate.py",
         "-c",
         "../../fixtures/config.toml",
-        "../../data/kai-logs-parsed.yaml",  # input_dir
-        "../../data/kai-eval-result.yaml"  # output
+        "../../data/kai-logs-parsed.yaml",  # input_file
+        "../../data/kai-eval-result.yaml"  # output_file
     ]
     logger.debug(f"Runnin evaluation: {' '.join(evaluate_command_args)}")
     result = subprocess.run(
