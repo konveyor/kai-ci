@@ -1,7 +1,8 @@
 name: Run demo with kai client and evaluate results
 
-on: push
-
+on:
+  schedule:
+    - cron: '0 0 * * 0,1,2,3,4,5'
 jobs:
   test-and-evaluate:
     name: Run demo and evaluation
