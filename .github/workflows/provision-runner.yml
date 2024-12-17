@@ -77,31 +77,6 @@ jobs:
           ec2-image-id: ${{ inputs.ec2-image-id }}
           subnet-id: ${{ inputs.subnet-id }}
           security-group-id: ${{ inputs.security-group-id }}
-          pre-runner-script: |
-            <powershell>
-            # Step 1: Create the test user
-            net user testuser ${{ secrets.nonadmin-password }} /add
-            net localgroup "Remote Desktop Users" testuser /add
-            net localgroup "Users" testuser /add
-
-            # Step 2: Download and set up the GitHub Actions runner as the non-admin user
-            $runnerPath = "C:\actions-runner"
-            if (-not (Test-Path -Path $runnerPath)) {
-              New-Item -ItemType Directory -Force -Path $runnerPath
-            }
-            Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v2.292.0/actions-runner-win-x64-2.292.0.zip" -OutFile "$runnerPath\actions-runner.zip"
-            Expand-Archive -Path "$runnerPath\actions-runner.zip" -DestinationPath $runnerPath
-            Remove-Item "$runnerPath\actions-runner.zip"
-
-            # Step 3: Configure the runner with test user credentials
-            $password = ConvertTo-SecureString -String "${{ secrets.nonadmin-password }}" -AsPlainText -Force
-            $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "testuser", $password
-
-            Start-Process -FilePath "$runnerPath\config.cmd" -ArgumentList "--url https://github.com/YOUR_ORG/YOUR_REPO --token ${{ secrets.github-token }}" -Credential $credential -NoNewWindow -Wait
-
-            # Step 4: Run the GitHub Actions runner as the test user
-            Start-Process -FilePath "$runnerPath\run.cmd" -Credential $credential -NoNewWindow
-            </powershell>
 
       - name: Output EC2 Instance ID
         run: |
