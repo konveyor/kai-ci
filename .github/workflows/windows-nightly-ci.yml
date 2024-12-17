@@ -44,38 +44,45 @@ jobs:
       - name: Run Test Script with PsExec
         shell: powershell
         run: |
+          # Define paths
+          $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
+          $toolsDir = "C:\tools"
+          $psExecPath = "$toolsDir\PsExec64.exe"
           $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$logDir\run-tests-output.log"
           $logPathErr = "$logDir\run-tests-error.log"
           
-          # Ensure the directory exists
+          # Step 1: Install PsExec
+          Write-Output "Downloading and installing PsExec..."
+          if (Test-Path -Path $toolsDir) { Remove-Item -Recurse -Force $toolsDir }
+          New-Item -Path $toolsDir -ItemType Directory -Force
+          Invoke-WebRequest -Uri $psExecUrl -OutFile "$toolsDir\PSTools.zip"
+          Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
+          Write-Output "PsExec installed successfully."
+          
+          # Step 2: Ensure the log directory exists
+          Write-Output "Ensuring log directory exists: $logDir"
           if (-Not (Test-Path -Path $logDir)) {
-          New-Item -Path $logDir -ItemType Directory -Force
+              New-Item -Path $logDir -ItemType Directory -Force
           }
           
-          # Debug: Print the Start-Process command
-          Write-Output "Executing Start-Process as nonadmin with directory creation..."
+          # Step 3: Execute the command using PsExec
+          Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
+              -Command "code --version > '$logPathOut' 2> '$logPathErr'"
           
-          # Run the command
-          Start-Process -FilePath "powershell.exe" `
-          -ArgumentList "-Command code --version > '$logPathOut' 2> '$logPathErr'" `
-          -Credential $Credential `
-          -RedirectStandardOutput "C:\Users\nonadmin\Documents\actions-runner\work\process-output.log" `
-          -RedirectStandardError "C:\Users\nonadmin\Documents\actions-runner\work\process-error.log" `
-          -NoNewWindow `
-                  
-          # Debug: Check if log files exist
+          # Step 4: Check if output log file exists
           if (-Not (Test-Path -Path $logPathOut)) {
-            Write-Output "Log file does not exist: $logPathOut"
-            exit 1
+              Write-Output "Log file does not exist: $logPathOut"
+              Write-Output "Check $logPathErr for any errors."
+              exit 1
           }
           
-          # Output log files to GitHub Actions
+          # Step 5: Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
           Write-Output "--- Run Error ---"
           Get-Content -Path $logPathErr
-
 
 
 
