@@ -2,17 +2,18 @@ import os
 import platform
 import shutil
 import subprocess
+from pathlib import Path
 
 import requests
 
 from consts import KAI_FILES_FOLDER, KAI_FOLDER
 from files import unzip_file, download_file, rename_extracted_folder, set_executable_permissions, copy_file, \
-    clone_repository
+    clone_repository, on_rmtree_error
 from logger import get_logger
+from utils import is_windows
 
 logger = get_logger(__name__)
 
-# TODO (abrugaro) move to a class
 
 def download_kai_release():
     api_response = requests.get("https://api.github.com/repos/konveyor/kai/releases/latest")
@@ -29,7 +30,7 @@ def download_kai_release():
     system = platform.system().lower()
 
     if system == "windows":
-        rpc_server_name = "kai-rpc-server.windows-x86_64.zip"
+        rpc_server_name = "kai-rpc-server.windows-X64.zip"
     elif system == "linux":
         rpc_server_name = "kai-rpc-server.linux-x86_64.zip"
     else:
@@ -39,8 +40,8 @@ def download_kai_release():
     rpc_server_url = next((asset["browser_download_url"] for asset in assets if asset["name"] == rpc_server_name), None)
 
     if not rpc_server_url:
-        logger.error("Required asset not found")
-        return
+        logger.error(f"Error while finding url for {rpc_server_name}")
+        raise Exception(f"Error while finding url for {rpc_server_name}")
 
     source_code_url = release_data.get("zipball_url", "")
     file_path = os.path.join(KAI_FILES_FOLDER, "source_code.zip")
@@ -73,7 +74,7 @@ def setup_kai_external_files():
 
     clone_repository('rulesets', 'https://github.com/konveyor/rulesets.git', 'main')
     os.rename('data/rulesets/default/generated/', 'kai_files/kai/example/analysis/rulesets')
-    shutil.rmtree('data/rulesets/')
+    shutil.rmtree('data/rulesets/', onerror=on_rmtree_error)
 
     clone_repository('coolstore', 'https://github.com/konveyor-ecosystem/coolstore', 'main')
     os.rename('data/coolstore', 'kai_files/kai/example/coolstore')
@@ -82,8 +83,7 @@ def setup_kai_external_files():
 def setup_kai_dependencies():
     venv_folder = os.path.join(KAI_FOLDER, "venv")
 
-    system = platform.system().lower()
-    if system == "windows":
+    if is_windows():
         pip_executable = os.path.join(venv_folder, "Scripts", "pip")
     else:
         pip_executable = os.path.join(venv_folder, "bin", "pip")
@@ -99,13 +99,17 @@ def setup_kai_dependencies():
 
 def run_demo():
     python_venv_executable = get_python_venv_executable()
+    demo_rel_path = Path(f"../../../{python_venv_executable}")
+    cwd = os.path.join(KAI_FOLDER, "example")
 
     logger.info("Executing run_demo.py")
+    logger.debug(f"Running {demo_rel_path} run_demo.py from {cwd}")
     result = subprocess.run(
-        [os.path.join("../../../", python_venv_executable), "run_demo.py"],
-        cwd=os.path.join(KAI_FOLDER, "example"),
+        [demo_rel_path, "run_demo.py"],
+        cwd=cwd,
         capture_output=True,
-        text=True
+        text=True,
+        shell=is_windows()
     )
 
     if result.returncode == 0:
@@ -119,8 +123,12 @@ def get_python_venv_executable() -> str:
     """
     venv_folder = os.path.join(KAI_FOLDER, "venv")
 
-    system = platform.system().lower()
-    if system == "windows":
+    if is_windows():
         return os.path.join(venv_folder, "Scripts", "python")
 
     return os.path.join(venv_folder, "bin", "python")
+
+def setup() -> None:
+    download_kai_release()
+    setup_kai_external_files()
+    setup_kai_dependencies()

@@ -1,17 +1,15 @@
 import os
 import subprocess
+from pathlib import Path
 
 from consts import KAI_EVAL_FOLDER, COOLSTORE_FOLDER
 from files import clone_repository
 from kai_handler import get_python_venv_executable
 from logger import get_logger
+from utils import is_windows
 
 logger = get_logger(__name__)
 
-
-# TODO (abrugaro) move to a class
-# For discussing: As kai-eval is right now formed by 4 files that I already had to modify and they will need more changes in the near future
-# We may directly integrate it in this repository
 
 def download_kai_eval():
     clone_repository('kai-eval', 'https://github.com/abrugaro/kai-eval.git', 'main')
@@ -22,7 +20,7 @@ def parse_kai_logs():
     python_venv_executable = get_python_venv_executable()
     result = subprocess.run(
         [
-            os.path.join("../../", python_venv_executable),
+            Path(f"../../{python_venv_executable}"),
             "parse_kai_logs.py",
             "../kai/example/analysis/coolstore/output.yaml",  # input file
             f"../../{COOLSTORE_FOLDER}",  # repository path
@@ -30,7 +28,8 @@ def parse_kai_logs():
         ],
         cwd="kai_files/kai-eval",
         capture_output=True,
-        text=True
+        text=True,
+        shell=is_windows()
     )
 
     if result.returncode == 0:
@@ -42,19 +41,20 @@ def parse_kai_logs():
 def evaluate():
     python_venv_executable = get_python_venv_executable()
     evaluate_command_args = [
-        os.path.join("../../", python_venv_executable),
+        Path(f"../../{python_venv_executable}"),
         "evaluate.py",
         "-c",
         "../../fixtures/config.toml",
         "../../data/kai-logs-parsed.yaml",  # input_file
         "../../data/kai-eval-result.yaml"  # output_file
     ]
-    logger.debug(f"Runnin evaluation: {' '.join(evaluate_command_args)}")
+    logger.debug(f"Runnin evaluation: {evaluate_command_args}")
     result = subprocess.run(
         evaluate_command_args,
         cwd=KAI_EVAL_FOLDER,
         capture_output=True,
-        text=True
+        text=True,
+        shell=is_windows()
     )
 
     if result.returncode == 0:
@@ -67,7 +67,7 @@ def generate_report():
     python_venv_executable = get_python_venv_executable()
     result = subprocess.run(
         [
-            os.path.join("../../", python_venv_executable),
+            Path(f"../../{python_venv_executable}"),
             "generate_report.py",
             "../../data/kai-eval-result.yaml",  # input
             "../../data/kai-report.json",  # output
@@ -75,7 +75,8 @@ def generate_report():
         ],
         cwd="kai_files/kai-eval",
         capture_output=True,
-        text=True
+        text=True,
+        shell=is_windows()
     )
 
     if result.returncode == 0:

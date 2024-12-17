@@ -2,6 +2,7 @@ import platform
 import shutil
 import stat
 import zipfile
+import json
 import os
 import git
 
@@ -11,7 +12,6 @@ from git import Repo
 from logger import get_logger
 
 logger = get_logger(__name__)
-
 
 def download_file(url: str, file_path: str):
     response = requests.get(url, stream=True)
@@ -82,6 +82,14 @@ def copy_file(src: str, dst: str):
     except Exception as e:
         logger.error(f'Error while copying {src} to {dst}: {e}')
 
+def append_to_json_file(file_path, new_data):
+    with open(file_path, 'r', encoding='utf-8') as ogFile:
+        data = json.load(ogFile)
+
+    data.append(new_data)
+
+    with open(file_path, 'w', encoding='utf-8') as modFile:
+        json.dump(data, modFile, indent=4)
 
 def set_executable_permissions(file_path: str):
     try:
