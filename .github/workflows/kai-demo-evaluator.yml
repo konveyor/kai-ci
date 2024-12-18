@@ -44,4 +44,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-          GIT_PYTHON_GIT_EXECUTABLE: "C:\Program Files\Git\bin\git.exe"
+          GIT_PYTHON_GIT_EXECUTABLE: "C:\\Program Files\\Git\\bin\\git.exe"
