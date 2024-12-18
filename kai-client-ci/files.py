@@ -1,17 +1,19 @@
+import platform
 import shutil
 import stat
 import zipfile
+import json
 import os
 import git
 
 import requests
+from git import Repo
 
 from logger import get_logger
 
 logger = get_logger(__name__)
 
-
-def download_file(url, file_path):
+def download_file(url: str, file_path: str):
     response = requests.get(url, stream=True)
     if response.status_code == 200:
         with open(file_path, 'wb') as file:
@@ -22,7 +24,7 @@ def download_file(url, file_path):
         logger.error(f'Failed to download the file {file_path} | Status code: {response.status_code}')
 
 
-def rename_extracted_folder(base_folder, target_folder_name):
+def rename_extracted_folder(base_folder: str, target_folder_name: str):
     """
         Renames the extracted source code folder which is in format konveyor-kai-[uid] to a standard name 'kai'
     """
@@ -40,13 +42,18 @@ def rename_extracted_folder(base_folder, target_folder_name):
         logger.error(f'Failed to rename folder: {e}')
 
 
-def clone_repository(app_name, repository_url, branch):
+def clone_repository(app_name: str, repository_url: str, branch: str):
     clone_dir = os.path.join('data', f'{app_name}')
     git.Repo.clone_from(repository_url, clone_dir, branch=branch)
     logger.info(f"Repository {app_name} {branch} cloned into 'data'")
 
+def count_modified_files(repo_path: str) -> int:
+    repo = Repo(repo_path)
+    diff = repo.git.diff('--numstat')
+    modified_files = len(diff.splitlines())
+    return modified_files
 
-def unzip_file(zip_path, extract_folder):
+def unzip_file(zip_path: str, extract_folder: str):
     extract_folder = winapi_path(extract_folder)
     try:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
@@ -56,7 +63,7 @@ def unzip_file(zip_path, extract_folder):
         logger.error(f'Failed to extract {zip_path}')
 
 
-def zip_folder(input_dir, file_name, output_dir):
+def zip_folder(input_dir: str, file_name: str, output_dir: str) -> str:
     zip_filename = f'{file_name}.zip'
     zip_path = os.path.join(output_dir, zip_filename)
 
@@ -65,7 +72,7 @@ def zip_folder(input_dir, file_name, output_dir):
     return zip_path
 
 
-def copy_file(src, dst):
+def copy_file(src: str, dst: str):
     try:
         if os.path.isdir(src):
             shutil.copytree(src, dst)
@@ -75,8 +82,16 @@ def copy_file(src, dst):
     except Exception as e:
         logger.error(f'Error while copying {src} to {dst}: {e}')
 
+def append_to_json_file(file_path, new_data):
+    with open(file_path, 'r', encoding='utf-8') as ogFile:
+        data = json.load(ogFile)
 
-def set_executable_permissions(file_path):
+    data.append(new_data)
+
+    with open(file_path, 'w', encoding='utf-8') as modFile:
+        json.dump(data, modFile, indent=4)
+
+def set_executable_permissions(file_path: str):
     try:
         logger.info(f'Setting executable permissions for {file_path}')
         st = os.stat(file_path)
@@ -110,6 +125,9 @@ def winapi_path(dos_path, encoding=None):
     """
     Fix to avoid path too long errors while extracting kai in Windows
     """
+    if platform.system().lower() != "windows":
+        return dos_path
+
     path = os.path.abspath(dos_path)
 
     if path.startswith("\\\\"):

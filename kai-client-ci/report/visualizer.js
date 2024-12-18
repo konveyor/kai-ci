@@ -26,7 +26,7 @@ const CHART_COLORS = {
 };
 
 const kaiPerformanceJSON =
-  'https://raw.githubusercontent.com/konveyor/kai-ci/refs/heads/main/kai-client-ci/output/report.json';
+  'https://kaiqe.s3.us-east-1.amazonaws.com/report.json';
 
 function createDatePicker() {
   const datePicker = document.getElementById('date-picker');
