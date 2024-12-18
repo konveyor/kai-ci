@@ -24,7 +24,7 @@ jobs:
         run: |
           python -m venv venv
           . venv\Scripts\activate
-          echo PATH=$PATH >> $GITHUB_ENV
+          echo PATH=C:\\Program Files\\Git\\bin;$PATH >> $GITHUB_ENV
 
       - name: Set up dependencies
         run: |
@@ -34,8 +34,7 @@ jobs:
           PATH: ${{ env.PATH }}
 
       - name: Run execution & evaluation test
-        run: |
-          echo "C:\\Program Files\\Git\\bin\\git.exe" | Out-File -FilePath $env:PATH -Encoding utf8 -Append
+        run: |  
           python --version
           cd kai-client-ci
           python ./main.py
