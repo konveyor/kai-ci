@@ -45,7 +45,6 @@ jobs:
 
       - name: Run execution & evaluation test
         run: |
-          echo ${{ env.PATH }}
           python --version
           cd kai-client-ci
           python ./main.py
