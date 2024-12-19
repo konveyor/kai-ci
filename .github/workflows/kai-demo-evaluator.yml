@@ -10,16 +10,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Visual Studio Build Tools
-        uses: crazy-max/ghaction-chocolatey@v3
-        with:
-          args: install visualstudio2022buildtools --params "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --includeRecommended --quiet --wait"
-
-      - name: Install Windows SDK
-        uses: crazy-max/ghaction-chocolatey@v3
-        with:
-          args: install windows-sdk-10.0 -y
-
       - uses: actions/setup-java@v3
         with:
           distribution: "microsoft"
