@@ -8,7 +8,7 @@ import requests
 
 from consts import KAI_FILES_FOLDER, KAI_FOLDER
 from files import unzip_file, download_file, rename_extracted_folder, set_executable_permissions, copy_file, \
-    clone_repository, on_rmtree_error
+    clone_repository, on_rmtree_error, remove_dependency_from_requirements
 from logger import get_logger
 from utils import is_windows
 
@@ -49,6 +49,7 @@ def download_kai_release():
     download_file(source_code_url, file_path)
     unzip_file(file_path, KAI_FILES_FOLDER)
     rename_extracted_folder(KAI_FILES_FOLDER, "kai")
+    remove_dependency_from_requirements(Path(f"{KAI_FOLDER}/requirements.txt"), "imgui")
 
     logger.info(f"Downloading RPC server binary from {rpc_server_url}")
 

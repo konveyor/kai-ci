@@ -4,6 +4,8 @@ import stat
 import zipfile
 import json
 import os
+from pathlib import Path
+
 import git
 
 import requests
@@ -102,6 +104,26 @@ def set_executable_permissions(file_path: str):
     except Exception as e:
         logger.error(f'Failed to set executable permissions for {file_path}: {e}')
 
+
+import os
+import zipfile
+import requests
+
+def remove_dependency_from_requirements(requirements_path: Path, dependency: str):
+    """
+    Removes a specific dependency from the requirements.txt file.
+    This prevents unnecessary installations of unused dependencies (Mostly to avoid errors on Windows).
+    """
+    if not os.path.exists(requirements_path):
+        return
+
+    with open(requirements_path, 'r') as file:
+        lines = file.readlines()
+
+    filtered_lines = [line for line in lines if not line.strip().startswith(dependency)]
+
+    with open(requirements_path, 'w') as file:
+        file.writelines(filtered_lines)
 
 def on_rmtree_error(func, path, exc_info):
     """"
