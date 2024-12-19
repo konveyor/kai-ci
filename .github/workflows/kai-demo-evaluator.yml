@@ -20,6 +20,11 @@ jobs:
         with:
           args: install windows-sdk-10.0 -y
 
+      - name: Install Windows Build Tools
+        uses: crazy-max/ghaction-chocolatey@v3
+        with:
+          args: install windows-build-tools -y
+
       - uses: actions/setup-java@v3
         with:
           distribution: "microsoft"
@@ -44,7 +49,8 @@ jobs:
           PATH: ${{ env.PATH }}
 
       - name: Run execution & evaluation test
-        run: |  
+        run: |
+          echo ${{ env.PATH }}
           python --version
           cd kai-client-ci
           python ./main.py
