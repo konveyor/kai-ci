@@ -69,7 +69,7 @@ if __name__ == '__main__':
         logger.info(f'Run data uploaded to {report_data_url}')
 
         s3_handler.delete('report.json')
-        s3_handler.upload('./data/report.json', "report.json")
+        s3_handler.upload('./data/report.json', "report.json", "application/json")
 
         logger.info(f'JSON report updated')
     except Exception as e:

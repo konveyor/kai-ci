@@ -43,7 +43,7 @@ function createDatePicker() {
 
     resetCanvasElements(
       ['pies-chart', 'average-ranges-chart'],
-      'single-performace-charts'
+      'single-performace-charts',
     );
 
     pieCharts(selectedDate);
@@ -74,7 +74,7 @@ function addRangePicker(options = {}) {
   const defaultOptions = {
     mode: 'range',
     dateFormat: 'Y-m-d',
-    onClose: function (selectedDates) {
+    onClose: function(selectedDates) {
       if (selectedDates.length !== 2) return;
 
       const startDate = selectedDates[0];
@@ -103,7 +103,7 @@ async function fetchJson() {
       const response = await fetch(kaiPerformanceJSON);
       if (!response.ok) {
         throw new Error(
-          'Network Error, failed to fetch the evaluation data file'
+          'Network Error, failed to fetch the evaluation data file',
         );
       }
       kaiData = await response.json();
@@ -115,7 +115,7 @@ async function fetchJson() {
       retries -= 1;
       if (retries === 0) {
         console.error(
-          'All retries failed. Please check your network connection or the URL.'
+          'All retries failed. Please check your network connection or the URL.',
         );
       }
     }
@@ -166,24 +166,6 @@ function kaiPerformanceChart(filteredData) {
         data: filteredData.map((item) => item.kaiEvalData.averageSpecificity),
         borderColor: CHART_COLORS.cyan,
         backgroundColor: CHART_COLORS.cyan,
-        borderWidth: 2,
-        tension: 0.4,
-        order: 0,
-      },
-      {
-        label: 'Average Reasoning',
-        data: filteredData.map((item) => item.kaiEvalData.averageReasoning),
-        borderColor: CHART_COLORS.darkBlue,
-        backgroundColor: CHART_COLORS.darkBlue,
-        borderWidth: 2,
-        tension: 0.4,
-        order: 0,
-      },
-      {
-        label: 'Average Competency',
-        data: filteredData.map((item) => item.kaiEvalData.averageCompetency),
-        borderColor: CHART_COLORS.purple,
-        backgroundColor: CHART_COLORS.purple,
         borderWidth: 2,
         tension: 0.4,
         order: 0,
@@ -301,14 +283,14 @@ function pieCharts(selectedDate) {
   ] = selectedkaiData.kaiEvalData.data.reduce(
     (
       [codeTrueCount, codeFalseCount, changesTrueCount, changesFalseCount],
-      item
+      item,
     ) => [
       codeTrueCount + (item['validCode'] === true ? 1 : 0),
       codeFalseCount + (item['validCode'] === false ? 1 : 0),
       changesTrueCount + (item['unnecessaryChanges'] === true ? 1 : 0),
       changesFalseCount + (item['unnecessaryChanges'] === false ? 1 : 0),
     ],
-    [0, 0, 0, 0]
+    [0, 0, 0, 0],
   );
 
   const chartData = {
@@ -335,7 +317,7 @@ function pieCharts(selectedDate) {
     plugins: {
       legend: {
         labels: {
-          generateLabels: function (chart) {
+          generateLabels: function(chart) {
             const datasets = chart.data.datasets;
             let resultLabels = [];
 
@@ -356,7 +338,7 @@ function pieCharts(selectedDate) {
             return resultLabels;
           },
         },
-        onClick: function (mouseEvent, legendItem, legend) {
+        onClick: function(mouseEvent, legendItem, legend) {
           const datasetIndex = legendItem.datasetIndex;
           const dataIndex = legendItem.index;
           const meta = legend.chart.getDatasetMeta(datasetIndex);
@@ -367,11 +349,11 @@ function pieCharts(selectedDate) {
       tooltip: {
         callbacks: {
           title: () => null,
-          label: function (context) {
+          label: function(context) {
             const label =
               context.chart.data.labels[
-                context.dataIndex + context.datasetIndex * 2
-              ] || '';
+              context.dataIndex + context.datasetIndex * 2
+                ] || '';
             return `${label}: ${context.formattedValue}`;
           },
         },
@@ -395,18 +377,18 @@ function getMinAndMaxValues(data, key) {
 
 function getRangeData(selectedkaiData, keys) {
   return keys.map((key) =>
-    getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key)
+    getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key),
   );
 }
 
 function averageRangesChart(selectedDate) {
   selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
 
-  const keys = ['effectiveness', 'specificity', 'reasoning', 'competency'];
+  const keys = ['effectiveness', 'specificity', 'competency'];
   const ranges = getRangeData(selectedkaiData, keys);
 
   const chartData = {
-    labels: ['Effectiveness', 'Specificity', 'Reasoning', 'Competency'],
+    labels: ['Effectiveness', 'Specificity', 'Competency'],
     datasets: [
       {
         label: 'Range',
@@ -434,7 +416,6 @@ function averageRangesChart(selectedDate) {
         data: [
           selectedkaiData.kaiEvalData['averageEffectiveness'],
           selectedkaiData.kaiEvalData['averageSpecificity'],
-          selectedkaiData.kaiEvalData['averageReasoning'],
           selectedkaiData.kaiEvalData['averageCompetency'],
         ],
         borderColor: 'rgba(0, 0, 0, 1)',
