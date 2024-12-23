@@ -1,4 +1,4 @@
-name: Run demo with kai client and evaluate results
+name: Run demo with kai client and evaluate results (Linux)
 
 on:
   schedule:
