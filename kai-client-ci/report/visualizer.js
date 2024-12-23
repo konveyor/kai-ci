@@ -25,6 +25,39 @@ const CHART_COLORS = {
   lightPurpleTransparent: 'rgb(199, 171, 255, 0.5)',
 };
 
+const CHART_OPTIONS = {
+  responsive: true,
+  scales: {
+    x: {
+      barPercentage: 0.1,
+    },
+    y: {
+      beginAtZero: true,
+      suggestedMax: 12,
+    },
+  },
+  plugins: {
+    legend: {
+      display: true,
+    },
+    tooltip: {
+      position: 'nearest',
+      bodyFont: {
+        size: 16,
+      },
+      titleFont: {
+        size: 18,
+      },
+      padding: 12,
+    },
+  },
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  },
+};
+
+
 const kaiPerformanceJSON =
   'https://kaiqe.s3.us-east-1.amazonaws.com/report.json';
 
@@ -97,34 +130,19 @@ function addRangePicker(options = {}) {
 }
 
 async function fetchJson() {
-  const retries = 3;
-  while (retries > 0) {
-    try {
-      const response = await fetch(kaiPerformanceJSON);
-      if (!response.ok) {
-        throw new Error(
-          'Network Error, failed to fetch the evaluation data file',
-        );
-      }
-      kaiData = await response.json();
-      jsonDates = kaiData.map((obj) => obj.date.split(' ')[0]);
-      jsonDates.sort();
-      break;
-    } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-      retries -= 1;
-      if (retries === 0) {
-        console.error(
-          'All retries failed. Please check your network connection or the URL.',
-        );
-      }
+  try {
+    const response = await fetch(kaiPerformanceJSON);
+    if (!response.ok) {
+      throw new Error(
+        'Network Error, failed to fetch the evaluation data file',
+      );
     }
+    kaiData = await response.json();
+    jsonDates = kaiData.map((obj) => obj.date.split(' ')[0]);
+    jsonDates.sort();
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
   }
-}
-
-function getMinAndMaxValues(data, key) {
-  const values = data.map((item) => item[key]);
-  return [Math.min(...values), Math.max(...values)];
 }
 
 function kaiPerformanceChart(filteredData) {
@@ -136,8 +154,8 @@ function kaiPerformanceChart(filteredData) {
     labels: formattedDates,
     datasets: [
       {
-        label: 'Total Incidents',
-        data: filteredData.map((item) => item.kaiEvalData.length),
+        label: 'Diff stat',
+        data: filteredData.map((item) => item.diffStat),
         borderColor: CHART_COLORS.red,
         backgroundColor: CHART_COLORS.red,
         borderWidth: 4,
@@ -146,7 +164,7 @@ function kaiPerformanceChart(filteredData) {
       },
       {
         label: 'Average Score',
-        data: filteredData.map((item) => item.kaiEvalData.averageScore),
+        data: filteredData.map((item) => item.kaiEvalData?.averageScore),
         borderColor: CHART_COLORS.blue,
         backgroundColor: CHART_COLORS.blue,
         borderWidth: 4,
@@ -155,7 +173,7 @@ function kaiPerformanceChart(filteredData) {
       },
       {
         label: 'Average Effectiveness',
-        data: filteredData.map((item) => item.kaiEvalData.averageEffectiveness),
+        data: filteredData.map((item) => item.kaiEvalData?.averageEffectiveness),
         borderColor: CHART_COLORS.green,
         backgroundColor: CHART_COLORS.green,
         borderWidth: 2,
@@ -163,7 +181,7 @@ function kaiPerformanceChart(filteredData) {
       },
       {
         label: 'Average Specificity',
-        data: filteredData.map((item) => item.kaiEvalData.averageSpecificity),
+        data: filteredData.map((item) => item.kaiEvalData?.averageSpecificity),
         borderColor: CHART_COLORS.cyan,
         backgroundColor: CHART_COLORS.cyan,
         borderWidth: 2,
@@ -173,7 +191,7 @@ function kaiPerformanceChart(filteredData) {
       {
         label: 'Valid Code True',
         data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
             return data.validCode === true ? count + 1 : count;
           }, 0);
           return totalCount;
@@ -189,7 +207,7 @@ function kaiPerformanceChart(filteredData) {
       {
         label: 'Valid Code False',
         data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
             return data.validCode === false ? count + 1 : count;
           }, 0);
           return totalCount;
@@ -205,7 +223,7 @@ function kaiPerformanceChart(filteredData) {
       {
         label: 'Unnecessary Changes True',
         data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
             return data.unnecessaryChanges === true ? count + 1 : count;
           }, 0);
           return totalCount;
@@ -221,7 +239,7 @@ function kaiPerformanceChart(filteredData) {
       {
         label: 'Unnecessary Changes False',
         data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData.data.reduce((count, data) => {
+          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
             return data['unnecessaryChanges'] === false ? count + 1 : count;
           }, 0);
           return totalCount;
@@ -237,43 +255,15 @@ function kaiPerformanceChart(filteredData) {
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    scales: {
-      x: {
-        barPercentage: 0.1,
-      },
-      y: {
-        beginAtZero: true,
-        suggestedMax: 12,
-      },
-    },
-    plugins: {
-      legend: {
-        display: true,
-      },
-      tooltip: {
-        position: 'nearest',
-        bodyFont: {
-          size: 16,
-        },
-        titleFont: {
-          size: 18,
-        },
-        padding: 12,
-      },
-    },
-    interaction: {
-      mode: 'index',
-      intersect: false,
-    },
-  };
 
-  createChart('kai-performance-chart', 'line', chartData, chartOptions);
+  createChart('kai-performance-chart', 'line', chartData, CHART_OPTIONS);
 }
 
 function pieCharts(selectedDate) {
   selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
+  if (!selectedkaiData.kaiEvalData) {
+    return;
+  }
 
   const [
     validCodeTrueCount,
@@ -383,6 +373,9 @@ function getRangeData(selectedkaiData, keys) {
 
 function averageRangesChart(selectedDate) {
   selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
+  if (!selectedkaiData.kaiEvalData) {
+    return;
+  }
 
   const keys = ['effectiveness', 'specificity', 'competency'];
   const ranges = getRangeData(selectedkaiData, keys);

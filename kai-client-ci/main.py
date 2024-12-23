@@ -61,7 +61,6 @@ if __name__ == '__main__':
 
     if os.path.exists(f"{KAI_FOLDER}/example/kai-analyzer.log"):
         os.rename(f"{KAI_FOLDER}/example/kai-analyzer.log", 'data/logs/kai-analyzer.log')
-
     try:
         zip_name = datetime.now().strftime('%Y-%m-%d--%H-%M')
         zip_path = zip_folder('data', zip_name, 'output')
@@ -75,4 +74,4 @@ if __name__ == '__main__':
     except Exception as e:
         logger.error(f"Data uploading failed")
         logger.error(e)
-    logger.info(f'Test execution took {time.time() - start} seconds')
+        logger.info(f'Test execution took {time.time() - start} seconds')

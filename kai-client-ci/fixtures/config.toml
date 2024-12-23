@@ -1,6 +1,5 @@
 log_dir = "../logs/"
 demo_mode = false
-trace_enabled = true
 log_level = "debug"
 file_log_level = "debug"
 [models]
