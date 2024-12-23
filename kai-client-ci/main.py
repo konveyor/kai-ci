@@ -28,6 +28,9 @@ if __name__ == '__main__':
     kai_handler.run_demo()
     demo_end = time.time()
 
+    if count_modified_files(COOLSTORE_FOLDER) == 0:
+        raise Exception('No modified files found')
+
     kai_eval_handler.download_kai_eval()
     kai_eval_handler.parse_kai_logs()
 
@@ -62,7 +65,7 @@ if __name__ == '__main__':
     try:
         zip_name = datetime.now().strftime('%Y-%m-%d--%H-%M')
         zip_path = zip_folder('data', zip_name, 'output')
-        report_data_url = s3_handler.upload(zip_path, zip_path)
+        report_data_url = s3_handler.upload(zip_path, zip_path.replace("\\", "/"))
         logger.info(f'Run data uploaded to {report_data_url}')
 
         s3_handler.delete('report.json')
