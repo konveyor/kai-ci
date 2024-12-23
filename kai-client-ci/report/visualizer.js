@@ -133,9 +133,8 @@ async function fetchJson() {
   try {
     const response = await fetch(kaiPerformanceJSON);
     if (!response.ok) {
-      throw new Error(
-        'Network Error, failed to fetch the evaluation data file',
-      );
+      console.error('There was a problem with the fetch operation');
+      return;
     }
     kaiData = await response.json();
     jsonDates = kaiData.map((obj) => obj.date.split(' ')[0]);
@@ -221,13 +220,8 @@ function kaiPerformanceChart(filteredData) {
         borderWidth: 1,
       },
       {
-        label: 'Unnecessary Changes True',
-        data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
-            return data.unnecessaryChanges === true ? count + 1 : count;
-          }, 0);
-          return totalCount;
-        }),
+        label: 'Unnecessary Changes',
+        data: filteredData.map(report => report.kaiEvalData?.data.filter((item) => item.unnecessaryChanges).length),
         backgroundColor: CHART_COLORS.orangeTransparent,
         borderColor: CHART_COLORS.orange,
         type: 'bar',
@@ -235,22 +229,6 @@ function kaiPerformanceChart(filteredData) {
         stack: 'stack2',
         barPercentage: 0.2,
         borderWidth: 1,
-      },
-      {
-        label: 'Unnecessary Changes False',
-        data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
-            return data['unnecessaryChanges'] === false ? count + 1 : count;
-          }, 0);
-          return totalCount;
-        }),
-        backgroundColor: CHART_COLORS.lightPurpleTransparent,
-        borderColor: CHART_COLORS.lightPurple,
-        type: 'bar',
-        order: 1,
-        stack: 'stack2',
-        borderWidth: 1,
-        barPercentage: 0.2,
       },
     ],
   };
@@ -260,7 +238,7 @@ function kaiPerformanceChart(filteredData) {
 }
 
 function pieCharts(selectedDate) {
-  selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
+  const selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
   if (!selectedkaiData.kaiEvalData) {
     return;
   }
@@ -302,7 +280,7 @@ function pieCharts(selectedDate) {
     ],
   };
 
-  chartOptions = {
+  const chartOptions = {
     responsive: true,
     plugins: {
       legend: {
