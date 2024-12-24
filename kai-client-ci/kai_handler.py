@@ -84,12 +84,13 @@ def setup_kai_external_files():
 def setup_kai_dependencies() -> None:
     venv_folder = os.path.join(KAI_FOLDER, "venv")
     logger.debug("Creating virtual environment for running demo")
-    subprocess.run(["python", "-m", "venv", venv_folder], check=True)
+    #subprocess.run(["python", "-m", "venv", venv_folder], check=True)
 
     if is_windows():
         pip_executable = os.path.join(venv_folder, "Scripts", "pip")
     else:
         pip_executable = os.path.join(venv_folder, "bin", "pip")
+    pip_executable = "pip"
 
     logger.debug("Installing requirements")
     subprocess.run([pip_executable, "install", "-e", KAI_FOLDER], check=True)
@@ -104,7 +105,7 @@ def run_demo() -> None:
     logger.info("Executing run_demo.py")
     logger.debug(f"Running {demo_rel_path} run_demo.py from {cwd}")
     result = subprocess.run(
-        [demo_rel_path, "run_demo.py"],
+        ["python", "run_demo.py"],
         cwd=cwd,
         capture_output=True,
         text=True,
@@ -129,6 +130,7 @@ def run_demo() -> None:
             logger.debug(f.read())
 
 def get_python_venv_executable() -> str:
+    return "python"
     """
         :return: python venv executable path inside kai_files/kai
     """
