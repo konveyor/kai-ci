@@ -83,17 +83,15 @@ def setup_kai_external_files():
 
 def setup_kai_dependencies() -> None:
     venv_folder = os.path.join(KAI_FOLDER, "venv")
+    logger.debug("Creating virtual environment for running demo")
+    subprocess.run(["python", "-m", "venv", venv_folder], check=True)
 
     if is_windows():
         pip_executable = os.path.join(venv_folder, "Scripts", "pip")
     else:
         pip_executable = os.path.join(venv_folder, "bin", "pip")
 
-    logger.debug("Creating virtual environment for running demo")
-    subprocess.run(["python", "-m", "venv", venv_folder], check=True)
-
     logger.debug("Installing requirements")
-    subprocess.run([pip_executable, "install", "pyinstaller"], check=True)
     subprocess.run([pip_executable, "install", "-e", KAI_FOLDER], check=True)
     subprocess.run([pip_executable, "install", "-r", os.path.join(KAI_FOLDER, "requirements.txt")], check=True)
 
@@ -119,6 +117,16 @@ def run_demo() -> None:
     else:
         logger.error(f"run_demo.py failed with return code {result.returncode}: \n{result.stderr}")
         raise Exception(f"run_demo.py failed")
+
+    if os.path.exists(f"{KAI_FOLDER}/logs/kai-analyzer-server.log"):
+        logger.debug("Analyzer logs")
+        with open(f"{KAI_FOLDER}/logs/kai-analyzer-server.log", 'r') as f:
+            logger.debug(f.read())
+
+    if os.path.exists(f"{KAI_FOLDER}/logs/kai_server.log"):
+        logger.debug("Kai server logs")
+        with open(f"{KAI_FOLDER}/logs/kai_server.log", 'r') as f:
+            logger.debug(f.read())
 
 def get_python_venv_executable() -> str:
     """
