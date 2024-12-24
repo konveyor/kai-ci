@@ -27,7 +27,19 @@ if __name__ == '__main__':
     demo_start = time.time()
     kai_handler.run_demo()
     demo_end = time.time()
+    analyzer_logs_path = f"{KAI_FOLDER}/example/kai-analyzer.log"
 
+    if os.path.exists(analyzer_logs_path):
+        logger.debug("Analyzer logs")
+        with open(analyzer_logs_path, 'r') as f:
+            logger.debug(f.read())
+
+    if os.path.exists(f"{KAI_FOLDER}/logs/kai_server.log"):
+        logger.debug("Kai server logs")
+        with open(f"{KAI_FOLDER}/logs/kai_server.log", 'r') as f:
+            logger.debug(f.read())
+
+    # If there are no modified files in the demo app folder it means that the run_demo script failed
     if count_modified_files(COOLSTORE_FOLDER) == 0:
         raise Exception('No modified files found')
 
@@ -59,8 +71,8 @@ if __name__ == '__main__':
     os.rename(f"{KAI_FOLDER}/logs", 'data/logs')
     os.rename(COOLSTORE_FOLDER, 'data/coolstore')
 
-    if os.path.exists(f"{KAI_FOLDER}/example/kai-analyzer.log"):
-        os.rename(f"{KAI_FOLDER}/example/kai-analyzer.log", 'data/logs/kai-analyzer.log')
+    if os.path.exists(analyzer_logs_path):
+        os.rename(analyzer_logs_path, 'data/logs/kai-analyzer.log')
     try:
         zip_name = datetime.now().strftime('%Y-%m-%d--%H-%M')
         zip_path = zip_folder('data', zip_name, 'output')

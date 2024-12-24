@@ -18,6 +18,11 @@ jobs:
           distribution: "oracle"
           java-version: "17"
 
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          check-latest: true
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
