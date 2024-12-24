@@ -57,7 +57,6 @@ const CHART_OPTIONS = {
   },
 };
 
-
 const kaiPerformanceJSON =
   'https://kaiqe.s3.us-east-1.amazonaws.com/report.json';
 
@@ -76,7 +75,7 @@ function createDatePicker() {
 
     resetCanvasElements(
       ['pies-chart', 'average-ranges-chart'],
-      'single-performace-charts',
+      'single-performace-charts'
     );
 
     pieCharts(selectedDate);
@@ -107,7 +106,7 @@ function addRangePicker(options = {}) {
   const defaultOptions = {
     mode: 'range',
     dateFormat: 'Y-m-d',
-    onClose: function(selectedDates) {
+    onClose: function (selectedDates) {
       if (selectedDates.length !== 2) return;
 
       const startDate = selectedDates[0];
@@ -172,7 +171,9 @@ function kaiPerformanceChart(filteredData) {
       },
       {
         label: 'Average Effectiveness',
-        data: filteredData.map((item) => item.kaiEvalData?.averageEffectiveness),
+        data: filteredData.map(
+          (item) => item.kaiEvalData?.averageEffectiveness
+        ),
         borderColor: CHART_COLORS.green,
         backgroundColor: CHART_COLORS.green,
         borderWidth: 2,
@@ -221,7 +222,11 @@ function kaiPerformanceChart(filteredData) {
       },
       {
         label: 'Unnecessary Changes',
-        data: filteredData.map(report => report.kaiEvalData?.data.filter((item) => item.unnecessaryChanges).length),
+        data: filteredData.map(
+          (report) =>
+            report.kaiEvalData?.data.filter((item) => item.unnecessaryChanges)
+              .length
+        ),
         backgroundColor: CHART_COLORS.orangeTransparent,
         borderColor: CHART_COLORS.orange,
         type: 'bar',
@@ -233,12 +238,13 @@ function kaiPerformanceChart(filteredData) {
     ],
   };
 
-
   createChart('kai-performance-chart', 'line', chartData, CHART_OPTIONS);
 }
 
 function pieCharts(selectedDate) {
-  const selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
+  const selectedkaiData = kaiData.find((item) =>
+    item.date.includes(selectedDate)
+  );
   if (!selectedkaiData.kaiEvalData) {
     return;
   }
@@ -251,14 +257,14 @@ function pieCharts(selectedDate) {
   ] = selectedkaiData.kaiEvalData.data.reduce(
     (
       [codeTrueCount, codeFalseCount, changesTrueCount, changesFalseCount],
-      item,
+      item
     ) => [
       codeTrueCount + (item['validCode'] === true ? 1 : 0),
       codeFalseCount + (item['validCode'] === false ? 1 : 0),
       changesTrueCount + (item['unnecessaryChanges'] === true ? 1 : 0),
       changesFalseCount + (item['unnecessaryChanges'] === false ? 1 : 0),
     ],
-    [0, 0, 0, 0],
+    [0, 0, 0, 0]
   );
 
   const chartData = {
@@ -285,7 +291,7 @@ function pieCharts(selectedDate) {
     plugins: {
       legend: {
         labels: {
-          generateLabels: function(chart) {
+          generateLabels: function (chart) {
             const datasets = chart.data.datasets;
             let resultLabels = [];
 
@@ -306,7 +312,7 @@ function pieCharts(selectedDate) {
             return resultLabels;
           },
         },
-        onClick: function(mouseEvent, legendItem, legend) {
+        onClick: function (mouseEvent, legendItem, legend) {
           const datasetIndex = legendItem.datasetIndex;
           const dataIndex = legendItem.index;
           const meta = legend.chart.getDatasetMeta(datasetIndex);
@@ -317,11 +323,11 @@ function pieCharts(selectedDate) {
       tooltip: {
         callbacks: {
           title: () => null,
-          label: function(context) {
+          label: function (context) {
             const label =
               context.chart.data.labels[
-              context.dataIndex + context.datasetIndex * 2
-                ] || '';
+                context.dataIndex + context.datasetIndex * 2
+              ] || '';
             return `${label}: ${context.formattedValue}`;
           },
         },
@@ -345,7 +351,7 @@ function getMinAndMaxValues(data, key) {
 
 function getRangeData(selectedkaiData, keys) {
   return keys.map((key) =>
-    getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key),
+    getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key)
   );
 }
 
