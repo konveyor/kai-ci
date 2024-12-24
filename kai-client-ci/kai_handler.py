@@ -110,7 +110,8 @@ def run_demo() -> None:
         cwd=cwd,
         capture_output=True,
         text=True,
-        shell=is_windows()
+        shell=is_windows(),
+        env=os.environ
     )
 
     if result.returncode == 0:
