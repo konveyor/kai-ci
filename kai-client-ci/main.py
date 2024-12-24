@@ -27,7 +27,7 @@ if __name__ == '__main__':
     demo_start = time.time()
     kai_handler.run_demo()
     demo_end = time.time()
-    analyzer_logs_path = f"{KAI_FOLDER}/example/kai-analyzer.log"
+    analyzer_logs_path = f"{KAI_FOLDER}/logs/kai-analyzer-server.log"
 
     if os.path.exists(analyzer_logs_path):
         logger.debug("Analyzer logs")
