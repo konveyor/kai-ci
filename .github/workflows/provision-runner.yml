@@ -38,11 +38,14 @@ on:
       github-token:
         description: 'Personal Access Token For GH'
         required: true
+      nonadmin-password:
+        description: 'Password for the non-admin user'
+        required: true
     outputs:
-      instance_label: 
+      instance_label:
         description: "The label of the VM that was created."
         value: ${{ jobs.provision-ec2.outputs.label }}
-      ec2-instance-id: 
+      ec2-instance-id:
         description: "Instance id of the VM that was created."
         value: ${{ jobs.provision-ec2.outputs.instance_id }}
 
@@ -70,7 +73,7 @@ jobs:
           mode: start
           github-token: ${{ secrets.github-token }}
           ec2-os: ${{ inputs.ec2-os-type }}
-          ec2-instance-type: ${{ inputs.ec2-instance-type }}        
+          ec2-instance-type: ${{ inputs.ec2-instance-type }}
           ec2-image-id: ${{ inputs.ec2-image-id }}
           subnet-id: ${{ inputs.subnet-id }}
           security-group-id: ${{ inputs.security-group-id }}
