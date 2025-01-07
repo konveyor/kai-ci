@@ -28,6 +28,7 @@ if __name__ == '__main__':
     kai_handler.run_demo()
     demo_end = time.time()
 
+    # If there are no modified files in the demo app folder it means that the run_demo script failed
     if count_modified_files(COOLSTORE_FOLDER) == 0:
         raise Exception('No modified files found')
 
@@ -59,9 +60,8 @@ if __name__ == '__main__':
     os.rename(f"{KAI_FOLDER}/logs", 'data/logs')
     os.rename(COOLSTORE_FOLDER, 'data/coolstore')
 
-    if os.path.exists(f"{KAI_FOLDER}/example/kai-analyzer.log"):
-        os.rename(f"{KAI_FOLDER}/example/kai-analyzer.log", 'data/logs/kai-analyzer.log')
-
+    if os.path.exists(f"{KAI_FOLDER}/logs/kai-analyzer-server.log"):
+        os.rename(f"{KAI_FOLDER}/logs/kai-analyzer-server.log", 'data/logs/kai-analyzer.log')
     try:
         zip_name = datetime.now().strftime('%Y-%m-%d--%H-%M')
         zip_path = zip_folder('data', zip_name, 'output')
@@ -69,10 +69,10 @@ if __name__ == '__main__':
         logger.info(f'Run data uploaded to {report_data_url}')
 
         s3_handler.delete('report.json')
-        s3_handler.upload('./data/report.json', "report.json")
+        s3_handler.upload('./data/report.json', "report.json", "application/json")
 
         logger.info(f'JSON report updated')
     except Exception as e:
         logger.error(f"Data uploading failed")
         logger.error(e)
-    logger.info(f'Test execution took {time.time() - start} seconds')
+        logger.info(f'Test execution took {time.time() - start} seconds')

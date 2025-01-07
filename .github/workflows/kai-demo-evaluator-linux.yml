@@ -1,8 +1,9 @@
-name: Run demo with kai client and evaluate results (Linux)
+name: (Linux) Run demo with kai client and evaluate results
 
 on:
   schedule:
     - cron: '0 0 * * 0,1,2,3,4,5'
+  workflow_dispatch:
 jobs:
   test-and-evaluate:
     name: Run demo and evaluation
