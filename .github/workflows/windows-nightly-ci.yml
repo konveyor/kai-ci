@@ -69,7 +69,7 @@ jobs:
           # Step 3: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
           Write-Output "PsExec Path: $psExecPath"
-          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command 'hostname > $logPathOut 2> $logPathErr'"
+          # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command 'hostname > $logPathOut 2> $logPathErr'"
 
           try {
             & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname"
