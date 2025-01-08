@@ -69,12 +69,15 @@ jobs:
           # Step 3: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
           Write-Output "PsExec Path: $psExecPath"
-          # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command 'hostname > $logPathOut 2> $logPathErr'"
-
-          try {
-            & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname"
-          } catch {
-              Write-Output "Error running PsExec: $_"
+          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"hostname > 'C:\Users\nonadmin\abcde.txt' 2>&1\""
+          
+          # Check if the log file exists
+          if (Test-Path 'C:\Users\nonadmin\abcde.txt') {
+          Write-Output "File exists. Printing content of abcde.txt..."
+          # Print the content of the log file
+          Get-Content 'C:\Users\nonadmin\abcde.txt'
+          } else {
+            Write-Output "File 'abcde.txt' does not exist."
           }
           #& $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
           #    -Command "hostname > '$logPathOut' 2> '$logPathErr'"
