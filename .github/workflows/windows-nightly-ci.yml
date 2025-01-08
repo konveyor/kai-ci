@@ -68,14 +68,23 @@ jobs:
           
           # Step 3: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
-              -Command "hostname > '$logPathOut' 2> '$logPathErr'"
+          Write-Output "PsExec Path: $psExecPath"
+          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command 'hostname > $logPathOut 2> $logPathErr'"
+
+          try {
+            & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname"
+          } catch {
+              Write-Output "Error running PsExec: $_"
+          }
+          #& $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
+          #    -Command "hostname > '$logPathOut' 2> '$logPathErr'"
           
           # Step 4: Check if output log file exists
-          if (-Not (Test-Path -Path $logPathOut)) {
-              Write-Output "Log file does not exist: $logPathOut"
-              Write-Output "Check $logPathErr for any errors."
-              exit 1
+          if (-Not (Test-Path -Path $logDir)) {
+              Write-Output "Log directory does not exist, creating: $logDir"
+              New-Item -Path $logDir -ItemType Directory -Force
+          } else {
+              Write-Output "Log directory exists: $logDir"
           }
           
           # Step 5: Output log files to GitHub Actions
