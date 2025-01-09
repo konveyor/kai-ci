@@ -76,8 +76,10 @@ jobs:
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
           $command = "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
-          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
-          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -NoExit -Command '$command'
+          # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
+          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
+          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
+
 
       - name: Take Screenshot after hostname command
         if: always()  # Ensure this step runs even if the previous step fails
