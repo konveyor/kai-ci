@@ -48,7 +48,7 @@ jobs:
           $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
           $toolsDir = "C:\tools"
           $psExecPath = "$toolsDir\PsExec64.exe"
-          $logDir = "C:\Users\nonadmin"
+          $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$logDir\run-tests-output.log"
           $logPathErr = "$logDir\run-tests-error.log"
           
@@ -65,11 +65,12 @@ jobs:
           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
           Write-Output "PsExec Path: $psExecPath"
           Write-Output "Executing command: "
-          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"        
+          $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
+          
           
           # Check if the log file exists remotely and print its content
           Write-Output "Reading the log file from the EC2 instance..."
-          Get-Content 'C:\Users\nonadmin\abcde.txt'
+          Get-Content 'C:\Users\nonadmin\abcde.txt'"
           Write-Output "==========="
          
           
