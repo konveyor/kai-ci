@@ -61,11 +61,16 @@ jobs:
           Write-Output "PsExec installed successfully."
           
           
-      - name: Install nircmd tool
+      - name: Download NirCmd
         run: |
-          Invoke-WebRequest -Uri "https://www.nirsoft.net/utils/nircmd.zip" -OutFile "C:\tools\nircmd.zip"
-          Expand-Archive -Path "C:\tools\nircmd.zip" -DestinationPath "C:\tools"
+          $nircmdUrl = "https://www.nirsoft.net/utils/nircmd.zip"
+          $nircmdZip = "$env:TEMP\nircmd.zip"
+          $nircmdPath = "C:\tools\nircmd.exe"
 
+          # Download and extract NirCmd
+          Invoke-WebRequest -Uri $nircmdUrl -OutFile $nircmdZip
+          Expand-Archive -Path $nircmdZip -DestinationPath C:\tools -Force
+          Write-Output "NirCmd downloaded and extracted."
 
       - name: Execute command
         run: |
@@ -80,7 +85,7 @@ jobs:
           Write-Output "Capturing screenshot..."
           
           # Use nircmd to take a screenshot and save it
-          & "C:\tools\nircmd\nircmd.exe" cmdwait 1000 savescreenshot "$screenshotPath"
+          & "C:\tools\nircmd.exe" cmdwait 1000 savescreenshot "$screenshotPath"
 
 
       # - name: Take Screenshot after hostname command
