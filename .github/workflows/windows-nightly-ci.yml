@@ -75,7 +75,7 @@ jobs:
       - name: Execute command
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
-          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command hostname "
+          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command 'hostname' "
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
 
       - name: Take Screenshot after hostname command
