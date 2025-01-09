@@ -72,24 +72,28 @@ jobs:
           Expand-Archive -Path $nircmdZip -DestinationPath C:\tools -Force
           Write-Output "NirCmd downloaded and extracted."
 
-      - name: Take Screenshot
-        run: |
-          $screenshotPath = "C:\Users\nonadmin\screenshot.png"
-          # Use NirCmd to take a screenshot
-          & "C:\tools\nircmd.exe" savescreenshot $screenshotPath
-          Write-Output "Screenshot taken and saved to: $screenshotPath"
-        
       - name: Execute command
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
-          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1\""
+          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -NoExit -Command \"hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1\""
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
+
+      - name: Take Screenshot after hostname command
+        if: always()  # Ensure this step runs even if the previous step fails
+        run: |
+          $screenshotPath = "C:\Users\nonadmin\screenshot_after_hostname.png"
+          # Use NirCmd to take a screenshot after running the hostname command
+          & "C:\tools\nircmd.exe" savescreenshot $screenshotPath
+          Write-Output "Screenshot taken after hostname command and saved to: $screenshotPath"
+
         
       - name: Upload Screenshot as Artifact
+        if: always()  # Ensure this step runs even if previous steps fail
         uses: actions/upload-artifact@v3
         with:
           name: screenshot
           path: C:\Users\nonadmin\screenshot.png
+  
           
       # # Check if the log file exists remotely and print its content
       #     Write-Output "Reading the log file from the EC2 instance..."
