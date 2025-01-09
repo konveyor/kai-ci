@@ -60,11 +60,6 @@ jobs:
           Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
           Write-Output "PsExec installed successfully."
           
-          # Step 2: Ensure the log directory exists
-          Write-Output "Ensuring log directory exists: $logDir"
-          if (-Not (Test-Path -Path $logDir)) {
-              New-Item -Path $logDir -ItemType Directory -Force
-          }
           
           # Step 3: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
@@ -73,29 +68,16 @@ jobs:
           
           # Check if the log file exists
           if (Test-Path 'C:\Users\nonadmin\abcde.txt') {
-          Write-Output "File exists. Printing content of abcde.txt..."
+            Write-Output "File exists. Printing content of abcde.txt..."
           # Print the content of the log file
           Get-Content 'C:\Users\nonadmin\abcde.txt'
+          Write-Output "==========="
           } else {
             Write-Output "File 'abcde.txt' does not exist."
           }
-          #& $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
-          #    -Command "hostname > '$logPathOut' 2> '$logPathErr'"
+         
           
-          # Step 4: Check if output log file exists
-          if (-Not (Test-Path -Path $logDir)) {
-              Write-Output "Log directory does not exist, creating: $logDir"
-              New-Item -Path $logDir -ItemType Directory -Force
-          } else {
-              Write-Output "Log directory exists: $logDir"
-          }
-          
-          # Step 5: Output log files to GitHub Actions
-          Write-Output "--- Run Output ---"
-          Get-Content -Path $logPathOut
-          Write-Output "--- Run Error ---"
-          Get-Content -Path $logPathErr
-
+         
 
 
 #  stop-ec2-instance:
