@@ -61,16 +61,11 @@ jobs:
           Write-Output "PsExec installed successfully."
           
           
-      - name: Download NirCmd
+      - name: Install nircmd tool
         run: |
-          $nircmdUrl = "https://www.nirsoft.net/utils/nircmd.zip"
-          $nircmdZip = "$env:TEMP\nircmd.zip"
-          $nircmdPath = "C:\tools\nircmd.exe"
+          Invoke-WebRequest -Uri "https://www.nirsoft.net/utils/nircmd.zip" -OutFile "C:\tools\nircmd.zip"
+          Expand-Archive -Path "C:\tools\nircmd.zip" -DestinationPath "C:\tools"
 
-          # Download and extract NirCmd
-          Invoke-WebRequest -Uri $nircmdUrl -OutFile $nircmdZip
-          Expand-Archive -Path $nircmdZip -DestinationPath C:\tools -Force
-          Write-Output "NirCmd downloaded and extracted."
 
       - name: Execute command
         run: |
@@ -80,14 +75,21 @@ jobs:
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
 
-
-      - name: Take Screenshot after hostname command
-        if: always()  # Ensure this step runs even if the previous step fails
-        run: |
+          # Capture screenshot after running the command using nircmd
           $screenshotPath = "C:\Users\nonadmin\screenshot.png"
-          # Use NirCmd to take a screenshot after running the hostname command
-          & "C:\tools\nircmd.exe" savescreenshot $screenshotPath
-          Write-Output "Screenshot taken after hostname command and saved to: $screenshotPath"
+          Write-Output "Capturing screenshot..."
+          
+          # Use nircmd to take a screenshot and save it
+          & "C:\tools\nircmd\nircmd.exe" cmdwait 1000 savescreenshot "$screenshotPath"
+
+
+      # - name: Take Screenshot after hostname command
+      #   if: always()  # Ensure this step runs even if the previous step fails
+      #   run: |
+      #     $screenshotPath = "C:\Users\nonadmin\screenshot.png"
+      #     # Use NirCmd to take a screenshot after running the hostname command
+      #     & "C:\tools\nircmd.exe" savescreenshot $screenshotPath
+      #     Write-Output "Screenshot taken after hostname command and saved to: $screenshotPath"
 
         
       - name: Upload Screenshot as Artifact
