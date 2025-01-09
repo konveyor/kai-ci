@@ -61,17 +61,40 @@ jobs:
           Write-Output "PsExec installed successfully."
           
           
-          # Step 3: Execute the command using PsExec
-          Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
-          Write-Output "PsExec Path: $psExecPath"
-          Write-Output "Executing command: ========="
-          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > 'C:\Users\nonadmin\abcde.txt' 2>&1"
+      - name: Download NirCmd
+        run: |
+          $nircmdUrl = "https://www.nirsoft.net/utils/nircmd.zip"
+          $nircmdZip = "$env:TEMP\nircmd.zip"
+          $nircmdPath = "C:\tools\nircmd.exe"
+
+          # Download and extract NirCmd
+          Invoke-WebRequest -Uri $nircmdUrl -OutFile $nircmdZip
+          Expand-Archive -Path $nircmdZip -DestinationPath C:\tools -Force
+          Write-Output "NirCmd downloaded and extracted."
+
+      - name: Take Screenshot
+        run: |
+          $screenshotPath = "C:\Users\nonadmin\screenshot.png"
+          # Use NirCmd to take a screenshot
+          & "C:\tools\nircmd.exe" savescreenshot $screenshotPath
+          Write-Output "Screenshot taken and saved to: $screenshotPath"
+        
+      - name: Execute command
+        run: |
+          $psExecPath = "C:\tools\PsExec64.exe"
+          Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1\""
+          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
+        
+      - name: Upload Screenshot as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot
+          path: C:\Users\nonadmin\screenshot.png
           
-          
-          # Check if the log file exists remotely and print its content
-          Write-Output "Reading the log file from the EC2 instance..."
-          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "Get-Content 'C:\Users\nonadmin\abcde.txt'"
-          Write-Output "==========="
+      # # Check if the log file exists remotely and print its content
+      #     Write-Output "Reading the log file from the EC2 instance..."
+      #     & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "Get-Content 'C:\Users\nonadmin\abcde.txt'"
+      #     Write-Output "==========="
          
           
          
