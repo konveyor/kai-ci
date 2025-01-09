@@ -66,10 +66,11 @@ jobs:
           Write-Output "PsExec Path: $psExecPath"
           Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command \"hostname > 'C:\Users\nonadmin\abcde.txt' 2>&1\""
           
+          
           # Check if the log file exists remotely and print its content
           Write-Output "Reading the log file from the EC2 instance..."
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "Get-Content 'C:\Users\nonadmin\abcde.txt'"
-
+          Write-Output "==========="
          
           
          
