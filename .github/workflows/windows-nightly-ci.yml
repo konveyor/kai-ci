@@ -85,13 +85,13 @@ jobs:
           $paExecPath = "C:\tools\paexec.exe"
           $outputFile = "C:\Users\nonadmin\pwd_output.txt"
           $command = "powershell.exe -Command 'pwd | Out-File -FilePath ""$outputFile""'"
-          
+
           # $command = "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
           # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
-          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' $command"
-
+          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'" -Wait -RedirectStandardOutput "C:\Temp\pwd_output.txt"
+          
           # Wait for the process to complete (optional)
           Start-Sleep -Seconds 5
 
