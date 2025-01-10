@@ -84,27 +84,19 @@ jobs:
           $psExecPath = "C:\tools\PsExec64.exe"
           $paExecPath = "C:\tools\paexec.exe"
           $outputFile = "C:\Users\nonadmin\pwd_output.txt"
-          # $command = "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
-          # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
-          # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
-          # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
-          #Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'" -Wait -RedirectStandardOutput "C:\Users\nonadmin\pwd_output.txt"
-          # Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' $command" -Wait
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Hello World'"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Starting'; pwd; Write-Host 'Finished'"
-          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "pwd > C:\Users\nonadmin\pwd_output.txt"
-
-          
+          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "pwd > '$logPathOut'" 
 
           # Wait for the process to complete (optional)
           Start-Sleep -Seconds 5
 
           # Check if the output file exists
-          if (Test-Path $outputFile) {
+          if (Test-Path $logPathOut) {
             Write-Output "Output file exists. Reading content..."
 
             # Read the content of the output file
-            $outputContent = Get-Content -Path $outputFile
+            $outputContent = Get-Content -Path $logPathOut
             Write-Output "Command output: $outputContent"
           } else {
             Write-Output "Output file not found. Check for errors."
