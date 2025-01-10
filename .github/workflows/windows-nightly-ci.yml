@@ -86,8 +86,8 @@ jobs:
           # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
-          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
-
+          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'"
+          
           # Capture screenshot after running the command using nircmd
           $screenshotPath = "C:\Users\nonadmin\screenshot.png"
           Write-Output "Capturing screenshot..."
