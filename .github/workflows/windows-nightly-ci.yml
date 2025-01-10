@@ -48,6 +48,7 @@ jobs:
           $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
           $toolsDir = "C:\tools"
           $psExecPath = "$toolsDir\PsExec64.exe"
+          $paexecpath = "$toolsDir\paexec.exe"
           $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$logDir\run-tests-output.log"
           $logPathErr = "$logDir\run-tests-error.log"
@@ -63,7 +64,9 @@ jobs:
       - name: Download PaExec
         run: |
           choco install wget -y --no-progress 
-          wget -q https://www.poweradmin.com/paexec/paexec.exe -p $toolsDir  
+          Invoke-WebRequest -Uri "https://www.poweradmin.com/paexec/paexec.exe" -OutFile "C:\tools\paexec.exe"
+
+          # wget -q https://www.poweradmin.com/paexec/paexec.exe -p $toolsDir  
 
       - name: Download NirCmd
         run: |
@@ -83,7 +86,7 @@ jobs:
           # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
-          & paexec -u nonadmin -p 'pass123!' -lo $pwd\output.txt
+          & $paexecpath -u nonadmin -p 'pass123!' -lo $pwd\output.txt
 
           # Capture screenshot after running the command using nircmd
           $screenshotPath = "C:\Users\nonadmin\screenshot.png"
