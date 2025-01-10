@@ -60,23 +60,6 @@ jobs:
 
           # wget -q https://www.poweradmin.com/paexec/paexec.exe -p $toolsDir  
 
-      - name: Verify PaExec exists
-        run: |
-          if (Test-Path "C:\tools\paexec.exe") {
-            Write-Host "PaExec found."
-
-            # Run pwd to print the current working directory on the GitHub Actions runner
-            Write-Host "Current working directory:"
-            pwd
-            whoami
-            & "C:\tools\paexec.exe" powershell.exe -Command "hostname > 'C:\Users\nonadmin\abc.txt'"
-            Write-Host "hostname executed. "
-          } else {
-            Write-Host "PaExec not found. Exiting."
-          exit 1
-          }
-
-
       - name: Download NirCmd
         run: |
           $nircmdUrl = "https://www.nirsoft.net/utils/nircmd.zip"
@@ -95,31 +78,27 @@ jobs:
       - name: Execute Batch File without Redirecting Output
         run: |
           $paExecPath = "C:\tools\paexec.exe"
-
-          # Define the .bat file path
-          $batFilePath = "C:\Users\nonadmin\hostname.bat"
-
           $outputFile = "C:\temp\hostname_output.txt"
 
-          # Create the batch file
-          $batchContent = "@echo off`nhostname"
-          Set-Content -Path $batFilePath -Value $batchContent
+          # Define the .bat file path
+          $batFile = "C:\temp\hostname.bat"
+          $outputFile = "C:\temp\hostname_output.txt"
 
-          # Grant permission to the nonadmin user to execute the batch file
-          icacls $batFilePath /grant nonadmin:(R,X)
+          # Create the .bat file with the hostname command (no output redirection)
+          $batContent = @"
+          @echo off
+          hostname > "$outputFile"
+          "@
+
+          # Save the content to the .bat file
+          Set-Content -Path $batFile -Value $batContent
 
           # Confirm that the file was written
           Write-Output "Batch file written at: $batFile"
-          $psExecPath = "C:\tools\Psexec.exe"
-          $paExecPath = "C:\tools\paexec.exe"
 
-          try {
-            & $paExecPath -u nonadmin -p 'pass123!' cmd.exe /C $batFilePath
-            Write-Host "Command executed successfully as nonadmin: "
-          } catch {
-            Write-Host "Error running command as nonadmin: $_"
-            exit 1
-          }
+          # Execute the .bat file with PaExec
+          Write-Output " bat file ..."
+          & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' cmd /C "$batFile"
 
           # Output a message indicating success
           Write-Output "Batch file execution completed."
@@ -127,36 +106,18 @@ jobs:
 
       - name: Execute command
         run: |
-          $psExecPath = "C:\tools\PsExec64.exe"
+          $psExecPath = "C:\tools\psexec.exe"
           $paExecPath = "C:\tools\paexec.exe"
           $outputFile = "C:\temp\hostname_output.txt" 
-          Write-Output " Writing to temp directory ..."
-          # & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Hello World'"
-          # & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Starting'; pwd; Write-Host 'Finished'"
-          # & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > '$outputFile'" 
+          Write-Output "psExec ..."
+          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Hello World'"
+          Write-Output "paExec ..."
+          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Starting'; pwd; Write-Host 'Finished'"
+          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'hostname'" 
 
           # Wait for the process to complete (optional)
           Start-Sleep -Seconds 5
 
-          # Check if the output file exists
-          if (Test-Path $outputFile) {
-            Write-Output "Output file exists. Reading content..."
-
-            # Read the content of the output file
-            $outputContent = Get-Content -Path $outputFile
-            Write-Output "Command output: $outputContent"
-          } else {
-            Write-Output "Output file not found. Check for errors."
-            exit 1
-          }
-
-
-          # Capture screenshot after running the command using nircmd
-          $screenshotPath = "C:\Users\nonadmin\screenshot.png"
-          Write-Output "Capturing screenshot..."
-          
-          # Use nircmd to take a screenshot and save it
-          & "C:\tools\nircmd.exe" cmdwait 1000 savescreenshot "$screenshotPath"
 
 
       # - name: Take Screenshot after hostname command
