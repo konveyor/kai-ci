@@ -110,11 +110,8 @@ jobs:
           $paExecPath = "C:\tools\paexec.exe"
           $outputFile = "C:\temp\hostname_output.txt" 
           Write-Output "psExec ..."
-          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Hello World'"
-          Write-Output "paExec ..."
-          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Starting'; pwd; Write-Host 'Finished'"
-          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'hostname'" 
-
+          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "cd C:\Users\nonadmin && git clone https://github.com/konveyor/kai-ci"
+          
           # Wait for the process to complete (optional)
           Start-Sleep -Seconds 5
 
