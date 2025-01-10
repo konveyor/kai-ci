@@ -3,23 +3,23 @@ name: Windows Nightly Run
 on: [pull_request]
 
 jobs:
-  start-ec2-instance:
-    uses: ./.github/workflows/provision-runner.yml
-    with:
-      ec2-image-id: ami-01fa2492704e48175
-      ec2-instance-type: t2.micro
-      security-group-id: sg-0a3e6b53e86d0e69d
-      subnet-id: subnet-06113672589e7e836
-      ec2-os-type: windows
-    secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+  #start-ec2-instance:
+    # uses: ./.github/workflows/provision-runner.yml
+    # with:
+    #   ec2-image-id: ami-01fa2492704e48175
+    #   ec2-instance-type: t2.micro
+    #   security-group-id: sg-0a3e6b53e86d0e69d
+    #   subnet-id: subnet-06113672589e7e836
+    #   ec2-os-type: windows
+    # secrets:
+    #   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+    #   nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
   run-tests:
-    needs: start-ec2-instance
-    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    #needs: start-ec2-instance
+    runs-on: 60rhn
     steps:
 
 #      - name: Write Test Script
@@ -52,14 +52,6 @@ jobs:
           $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$logDir\run-tests-output.log"
           $logPathErr = "$logDir\run-tests-error.log"
-          
-          # Step 1: Install PsExec
-          Write-Output "Downloading and installing PsExec..."
-          if (Test-Path -Path $toolsDir) { Remove-Item -Recurse -Force $toolsDir\PsExec64.exe }
-          New-Item -Path $toolsDir -ItemType Directory -Force
-          Invoke-WebRequest -Uri $psExecUrl -OutFile "$toolsDir\PSTools.zip"
-          Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
-          Write-Output "PsExec installed successfully."
           
       - name: Download PaExec
         run: |
