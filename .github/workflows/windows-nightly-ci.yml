@@ -91,9 +91,15 @@ jobs:
           # Save the content to the .bat file
           Set-Content -Path $batFile -Value $batContent
 
+          # Confirm that the file was written
+          Write-Output "Batch file written at: $batFile"
+
           # Execute the .bat file with PaExec
-          Write-Output " Writing to bat file ..."
-          & $paExecPath -u nonadmin -p 'pass123!' cmd.exe /C "$batFile"
+          Write-Output " bat file ..."
+          & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' cmd /C "$batFile"
+
+          # Output a message indicating success
+          Write-Output "Batch file execution completed."
 
 
       - name: Execute command
