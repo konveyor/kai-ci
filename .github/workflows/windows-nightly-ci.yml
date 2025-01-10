@@ -90,8 +90,8 @@ jobs:
           # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
-          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'" -Wait -RedirectStandardOutput "C:\Temp\pwd_output.txt"
-          
+          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'" -Wait -RedirectStandardOutput "C:\Users\nonadmin\pwd_output.txt"
+
           # Wait for the process to complete (optional)
           Start-Sleep -Seconds 5
 
