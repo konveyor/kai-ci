@@ -106,7 +106,7 @@ jobs:
           Set-Content -Path $batFilePath -Value $batchContent
 
           # Grant permission to the nonadmin user to execute the batch file
-          icacls $batFilePath /grant nonadmin:(RX)
+          icacls $batFilePath /grant nonadmin:(R,X)
 
           # Confirm that the file was written
           Write-Output "Batch file written at: $batFile"
