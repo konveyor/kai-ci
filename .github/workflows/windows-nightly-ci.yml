@@ -87,7 +87,7 @@ jobs:
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
           $paExecPath = "C:\tools\paexec.exe"
-          $outputFile = "C:\Users\nonadmin\Documents\actions-runner\work\pwd_output.txt"
+          $outputFile = "C:\temp\hostname_output.txt" 
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Hello World'"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Starting'; pwd; Write-Host 'Finished'"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > '$outputFile'" 
