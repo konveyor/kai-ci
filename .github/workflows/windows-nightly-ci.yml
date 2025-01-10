@@ -113,7 +113,7 @@ jobs:
           Write-Output "Batch file written at: $batFile"
 
           try {
-            & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' cmd /C "echo 'This is a test file' > C:\temp\testfile1.txt"            
+            & "C:\tools\psexec.exe" -accepteula -nobanner -u nonadmin -p 'pass123!' cmd /C "echo 'This is a test file' > C:\temp\testfile1.txt"            
             Write-Host "Command executed successfully as nonadmin: "
           } catch {
             Write-Host "Error running command as nonadmin: $_"
