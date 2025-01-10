@@ -63,7 +63,7 @@ jobs:
       - name: Download PaExec
         run: |
           choco install wget -y --no-progress 
-          wget -q https://www.poweradmin.com/paexec/paexec.exe -P $toolsDir  
+          wget -q https://www.poweradmin.com/paexec/paexec.exe -p $toolsDir  
 
       - name: Download NirCmd
         run: |
