@@ -97,17 +97,16 @@ jobs:
           $paExecPath = "C:\tools\paexec.exe"
 
           # Define the .bat file path
-          $batFile = "C:\temp\hostname.bat"
+          $batFilePath = "C:\Users\nonadmin\hostname.bat"
+
           $outputFile = "C:\temp\hostname_output.txt"
 
-          # Create the .bat file with the hostname command (no output redirection)
-          $batContent = @"
-          @echo off
-          hostname > "$outputFile"
-          "@
+          # Create the batch file
+          $batchContent = "@echo off`nhostname"
+          Set-Content -Path $batFilePath -Value $batchContent
 
-          # Save the content to the .bat file
-          Set-Content -Path $batFile -Value $batContent
+          # Grant permission to the nonadmin user to execute the batch file
+          icacls $batFilePath /grant nonadmin:(RX)
 
           # Confirm that the file was written
           Write-Output "Batch file written at: $batFile"
@@ -115,16 +114,12 @@ jobs:
           $paExecPath = "C:\tools\paexec.exe"
 
           try {
-            Start-Process $paExecPath -ArgumentList "-u", "nonadmin", "-p", "pass123!", "cmd.exe", "/C", "echo 'This is a test file' > C:\temp\testfile1.txt"
+            & $paExecPath -u nonadmin -p 'pass123!' cmd.exe /C $batFilePath
             Write-Host "Command executed successfully as nonadmin: "
           } catch {
             Write-Host "Error running command as nonadmin: $_"
             exit 1
           }
-
-          # Execute the .bat file with PaExec
-          Write-Output " bat file ..."
-          & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' cmd /C "$batFile"
 
           # Output a message indicating success
           Write-Output "Batch file execution completed."
