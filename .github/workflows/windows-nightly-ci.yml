@@ -115,7 +115,8 @@ jobs:
           $paExecPath = "C:\tools\paexec.exe"
 
           try {
-            Start-Process $paExecPath -ArgumentList "-u", "nonadmin", "-p", "pass123!", "cmd", "/C", "echo 'This is a test file' > C:\temp\testfile1.txt"            Write-Host "Command executed successfully as nonadmin: "
+            Start-Process $paExecPath -ArgumentList "-u", "nonadmin", "-p", "pass123!", "cmd.exe", "/C", "echo 'This is a test file' > C:\temp\testfile1.txt"
+            Write-Host "Command executed successfully as nonadmin: "
           } catch {
             Write-Host "Error running command as nonadmin: $_"
             exit 1
