@@ -93,7 +93,7 @@ jobs:
 
           # Execute the .bat file with PaExec
           Write-Output " Writing to bat file ..."
-          & $psExecPath -u nonadmin -p 'pass123!' cmd.exe /C "$batFile"
+          & $paExecPath -u nonadmin -p 'pass123!' cmd.exe /C "$batFile"
 
 
       - name: Execute command
