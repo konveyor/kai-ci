@@ -111,9 +111,11 @@ jobs:
 
           # Confirm that the file was written
           Write-Output "Batch file written at: $batFile"
+          $psExecPath = "C:\tools\PsExec64.exe"
+          $paExecPath = "C:\tools\paexec.exe"
 
           try {
-            Start-Process "C:\tools\paexec.exe" -ArgumentList " -u nonadmin -p 'pass123!' cmd /C "echo 'This is a test file' > C:\temp\testfile1.txt"            
+            Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' cmd -Command "echo 'This is a test file' > C:\temp\testfile1.txt""         
             Write-Host "Command executed successfully as nonadmin: "
           } catch {
             Write-Host "Error running command as nonadmin: $_"
