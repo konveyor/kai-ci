@@ -64,6 +64,11 @@ jobs:
         run: |
           if (Test-Path "C:\tools\paexec.exe") {
             Write-Host "PaExec found."
+
+            # Run pwd to print the current working directory on the GitHub Actions runner
+            Write-Host "Current working directory:"
+            pwd
+            whoami
             & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
             Write-Host "hostname executed. "
           } else {
