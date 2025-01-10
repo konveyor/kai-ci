@@ -60,7 +60,11 @@ jobs:
           Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
           Write-Output "PsExec installed successfully."
           
-          
+      - name: Download PaExec
+        run: |
+          choco install wget -y --no-progress 
+          wget -q https://www.poweradmin.com/paexec/paexec.exe -P $toolsDir  
+
       - name: Download NirCmd
         run: |
           $nircmdUrl = "https://www.nirsoft.net/utils/nircmd.zip"
@@ -79,6 +83,7 @@ jobs:
           # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
+          & paexec -u nonadmin -p 'pass123!' -lo $pwd\output.txt
 
           # Capture screenshot after running the command using nircmd
           $screenshotPath = "C:\Users\nonadmin\screenshot.png"
