@@ -64,7 +64,7 @@ jobs:
         run: |
           if (Test-Path "C:\tools\paexec.exe") {
             Write-Host "PaExec found."
-            & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
+            & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
             Write-Host "hostname executed. "
           } else {
             Write-Host "PaExec not found. Exiting."
