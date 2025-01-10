@@ -83,12 +83,30 @@ jobs:
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
           $paExecPath = "C:\tools\paexec.exe"
+          $outputFile = "C:\Users\nonadmin\pwd_output.txt"
+
           $command = "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
           # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
-          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'"
+          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd > $outputFile'"
 
+          # Wait for the process to complete (optional)
+          Start-Sleep -Seconds 5
+
+          # Check if the output file exists
+          if (Test-Path $outputFile) {
+            Write-Output "Output file exists. Reading content..."
+
+            # Read the content of the output file
+            $outputContent = Get-Content -Path $outputFile
+            Write-Output "Command output: $outputContent"
+          } else {
+            Write-Output "Output file not found. Check for errors."
+            exit 1
+          }
+
+          
           # Capture screenshot after running the command using nircmd
           $screenshotPath = "C:\Users\nonadmin\screenshot.png"
           Write-Output "Capturing screenshot..."
