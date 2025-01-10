@@ -111,7 +111,7 @@ jobs:
 
           # Confirm that the file was written
           Write-Output "Batch file written at: $batFile"
-          $psExecPath = "C:\tools\PsExec64.exe"
+          $psExecPath = "C:\tools\Psexec.exe"
           $paExecPath = "C:\tools\paexec.exe"
 
           try {
