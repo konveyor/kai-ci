@@ -79,6 +79,10 @@ jobs:
           Expand-Archive -Path $nircmdZip -DestinationPath C:\tools -Force
           Write-Output "NirCmd downloaded and extracted."
 
+      - name: Set PowerShell execution policy
+        run: |
+          Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+
       - name: Execute command
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
@@ -86,7 +90,7 @@ jobs:
           $outputFile = "C:\Users\nonadmin\Documents\actions-runner\work\pwd_output.txt"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Hello World'"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Starting'; pwd; Write-Host 'Finished'"
-          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "pwd > '$outputFile'" 
+          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "hostname > '$outputFile'" 
 
           # Wait for the process to complete (optional)
           Start-Sleep -Seconds 5
