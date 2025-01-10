@@ -75,35 +75,6 @@ jobs:
         run: |
           Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 
-      - name: Execute Batch File without Redirecting Output
-        run: |
-          $paExecPath = "C:\tools\paexec.exe"
-          $outputFile = "C:\temp\hostname_output.txt"
-
-          # Define the .bat file path
-          $batFile = "C:\temp\hostname.bat"
-          $outputFile = "C:\temp\hostname_output.txt"
-
-          # Create the .bat file with the hostname command (no output redirection)
-          $batContent = @"
-          @echo off
-          hostname > "$outputFile"
-          "@
-
-          # Save the content to the .bat file
-          Set-Content -Path $batFile -Value $batContent
-
-          # Confirm that the file was written
-          Write-Output "Batch file written at: $batFile"
-
-          # Execute the .bat file with PaExec
-          Write-Output " bat file ..."
-          & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' cmd /C "$batFile"
-
-          # Output a message indicating success
-          Write-Output "Batch file execution completed."
-
-
       - name: Execute command
         run: |
           $psExecPath = "C:\tools\psexec.exe"
