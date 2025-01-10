@@ -91,8 +91,9 @@ jobs:
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
           #Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'" -Wait -RedirectStandardOutput "C:\Users\nonadmin\pwd_output.txt"
-          Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' $command" -Wait
-          
+          # Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' $command" -Wait
+          $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'
+
           $process = Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' $command" -PassThru -Wait
           if ($process.ExitCode -ne 0) {
             Write-Output "PAExec failed with exit code: $($process.ExitCode)"
