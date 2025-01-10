@@ -113,8 +113,8 @@ jobs:
           Write-Output "Batch file written at: $batFile"
 
           try {
-            $result = & $paExecPath -u nonadmin -p 'pass123!' cmd /C "whoami"
-            Write-Host "Command executed successfully as nonadmin: $result"
+            & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "whoami > C:\Users\nonadmin\whoami.txt"
+            Write-Host "Command executed successfully as nonadmin: "
           } catch {
             Write-Host "Error running command as nonadmin: $_"
             exit 1
