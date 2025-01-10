@@ -60,6 +60,18 @@ jobs:
 
           # wget -q https://www.poweradmin.com/paexec/paexec.exe -p $toolsDir  
 
+      - name: Verify PaExec exists
+        run: |
+          if (Test-Path "C:\tools\paexec.exe") {
+            Write-Host "PaExec found."
+            & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
+            Write-Host "hostname executed. "
+          } else {
+            Write-Host "PaExec not found. Exiting."
+          exit 1
+          }
+
+
       - name: Download NirCmd
         run: |
           $nircmdUrl = "https://www.nirsoft.net/utils/nircmd.zip"
