@@ -81,11 +81,12 @@ jobs:
 
           # Define the .bat file path
           $batFile = "C:\temp\hostname.bat"
+          $outputFile = "C:\temp\hostname_output.txt"
 
           # Create the .bat file with the hostname command (no output redirection)
           $batContent = @"
           @echo off
-          hostname
+          hostname > "$outputFile"
           "@
 
           # Save the content to the .bat file
