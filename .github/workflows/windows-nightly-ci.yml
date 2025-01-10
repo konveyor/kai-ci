@@ -48,7 +48,7 @@ jobs:
           $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
           $toolsDir = "C:\tools"
           $psExecPath = "$toolsDir\PsExec64.exe"
-          $paexecpath = "$toolsDir\paexec.exe"
+          $paExecPath = "$toolsDir\paexec.exe"
           $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$logDir\run-tests-output.log"
           $logPathErr = "$logDir\run-tests-error.log"
@@ -87,7 +87,7 @@ jobs:
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
           # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
           Start-Process $paExecPath -ArgumentList "-u nonadmin -p 'pass123!' powershell.exe -Command 'pwd'"
-          
+
           # Capture screenshot after running the command using nircmd
           $screenshotPath = "C:\Users\nonadmin\screenshot.png"
           Write-Output "Capturing screenshot..."
