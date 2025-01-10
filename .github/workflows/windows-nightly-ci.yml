@@ -84,8 +84,8 @@ jobs:
           $psExecPath = "C:\tools\PsExec64.exe"
           $command = "hostname > 'C:\\Users\\nonadmin\\abcde.txt' 2>&1"
           # Write-Output "Executing command: & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command '$command'"
-          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
-          & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
+          # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
+          # & $psExecPath -accepteula -nobanner -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "pwd"
 
           # Capture screenshot after running the command using nircmd
