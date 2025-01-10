@@ -69,7 +69,7 @@ jobs:
             Write-Host "Current working directory:"
             pwd
             whoami
-            & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' powershell.exe -Command "hostname"
+            & "C:\tools\paexec.exe" powershell.exe -Command "hostname"
             Write-Host "hostname executed. "
           } else {
             Write-Host "PaExec not found. Exiting."
