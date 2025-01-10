@@ -112,6 +112,14 @@ jobs:
           # Confirm that the file was written
           Write-Output "Batch file written at: $batFile"
 
+          try {
+            $result = & $paExecPath -u nonadmin -p 'pass123!' cmd /C "whoami"
+            Write-Host "Command executed successfully as nonadmin: $result"
+          } catch {
+            Write-Host "Error running command as nonadmin: $_"
+            exit 1
+          }
+
           # Execute the .bat file with PaExec
           Write-Output " bat file ..."
           & "C:\tools\paexec.exe" -u nonadmin -p 'pass123!' cmd /C "$batFile"
