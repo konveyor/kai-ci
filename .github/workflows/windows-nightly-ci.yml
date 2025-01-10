@@ -83,20 +83,20 @@ jobs:
         run: |
           $psExecPath = "C:\tools\PsExec64.exe"
           $paExecPath = "C:\tools\paexec.exe"
-          $outputFile = "C:\Users\nonadmin\pwd_output.txt"
+          $outputFile = "C:\Users\nonadmin\Documents\actions-runner\work\pwd_output.txt"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Hello World'"
           & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "Write-Host 'Starting'; pwd; Write-Host 'Finished'"
-          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "pwd > '$logPathOut'" 
+          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "pwd > '$outputFile'" 
 
           # Wait for the process to complete (optional)
           Start-Sleep -Seconds 5
 
           # Check if the output file exists
-          if (Test-Path $logPathOut) {
+          if (Test-Path $outputFile) {
             Write-Output "Output file exists. Reading content..."
 
             # Read the content of the output file
-            $outputContent = Get-Content -Path $logPathOut
+            $outputContent = Get-Content -Path $outputFile
             Write-Output "Command output: $outputContent"
           } else {
             Write-Output "Output file not found. Check for errors."
