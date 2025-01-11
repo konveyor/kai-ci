@@ -62,6 +62,22 @@ jobs:
           $psExecPath = "C:\tools\psexec.exe"
           $paExecPath = "C:\tools\paexec.exe"
           Write-Output "psExec ..."
+
+          # Check whoami to verify the user context
+          Write-Output "Running whoami..."
+          whoami
+  
+          # Display the batch file location
+          Write-Output "Batch file path: C:\temp\shveta.bat"
+  
+          # Ensure the batch file exists
+          if (Test-Path "C:\temp\shveta.bat") {
+            Write-Output "Batch file exists."
+          } else {
+            Write-Output "Batch file does not exist."
+            exit 1
+          }
+            
           Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "-i", "cmd.exe" ,"/C", "C:\temp\shveta.bat"
           #Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "cmd.exe" ,"/C",  "cd C:\temp\ && git clone https://github.com/konveyor/kai-ci"
           Write-Output "psExec .Completed.."
