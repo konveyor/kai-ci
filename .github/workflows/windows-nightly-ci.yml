@@ -62,7 +62,7 @@ jobs:
           $psExecPath = "C:\tools\psexec.exe"
           $paExecPath = "C:\tools\paexec.exe"
           Write-Output "psExec ..."
-          & $paExecPath -u nonadmin -p 'pass123!' powershell.exe -Command "echo 'This is me' > C:\temp\how.txt"
+          Start-Process $paExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "powershell.exe" ,"-Command",  "echo 'This is me' > C:\temp\how.txt"
           
           
 
