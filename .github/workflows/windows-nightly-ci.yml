@@ -62,7 +62,7 @@ jobs:
           $psExecPath = "C:\tools\psexec.exe"
           $paExecPath = "C:\tools\paexec.exe"
           Write-Output "psExec ..."
-          Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "cmd.exe" ,"/C",  "cd C:\Users\nonadmin && git clone https://github.com/konveyor/kai-ci"
+          Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "cmd.exe" ,"/C",  "cd C:\temp\ && git clone https://github.com/konveyor/kai-ci"
           Write-Output "psExec .Completed.."
           
           
