@@ -41,6 +41,48 @@ jobs:
 #          $scriptPath = "$runnerDir\run-tests.ps1"
 #          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
+
+      - name: Generate SSH key pair
+        id: generate-ssh-key
+        run: |
+          # Generate an SSH key pair for EC2 connection
+          ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -N "" # No passphrase
+          echo "SSH key generated successfully."
+        
+      - name: Add EC2 host to known hosts
+        run: |
+          # Add EC2 host to known hosts to prevent SSH warnings
+          ssh-keyscan -H 52.87.190.114 >> ~/.ssh/known_hosts
+        env:
+          EC2_PUBLIC_IP: 52.87.190.114
+
+      - name: Copy the public key to EC2 instance
+        run: |
+          # Copy the public key to the EC2 instance to allow SSH access
+          ssh -i ~/.ssh/id_rsa Administrator@52.87.190.114 "mkdir -p C:\\Users\\Administrator\\.ssh && echo $(cat ~/.ssh/id_rsa.pub) >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
+        env:
+          EC2_PUBLIC_IP: 52.87.190.114
+  
+      - name: Create batch file for non-admin user
+        run: |
+          # Create a batch file that runs the "hostname" command as the non-admin user
+          echo "hostname" > ./hostname.bat
+          echo "Batch file created to execute 'hostname' command."
+  
+      - name: Copy batch file to EC2 instance
+        run: |
+          # Copy the batch file to the EC2 instance using SCP
+          scp -i ~/.ssh/id_rsa ./hostname.bat Administrator@52.87.190.114:C:\\Users\\nonadmin\\Desktop\\hostname.bat
+        env:
+          EC2_PUBLIC_IP: 52.87.190.114
+  
+      - name: Run batch file as non-admin user on EC2 instance
+        run: |
+          # Run the batch file on the EC2 instance as the non-admin user
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.87.190.114 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
+        env:
+          EC2_PUBLIC_IP: 52.87.190.114
+
       - name: Run Test Script with PsExec
         shell: powershell
         run: |
