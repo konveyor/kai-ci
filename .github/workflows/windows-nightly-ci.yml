@@ -3,23 +3,23 @@ name: Windows Nightly Run
 on: [push]
 
 jobs:
-  start-ec2-instance:
-    uses: ./.github/workflows/provision-runner.yml
-    with:
-      ec2-image-id: ami-01fa2492704e48175
-      ec2-instance-type: t2.micro
-      security-group-id: sg-0a3e6b53e86d0e69d
-      subnet-id: subnet-06113672589e7e836
-      ec2-os-type: windows
-    secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+#  start-ec2-instance:
+#    uses: ./.github/workflows/provision-runner.yml
+#    with:
+#      ec2-image-id: ami-01fa2492704e48175
+#      ec2-instance-type: t2.micro
+#      security-group-id: sg-0a3e6b53e86d0e69d
+#      subnet-id: subnet-06113672589e7e836
+#      ec2-os-type: windows
+#    secrets:
+#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+#      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
   run-tests:
-    needs: start-ec2-instance
-    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+#    needs: start-ec2-instance
+    runs-on: kxtnh
     steps:
 
 #      - name: Write Test Script
@@ -64,7 +64,7 @@ jobs:
           Write-Output "Ensuring log directory exists: $workDir"
           if (-Not (Test-Path -Path $workDir)) {
               New-Item -Path $workDir -ItemType Directory -Force
-              Set-Location -Path $workingDir
+              Set-Location -Path $workDir
           }
 
           # Step 3: Set Execution Policy to RemoteSigned
