@@ -19,7 +19,7 @@ jobs:
 
   run-tests:
     # needs: start-ec2-instance
-    runs-on: 81ayx
+    runs-on: kxtnh
     steps:
 
 #      - name: Write Test Script
@@ -68,7 +68,8 @@ jobs:
           
           # Step 3: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
+          Start-Process powershell.exe -ArgumentList "-Command", "mkdir C:\Users\nonadmin\test-dir > '$logPathOut' 2> '$logPathErr'"
+          # & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
           
           # Step 4: Check if output log file exists
           if (-Not (Test-Path -Path $logPathOut)) {
