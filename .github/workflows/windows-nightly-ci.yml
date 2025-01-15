@@ -41,6 +41,21 @@ jobs:
 #          $scriptPath = "$runnerDir\run-tests.ps1"
 #          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
+      - name: Delete existing SSH keys (if any)
+        run: |
+          # Ensure the .ssh directory exists
+          $sshDir = "$env:USERPROFILE\.ssh"
+          if (-not (Test-Path -Path $sshDir)) {
+            New-Item -ItemType Directory -Force -Path $sshDir
+          }
+          # Delete existing SSH key files (id_rsa and id_rsa.pub) if they exist
+          if (Test-Path -Path "$sshDir\id_rsa") {
+            Remove-Item -Path "$sshDir\id_rsa" -Force
+          }
+          if (Test-Path -Path "$sshDir\id_rsa.pub") {
+            Remove-Item -Path "$sshDir\id_rsa.pub" -Force
+          }
+          echo "Existing SSH keys deleted (if any)."
 
       - name: Generate SSH key pair
         id: generate-ssh-key
@@ -53,7 +68,7 @@ jobs:
           }
 
           # Generate an SSH key pair for EC2 connection with no passphrase
-          ssh-keygen -t rsa -b 2048 -f "$sshDir\id_rsa" -N None -y
+          ssh-keygen -t rsa -b 2048 -f "$sshDir\id_rsa" -N None
           echo "SSH key generated successfully."
                 
       - name: Add EC2 host to known hosts
