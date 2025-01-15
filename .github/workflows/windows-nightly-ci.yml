@@ -35,13 +35,13 @@ jobs:
           # Create a credential object for non-admin user
           $UserName = "nonadmin"  # Replace with actual non-admin username
           $Password = ConvertTo-SecureString "pass123!" -AsPlainText -Force  # Replace with the actual password
-          $Credential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
-          
+          #$Credential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
+
           # Ensure the working directory exists
           if (-Not (Test-Path -Path $workDir)) {
             New-Item -Path $workDir -ItemType Directory -Force
           }
-          
+
           # Create the test-script.bat
           Write-Output "Creating test script: $testScriptPath"
           $testScriptContent = @"
@@ -54,11 +54,11 @@ jobs:
               Write-Output "Test script does not exist: $testScriptPath"
               exit 1
           }
-          
+
           # Create the user-wrapper.bat
           Write-Output "Creating user wrapper script: $wrapperScriptPath"
           $wrapperScriptContent = @"
-          powershell.exe -Command Start-Process -FilePath `"powershell.exe`" -ArgumentList `"/c $testScriptPath`" -Credential (New-Object System.Management.Automation.PSCredential(`"$UserName`", (ConvertTo-SecureString `"$Password`" -AsPlainText -Force))) -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
+          powershell.exe -Command Start-Process -FilePath `"powershell.exe`" -ArgumentList `"/c $testScriptPath`" -Credential (New-Object System.Management.Automation.PSCredential(`"nonadmin`", (ConvertTo-SecureString `"pass123!`" -AsPlainText -Force))) -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
           "@
           $wrapperScriptContent | Out-File -FilePath $wrapperScriptPath -Encoding utf8 -Force
           
@@ -66,7 +66,7 @@ jobs:
               Write-Output "User wrapper script does not exist: $wrapperScriptPath"
               exit 1
           }
-          
+
           # Run the user-wrapper.bat as the admin
           Write-Output "Running user wrapper script..."
           Start-Process -FilePath "powershell.exe" -ArgumentList "/c $wrapperScriptPath" -NoNewWindow -Wait
@@ -78,7 +78,7 @@ jobs:
           } else {
               Write-Output "Output log file not found: $logPathOut"
           }
-          
+
           Write-Output "--- Run Error ---"
           if (Test-Path -Path $logPathErr) {
               Get-Content -Path $logPathErr
