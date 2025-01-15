@@ -51,6 +51,7 @@ jobs:
           $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$workDir\run-tests-output.log"
           $logPathErr = "$workDir\run-tests-error.log"
+          $gitRepo = "https://github.com/konveyor/kai-ci.git"
           
           # Step 1: Install PsExec
           # Write-Output "Downloading and installing PsExec..."
@@ -64,17 +65,21 @@ jobs:
           Write-Output "Ensuring log directory exists: $workDir"
           if (-Not (Test-Path -Path $workDir)) {
               New-Item -Path $workDir -ItemType Directory -Force
-              Set-Location -Path $workDir
           }
+          # set working directory          
+          Set-Location -Path $workDir
 
           # Step 3: Set Execution Policy to RemoteSigned
           # Write-Output "Setting Execution Policy to RemoteSigned..."
           # Set-ExecutionPolicy RemoteSigned -Force
           
           # Step 4: Execute the command using PsExec
-          Write-Output "Executing PsExec as nonadmin to run 'clone command'..."
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
-              -Command "git clone https://github.com/konveyor/kai-ci.git > '$logPathOut' 2> '$logPathErr'"
+          Write-Output "Executing start-process as nonadmin to run 'clone command'..."
+          # & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
+          #     -Command "git clone https://github.com/konveyor/kai-ci.git > '$logPathOut' 2> '$logPathErr'"
+          
+          Start-Process powershell.exe -ArgumentList "-Command", "git clone $gitRepo > '$logPathOut' 2> '$logPathErr'"
+          
           
           # Step 5: Check if output log file exists
           if (-Not (Test-Path -Path $logPathOut)) {
