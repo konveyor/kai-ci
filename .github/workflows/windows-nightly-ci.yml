@@ -69,7 +69,7 @@ jobs:
 
           # Run the user-wrapper.bat as the admin
           Write-Output "Running user wrapper script..."
-          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $wrapperScriptPath" -NoNewWindow -Wait
+          Start-Process $wrapperScriptPath
           
           # Output logs
           Write-Output "--- Run Output ---"
