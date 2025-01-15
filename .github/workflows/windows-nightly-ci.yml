@@ -45,36 +45,46 @@ jobs:
         shell: powershell
         run: |
           # Define paths
+          $scriptPath = "C:\Users\nonadmin\Documents\actions-runner\test-script.bat"
+          $gitRepo = "https://github.com/konveyor/kai-ci.git"
           $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$workDir\run-tests-output.log"
           $logPathErr = "$workDir\run-tests-error.log"
           
-          $gitRepo = "https://github.com/konveyor/kai-ci.git"
+          # Create a credential object for non-admin user
+          $UserName = "nonadmin"  # Replace with actual non-admin username
+          $Password = ConvertTo-SecureString "pass123!" -AsPlainText -Force  # Replace with the actual password
+          $Credential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
           
-          # Ensure the log directory exists & Set the working directory
-          Write-Output "Ensuring log directory exists: $workDir"
+          # Ensure the working directory exists
           if (-Not (Test-Path -Path $workDir)) {
-              New-Item -Path $workDir -ItemType Directory -Force
+          New-Item -Path $workDir -ItemType Directory -Force
           }
           
-          # set working directory          
-          Set-Location -Path $workDir
-
-          Start-Process powershell.exe -ArgumentList "-Command", "mkdir test-dir > '$logPathOut' 2> '$logPathErr'"
+          # Step 1: Create the batch file and add the git clone command with redirection
+          Write-Output "Creating batch file: $scriptPath"
+            $batchContent = @"
+            @echo off
+            git clone $gitRepo > "$logPathOut" 2> "$logPathErr"
+            "@
+          $batchContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
           
-          # Check if output log file exists
-          if (-Not (Test-Path -Path $logPathOut)) {
-              Write-Output "Log file does not exist: $logPathOut"
-              Write-Output "Check $logPathErr for any errors."
-              exit 1
+          # Step 2: Ensure the batch file exists before executing
+          if (-Not (Test-Path -Path $scriptPath)) {
+              Write-Output "Batch file does not exist: $scriptPath"
+                                exit 1
           }
           
-          # Output log files to GitHub Actions
+          # Step 3: Run the batch file as non-admin user
+          Write-Output "Running batch file to clone repository..."
+          Start-Process -FilePath "cmd.exe" -ArgumentList "/c $scriptPath" -Credential $Credential -PassThru -Wait
           
+          # Step 4: Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
           Write-Output "--- Run Error ---"
           Get-Content -Path $logPathErr
+          
 
 
 
