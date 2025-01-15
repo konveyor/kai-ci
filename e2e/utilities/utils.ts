@@ -25,9 +25,8 @@ export function getOSInfo(): string {
 }
 
 export function getKAIPluginName(): string {
-  const vsixFileName =
-    process.env.VSIX_FILE_NAME || 'konveyor-linux-0.0.1.vsix';
-  return vsixFileName.replace(/(konveyor-)(\w+)(-.*)/, `$1${getOSInfo()}$3`);
+  const vsixFileName = process.env.VSIX_FILE_NAME || 'konveyor-v0.0.4.vsix';
+  return vsixFileName;
 }
 
 export async function cleanupRepo() {
