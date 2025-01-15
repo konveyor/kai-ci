@@ -21,33 +21,14 @@ jobs:
 #    needs: start-ec2-instance
     runs-on: kxtnh
     steps:
-
-#      - name: Write Test Script
-#        shell: powershell
-#        run: |
-#          # Ensure the directory exists
-#          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
-#          if (-not (Test-Path -Path $runnerDir)) {
-#            New-Item -Path $runnerDir -ItemType Directory -Force
-#          }
-#
-#          # Create the test script
-#          $scriptContent = @"
-#          # Redirect output directly in the script
-#          code --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-#          node --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-#          "@
-#
-#          $scriptPath = "$runnerDir\run-tests.ps1"
-#          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
-
       - name: Run Test Script with PsExec
         shell: powershell
         run: |
           # Define paths
           $gitRepo = "https://github.com/konveyor/kai-ci.git"
           $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
-          $scriptPath = "$workDir\test-script.bat"
+          $testScriptPath = "$workDir\test-script.bat"
+          $wrapperScriptPath = "$workDir\user-wrapper.bat"
           $logPathOut = "$workDir\run-tests-output.log"
           $logPathErr = "$workDir\run-tests-error.log"
           
@@ -58,31 +39,52 @@ jobs:
           
           # Ensure the working directory exists
           if (-Not (Test-Path -Path $workDir)) {
-          New-Item -Path $workDir -ItemType Directory -Force
+            New-Item -Path $workDir -ItemType Directory -Force
           }
           
-          Write-Output "Creating batch file: $scriptPath"
-          $batchContent = @"
+          # Create the test-script.bat
+          Write-Output "Creating test script: $testScriptPath"
+          $testScriptContent = @"
           mkdir test
           git clone $gitRepo
           "@
-          $batchContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
+          $testScriptContent | Out-File -FilePath $testScriptPath -Encoding utf8 -Force
           
-          if (-Not (Test-Path -Path $scriptPath)) {
-              Write-Output "Batch file does not exist: $scriptPath"
+          if (-Not (Test-Path -Path $testScriptPath)) {
+              Write-Output "Test script does not exist: $testScriptPath"
               exit 1
           }
           
-          Write-Output "Running batch file to clone repository..."
-          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $scriptPath" -Credential $Credential -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
+          # Create the user-wrapper.bat
+          Write-Output "Creating user wrapper script: $wrapperScriptPath"
+          $wrapperScriptContent = @"
+          powershell.exe -Command Start-Process -FilePath `"powershell.exe`" -ArgumentList `"/c $testScriptPath`" -Credential (New-Object System.Management.Automation.PSCredential(`"$UserName`", (ConvertTo-SecureString `"$Password`" -AsPlainText -Force))) -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
+          "@
+          $wrapperScriptContent | Out-File -FilePath $wrapperScriptPath -Encoding utf8 -Force
           
-          # Step 4: Output log files to GitHub Actions
+          if (-Not (Test-Path -Path $wrapperScriptPath)) {
+              Write-Output "User wrapper script does not exist: $wrapperScriptPath"
+              exit 1
+          }
+          
+          # Run the user-wrapper.bat as the admin
+          Write-Output "Running user wrapper script..."
+          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $wrapperScriptPath" -NoNewWindow -Wait
+          
+          # Output logs
           Write-Output "--- Run Output ---"
-          Get-Content -Path $logPathOut
-          Write-Output "--- Run Error ---"
-          Get-Content -Path $logPathErr
+          if (Test-Path -Path $logPathOut) {
+              Get-Content -Path $logPathOut
+          } else {
+              Write-Output "Output log file not found: $logPathOut"
+          }
           
-
+          Write-Output "--- Run Error ---"
+          if (Test-Path -Path $logPathErr) {
+              Get-Content -Path $logPathErr
+          } else {
+              Write-Output "Error log file not found: $logPathErr"
+          }
 
 
 #  stop-ec2-instance:
