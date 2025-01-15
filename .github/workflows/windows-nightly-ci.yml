@@ -1,0 +1,100 @@
+name: Windows Nightly Run
+
+on: [push]
+
+jobs:
+#  start-ec2-instance:
+#    uses: ./.github/workflows/provision-runner.yml
+#    with:
+#      ec2-image-id: ami-01fa2492704e48175
+#      ec2-instance-type: t2.micro
+#      security-group-id: sg-0a3e6b53e86d0e69d
+#      subnet-id: subnet-06113672589e7e836
+#      ec2-os-type: windows
+#    secrets:
+#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+#      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+
+  run-tests:
+#    needs: start-ec2-instance
+    runs-on: kxtnh
+    steps:
+      - name: Run Test Script with PsExec
+        shell: powershell
+        run: |
+          # Define paths
+          $gitRepo = "https://github.com/konveyor/kai-ci.git"
+          $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+          $testScriptPath = "$workDir\test-script.bat"
+          $wrapperScriptPath = "$workDir\user-wrapper.bat"
+          $logPathOut = "$workDir\run-tests-output.log"
+          $logPathErr = "$workDir\run-tests-error.log"
+          
+          # Create a credential object for non-admin user
+          $UserName = "nonadmin"  # Replace with actual non-admin username
+          $Password = ConvertTo-SecureString "pass123!" -AsPlainText -Force  # Replace with the actual password
+          $Credential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
+          
+          # Ensure the working directory exists
+          if (-Not (Test-Path -Path $workDir)) {
+            New-Item -Path $workDir -ItemType Directory -Force
+          }
+          
+          # Create the test-script.bat
+          Write-Output "Creating test script: $testScriptPath"
+          $testScriptContent = @"
+          mkdir test
+          git clone $gitRepo
+          "@
+          $testScriptContent | Out-File -FilePath $testScriptPath -Encoding ascii -Force
+          
+          if (-Not (Test-Path -Path $testScriptPath)) {
+              Write-Output "Test script does not exist: $testScriptPath"
+              exit 1
+          }
+          
+          # Create the user-wrapper.bat
+          Write-Output "Creating user wrapper script: $wrapperScriptPath"
+          $wrapperScriptContent = @"
+          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $testScriptPath" -Credential (New-Object System.Management.Automation.PSCredential("$UserName", (ConvertTo-SecureString "$Password" -AsPlainText -Force))) -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
+          "@
+          $wrapperScriptContent | Out-File -FilePath $wrapperScriptPath -Encoding ascii -Force
+          
+          if (-Not (Test-Path -Path $wrapperScriptPath)) {
+              Write-Output "User wrapper script does not exist: $wrapperScriptPath"
+              exit 1
+          }
+          
+          # Run the user-wrapper.bat as the admin
+          Write-Output "Running user wrapper script..."
+          Start-Process -FilePath "cmd.exe" -ArgumentList "/c $wrapperScriptPath" -NoNewWindow -Wait
+          
+          # Output logs
+          Write-Output "--- Run Output ---"
+          if (Test-Path -Path $logPathOut) {
+              Get-Content -Path $logPathOut
+          } else {
+              Write-Output "Output log file not found: $logPathOut"
+          }
+          
+          Write-Output "--- Run Error ---"
+          if (Test-Path -Path $logPathErr) {
+              Get-Content -Path $logPathErr
+          } else {
+              Write-Output "Error log file not found: $logPathErr"
+          }
+
+
+#  stop-ec2-instance:
+#    needs: [ start-ec2-instance, run-tests ]
+#    if: always()
+#    uses: ./.github/workflows/remove-runner.yml
+#    with:
+#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+#    secrets:
+#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
