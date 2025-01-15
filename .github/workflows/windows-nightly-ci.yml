@@ -48,9 +48,9 @@ jobs:
           $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
           $toolsDir = "C:\tools"
           $psExecPath = "$toolsDir\PsExec64.exe"
-          $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
-          $logPathOut = "$logDir\run-tests-output.log"
-          $logPathErr = "$logDir\run-tests-error.log"
+          $workDir = "C:\Users\nonadmin\actions-runner\work"
+          $logPathOut = "$workDir\run-tests-output.log"
+          $logPathErr = "$workDir\run-tests-error.log"
           
           # Step 1: Install PsExec
           Write-Output "Downloading and installing PsExec..."
@@ -60,25 +60,30 @@ jobs:
           Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
           Write-Output "PsExec installed successfully."
           
-          # Step 2: Ensure the log directory exists
-          Write-Output "Ensuring log directory exists: $logDir"
-          if (-Not (Test-Path -Path $logDir)) {
-              New-Item -Path $logDir -ItemType Directory -Force
+          # Step 2: Ensure the log directory exists & Set the working directory
+          Write-Output "Ensuring log directory exists: $workDir"
+          if (-Not (Test-Path -Path $workDir)) {
+              New-Item -Path $workDir -ItemType Directory -Force
+              Set-Location -Path $workingDir
           }
+
+          # Step 3: Set Execution Policy to RemoteSigned
+          Write-Output "Setting Execution Policy to RemoteSigned..."
+          Set-ExecutionPolicy RemoteSigned -Force
           
-          # Step 3: Execute the command using PsExec
-          Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
-              -Command "hostname > '$logPathOut' 2> '$logPathErr'"
+          # Step 4: Execute the command using PsExec
+          Write-Output "Executing PsExec as nonadmin to run 'clone command'..."
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" -h powershell.exe `
+              -Command "git clone https://github.com/konveyor/kai-ci.git > '$logPathOut' 2> '$logPathErr'"
           
-          # Step 4: Check if output log file exists
+          # Step 5: Check if output log file exists
           if (-Not (Test-Path -Path $logPathOut)) {
               Write-Output "Log file does not exist: $logPathOut"
               Write-Output "Check $logPathErr for any errors."
               exit 1
           }
           
-          # Step 5: Output log files to GitHub Actions
+          # Step 6: Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
           Write-Output "--- Run Error ---"
