@@ -67,9 +67,9 @@ jobs:
               Set-Location -Path $workDir
           }
 
-          # Step 3: Set Execution Policy to RemoteSigned
-          Write-Output "Setting Execution Policy to RemoteSigned..."
-          Set-ExecutionPolicy RemoteSigned -Force
+#          # Step 3: Set Execution Policy to RemoteSigned
+#          Write-Output "Setting Execution Policy to RemoteSigned..."
+#          Set-ExecutionPolicy RemoteSigned -Force
           
           # Step 4: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'clone command'..."
