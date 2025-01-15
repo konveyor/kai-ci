@@ -53,12 +53,12 @@ jobs:
           $logPathErr = "$workDir\run-tests-error.log"
           
           # Step 1: Install PsExec
-          Write-Output "Downloading and installing PsExec..."
-          if (Test-Path -Path $toolsDir) { Remove-Item -Recurse -Force $toolsDir }
-          New-Item -Path $toolsDir -ItemType Directory -Force
-          Invoke-WebRequest -Uri $psExecUrl -OutFile "$toolsDir\PSTools.zip"
-          Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
-          Write-Output "PsExec installed successfully."
+          # Write-Output "Downloading and installing PsExec..."
+          # if (Test-Path -Path $toolsDir) { Remove-Item -Recurse -Force $toolsDir }
+          # New-Item -Path $toolsDir -ItemType Directory -Force
+          # Invoke-WebRequest -Uri $psExecUrl -OutFile "$toolsDir\PSTools.zip"
+          # Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
+          # Write-Output "PsExec installed successfully."
           
           # Step 2: Ensure the log directory exists & Set the working directory
           Write-Output "Ensuring log directory exists: $workDir"
