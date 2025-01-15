@@ -48,7 +48,7 @@ jobs:
           $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
           $toolsDir = "C:\tools"
           $psExecPath = "$toolsDir\PsExec64.exe"
-          $workDir = "C:\Users\nonadmin\actions-runner\work"
+          $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$workDir\run-tests-output.log"
           $logPathErr = "$workDir\run-tests-error.log"
           
