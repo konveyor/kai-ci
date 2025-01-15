@@ -1,6 +1,7 @@
 name: Deploy kai-client-ci visualizer
 on:
   push:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
