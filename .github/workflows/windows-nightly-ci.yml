@@ -45,50 +45,32 @@ jobs:
         shell: powershell
         run: |
           # Define paths
-          $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
-          $toolsDir = "C:\tools"
-          $psExecPath = "$toolsDir\PsExec64.exe"
           $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $logPathOut = "$workDir\run-tests-output.log"
           $logPathErr = "$workDir\run-tests-error.log"
+          
           $gitRepo = "https://github.com/konveyor/kai-ci.git"
           
-          # Step 1: Install PsExec
-          # Write-Output "Downloading and installing PsExec..."
-          # if (Test-Path -Path $toolsDir) { Remove-Item -Recurse -Force $toolsDir }
-          # New-Item -Path $toolsDir -ItemType Directory -Force
-          # Invoke-WebRequest -Uri $psExecUrl -OutFile "$toolsDir\PSTools.zip"
-          # Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
-          # Write-Output "PsExec installed successfully."
-          
-          # Step 2: Ensure the log directory exists & Set the working directory
+          # Ensure the log directory exists & Set the working directory
           Write-Output "Ensuring log directory exists: $workDir"
           if (-Not (Test-Path -Path $workDir)) {
               New-Item -Path $workDir -ItemType Directory -Force
           }
+          
           # set working directory          
           Set-Location -Path $workDir
 
-          # Step 3: Set Execution Policy to RemoteSigned
-          # Write-Output "Setting Execution Policy to RemoteSigned..."
-          # Set-ExecutionPolicy RemoteSigned -Force
+          Start-Process powershell.exe -ArgumentList "-Command", "mkdir test-dir > '$logPathOut' 2> '$logPathErr'"
           
-          # Step 4: Execute the command using PsExec
-          Write-Output "Executing start-process as nonadmin to run 'clone command'..."
-          # & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
-          #     -Command "git clone https://github.com/konveyor/kai-ci.git > '$logPathOut' 2> '$logPathErr'"
-          
-          Start-Process powershell.exe -ArgumentList "-Command", "git clone $gitRepo > '$logPathOut' 2> '$logPathErr'"
-          
-          
-          # Step 5: Check if output log file exists
+          # Check if output log file exists
           if (-Not (Test-Path -Path $logPathOut)) {
               Write-Output "Log file does not exist: $logPathOut"
               Write-Output "Check $logPathErr for any errors."
               exit 1
           }
           
-          # Step 6: Output log files to GitHub Actions
+          # Output log files to GitHub Actions
+          
           Write-Output "--- Run Output ---"
           Get-Content -Path $logPathOut
           Write-Output "--- Run Error ---"
