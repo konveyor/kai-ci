@@ -28,7 +28,6 @@ jobs:
           $gitRepo = "https://github.com/konveyor/kai-ci.git"
           $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $testScriptPath = "$workDir\test-script.bat"
-          $wrapperScriptPath = "$workDir\user-wrapper.bat"
           $logPathOut = "$workDir\run-tests-output.log"
           $logPathErr = "$workDir\run-tests-error.log"
           
@@ -55,21 +54,9 @@ jobs:
               exit 1
           }
           
-          # Create the user-wrapper.bat
-          Write-Output "Creating user wrapper script: $wrapperScriptPath"
-          $wrapperScriptContent = @"
-          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $testScriptPath" -Credential (New-Object System.Management.Automation.PSCredential("$UserName", (ConvertTo-SecureString "$Password" -AsPlainText -Force))) -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
-          "@
-          $wrapperScriptContent | Out-File -FilePath $wrapperScriptPath -Encoding ascii -Force
-          
-          if (-Not (Test-Path -Path $wrapperScriptPath)) {
-              Write-Output "User wrapper script does not exist: $wrapperScriptPath"
-              exit 1
-          }
-          
-          # Run the user-wrapper.bat as the admin
-          Write-Output "Running user wrapper script..."
-          Start-Process -FilePath "cmd.exe" -ArgumentList "/c $wrapperScriptPath" -NoNewWindow -Wait
+          # Run the test-script.bat directly as non-admin user
+          Write-Output "Running test script as non-admin user..."
+          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $testScriptPath" -Credential $Credential -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
           
           # Output logs
           Write-Output "--- Run Output ---"
@@ -85,8 +72,6 @@ jobs:
           } else {
               Write-Output "Error log file not found: $logPathErr"
           }
-
-
 #  stop-ec2-instance:
 #    needs: [ start-ec2-instance, run-tests ]
 #    if: always()
