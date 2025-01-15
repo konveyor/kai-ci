@@ -46,7 +46,7 @@ jobs:
         id: generate-ssh-key
         run: |
           # Generate an SSH key pair for EC2 connection
-          ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -N "" # No passphrase
+          ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -N "" | Out-Null
           echo "SSH key generated successfully."
         
       - name: Add EC2 host to known hosts
