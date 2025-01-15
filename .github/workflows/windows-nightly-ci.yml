@@ -63,6 +63,7 @@ jobs:
           
           Write-Output "Creating batch file: $scriptPath"
           $batchContent = @"
+          mkdir test
           git clone $gitRepo
           "@
           $batchContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
