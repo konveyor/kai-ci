@@ -73,7 +73,7 @@ jobs:
           
           # Step 4: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'clone command'..."
-          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" -h powershell.exe `
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe `
               -Command "git clone https://github.com/konveyor/kai-ci.git > '$logPathOut' 2> '$logPathErr'"
           
           # Step 5: Check if output log file exists
