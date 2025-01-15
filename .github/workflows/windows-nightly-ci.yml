@@ -58,7 +58,7 @@ jobs:
           # Create the user-wrapper.bat
           Write-Output "Creating user wrapper script: $wrapperScriptPath"
           $wrapperScriptContent = @"
-          powershell.exe -Command Start-Process -FilePath `"powershell.exe`" -ArgumentList `"/c $testScriptPath`" -Credential (New-Object System.Management.Automation.PSCredential(`"nonadmin`", (ConvertTo-SecureString `"pass123!`" -AsPlainText -Force))) -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
+          Start-Process -FilePath `"powershell.exe`" -ArgumentList `"/c $testScriptPath`" -Credential (New-Object System.Management.Automation.PSCredential(`"nonadmin`", (ConvertTo-SecureString `"pass123!`" -AsPlainText -Force))) -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
           "@
           $wrapperScriptContent | Out-File -FilePath $wrapperScriptPath -Encoding utf8 -Force
           
