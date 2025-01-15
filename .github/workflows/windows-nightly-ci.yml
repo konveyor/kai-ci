@@ -64,7 +64,7 @@ jobs:
           Write-Output "Creating batch file: $scriptPath"
           $batchContent = @"
           @echo off
-          git clone $gitRepo > "$logPathOut" 2> "$logPathErr"
+          git clone $gitRepo
           "@
           $batchContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
           
@@ -74,7 +74,7 @@ jobs:
           }
           
           Write-Output "Running batch file to clone repository..."
-          Start-Process -FilePath "cmd.exe" -ArgumentList "/c $scriptPath" -Credential $Credential -PassThru -Wait
+          Start-Process -FilePath "cmd.exe" -ArgumentList "/c $scriptPath" -Credential $Credential -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
           
           # Step 4: Output log files to GitHub Actions
           Write-Output "--- Run Output ---"
