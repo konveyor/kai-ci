@@ -28,6 +28,7 @@ jobs:
           $gitRepo = "https://github.com/konveyor/kai-ci.git"
           $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
           $testScriptPath = "$workDir\test-script.bat"
+          $wrapperScriptPath = "$workDir\user-wrapper.bat"
           $logPathOut = "$workDir\run-tests-output.log"
           $logPathErr = "$workDir\run-tests-error.log"
           
@@ -43,10 +44,12 @@ jobs:
           
           # Create the test-script.bat
           Write-Output "Creating test script: $testScriptPath"
+          
           $testScriptContent = @"
           mkdir test
           git clone $gitRepo
           "@
+          
           $testScriptContent | Out-File -FilePath $testScriptPath -Encoding ascii -Force
           
           if (-Not (Test-Path -Path $testScriptPath)) {
@@ -54,10 +57,26 @@ jobs:
               exit 1
           }
           
-          # Run the test-script.bat directly as non-admin user
-          Write-Output "Running test script as non-admin user..."
-          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $testScriptPath" -Credential $Credential -RedirectStandardOutput $logPathOut -RedirectStandardError $logPathErr -PassThru -Wait
+          # Create the user-wrapper.bat
+          Write-Output "Creating user wrapper script: $wrapperScriptPath"
+          $wrapperScriptContent = @"
+          PowerShell -Command "& {
+          \$securePassword = ConvertTo-SecureString '$Password' -AsPlainText -Force;
+          \$credential = New-Object System.Management.Automation.PSCredential('$UserName', \$securePassword);
+          Start-Process -FilePath '$testScriptPath' -Credential \$credential -RedirectStandardOutput '$logPathOut' -RedirectStandardError '$logPathErr' -NoNewWindow -Wait;
+          }"
+          "@
+          $wrapperScriptContent | Out-File -FilePath $wrapperScriptPath -Encoding ascii -Force
+            
+          if (-Not (Test-Path -Path $wrapperScriptPath)) {
+          Write-Output "User wrapper script does not exist: $wrapperScriptPath"
+            exit 1
+          }
           
+          # Run the user-wrapper.bat as admin
+          Write-Output "Running user wrapper script..."
+          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $wrapperScriptPath" -NoNewWindow -Wait
+                    
           # Output logs
           Write-Output "--- Run Output ---"
           if (Test-Path -Path $logPathOut) {
@@ -72,6 +91,8 @@ jobs:
           } else {
               Write-Output "Error log file not found: $logPathErr"
           }
+
+
 #  stop-ec2-instance:
 #    needs: [ start-ec2-instance, run-tests ]
 #    if: always()
