@@ -10,10 +10,32 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
     
-    - name: Clone repository on EC2 Windows instance using SSH password
+    # - name: Clone repository on EC2 Windows instance using SSH password
+    #   run: |
+    #     sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "git clone https://github.com/konveyor/kai-ci.git C:\\Users\\nonadmin\\kai-ci"'
+    #   env:
+    #     EC2_USER: nonadmin
+    #     EC2_HOST: ec2-52-90-29-139.compute-1.amazonaws.com
+    #     EC2_PASSWORD: pass123!
+
+
+    - name: Install Visual Studio Code on EC2 Windows instance and Clone Repository
       run: |
-        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "git clone https://github.com/konveyor/kai-ci.git C:\\Users\\nonadmin\\kai-ci"'
-      env:
-        EC2_USER: nonadmin
-        EC2_HOST: ec2-52-90-29-139.compute-1.amazonaws.com
-        EC2_PASSWORD: pass123!
+        # Step 1: Install VSCode on Windows EC2 instance
+        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "
+        # Download VSCode installer
+        Invoke-WebRequest -Uri https://update.code.visualstudio.com/latest/win32-x64-user/stable -OutFile C:\\Users\\nonadmin\\vscode-installer.exe;
+  
+        # Install VSCode
+        Start-Process -FilePath C:\\Users\\nonadmin\\vscode-installer.exe -ArgumentList \"/silent\" -NoNewWindow -Wait;
+  
+        # Clone the repository after installing VSCode
+        git clone https://github.com/konveyor/kai-ci.git C:\\Users\\nonadmin\\kai-ci
+        "'
+        env:
+          EC2_USER: nonadmin
+          EC2_HOST: ec2-52-90-29-139.compute-1.amazonaws.com
+          EC2_PASSWORD: pass123!
+  
+  
+  
