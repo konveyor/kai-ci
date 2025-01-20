@@ -41,85 +41,85 @@ jobs:
 #          $scriptPath = "$runnerDir\run-tests.ps1"
 #          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
-      - name: Delete existing SSH keys (if any)
-        run: |
-          # Ensure the .ssh directory exists
-          $sshDir = "$env:USERPROFILE\.ssh"
-          if (-not (Test-Path -Path $sshDir)) {
-            New-Item -ItemType Directory -Force -Path $sshDir
-          }
-          # Delete existing SSH key files (id_rsa and id_rsa.pub) if they exist
-          if (Test-Path -Path "$sshDir\id_rsa") {
-            Remove-Item -Path "$sshDir\id_rsa" -Force
-          }
-          if (Test-Path -Path "$sshDir\id_rsa.pub") {
-            Remove-Item -Path "$sshDir\id_rsa.pub" -Force
-          }
-          echo "Existing SSH keys deleted (if any)."
-
-      - name: Generate SSH key pair
-        id: generate-ssh-key
-        run: |
-          
-          # Ensure the .ssh directory exists
-          $sshDir = "$env:USERPROFILE\.ssh"
-          if (-not (Test-Path -Path $sshDir)) {
-            New-Item -ItemType Directory -Force -Path $sshDir
-          }
-
-          # Generate an SSH key pair for EC2 connection with no passphrase
-          ssh-keygen -t rsa -b 2048 -f "$sshDir\id_rsa" -N None
-          echo "SSH key generated successfully."
-                
-      - name: Add EC2 host to known hosts
-        run: |
-          # Add EC2 host to known hosts to prevent SSH warnings
-
-          # Ensure the .ssh directory exists
-          $sshDir = "$env:USERPROFILE\.ssh"
-          if (-not (Test-Path -Path $sshDir)) {
-            New-Item -ItemType Directory -Force -Path $sshDir
-          }
-
-          # Ensure known_hosts file exists, if not create it
-          $knownHostsFile = "$sshDir\known_hosts"
-          if (-not (Test-Path -Path $knownHostsFile)) {
-            New-Item -ItemType File -Force -Path $knownHostsFile
-          }
-
-          ssh-keyscan -H EC2AMAZ-VDK8A62 >> "$env:USERPROFILE\.ssh\known_hosts"
-        env:
-          EC2_PUBLIC_IP: 52.90.29.139
-
-      # - name: Copy the public key to EC2 instance
+      # - name: Delete existing SSH keys (if any)
       #   run: |
-      #     # Read the public key content and pass it to SSH
-      #     $publicKey = Get-Content -Path "$env:USERPROFILE\.ssh\id_rsa.pub" -Raw
-      #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-90-29-139.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $publicKey >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
+      #     # Ensure the .ssh directory exists
+      #     $sshDir = "$env:USERPROFILE\.ssh"
+      #     if (-not (Test-Path -Path $sshDir)) {
+      #       New-Item -ItemType Directory -Force -Path $sshDir
+      #     }
+      #     # Delete existing SSH key files (id_rsa and id_rsa.pub) if they exist
+      #     if (Test-Path -Path "$sshDir\id_rsa") {
+      #       Remove-Item -Path "$sshDir\id_rsa" -Force
+      #     }
+      #     if (Test-Path -Path "$sshDir\id_rsa.pub") {
+      #       Remove-Item -Path "$sshDir\id_rsa.pub" -Force
+      #     }
+      #     echo "Existing SSH keys deleted (if any)."
+
+      # - name: Generate SSH key pair
+      #   id: generate-ssh-key
+      #   run: |
+          
+      #     # Ensure the .ssh directory exists
+      #     $sshDir = "$env:USERPROFILE\.ssh"
+      #     if (-not (Test-Path -Path $sshDir)) {
+      #       New-Item -ItemType Directory -Force -Path $sshDir
+      #     }
+
+      #     # Generate an SSH key pair for EC2 connection with no passphrase
+      #     ssh-keygen -t rsa -b 2048 -f "$sshDir\id_rsa" -N None
+      #     echo "SSH key generated successfully."
+                
+      # - name: Add EC2 host to known hosts
+      #   run: |
+      #     # Add EC2 host to known hosts to prevent SSH warnings
+
+      #     # Ensure the .ssh directory exists
+      #     $sshDir = "$env:USERPROFILE\.ssh"
+      #     if (-not (Test-Path -Path $sshDir)) {
+      #       New-Item -ItemType Directory -Force -Path $sshDir
+      #     }
+
+      #     # Ensure known_hosts file exists, if not create it
+      #     $knownHostsFile = "$sshDir\known_hosts"
+      #     if (-not (Test-Path -Path $knownHostsFile)) {
+      #       New-Item -ItemType File -Force -Path $knownHostsFile
+      #     }
+
+      #     ssh-keyscan -H EC2AMAZ-VDK8A62 >> "$env:USERPROFILE\.ssh\known_hosts"
       #   env:
       #     EC2_PUBLIC_IP: 52.90.29.139
 
-      - name: Create batch file for non-admin user
-        run: |
-          # Create a batch file that runs the "hostname" command as the non-admin user
-          echo "hostname" > ./hostname.bat
-          echo "Batch file created to execute 'hostname' command."
+      # # - name: Copy the public key to EC2 instance
+      # #   run: |
+      # #     # Read the public key content and pass it to SSH
+      # #     $publicKey = Get-Content -Path "$env:USERPROFILE\.ssh\id_rsa.pub" -Raw
+      # #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-90-29-139.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $publicKey >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
+      # #   env:
+      # #     EC2_PUBLIC_IP: 52.90.29.139
+
+      # - name: Create batch file for non-admin user
+      #   run: |
+      #     # Create a batch file that runs the "hostname" command as the non-admin user
+      #     echo "hostname" > ./hostname.bat
+      #     echo "Batch file created to execute 'hostname' command."
   
-      - name: Copy batch file to EC2 instance
-        run: |
-          # Copy the batch file to the EC2 instance using SCP
-          scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat EC2AMAZ-VDK8A62:C:\\Users\\nonadmin\\Desktop\\hostname.bat
+      # - name: Copy batch file to EC2 instance
+      #   run: |
+      #     # Copy the batch file to the EC2 instance using SCP
+      #     scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat Administrator@ec2-52-90-29-139.compute-1.amazonaws.com:C:\\Users\\nonadmin\\Desktop\\hostname.bat
           
-        env:
-          EC2_PUBLIC_IP: 52.90.29.139
+      #   env:
+      #     EC2_PUBLIC_IP: 52.90.29.139
   
-      - name: Run batch file as non-admin user on EC2 instance
-        run: |
-          # Run the batch file on the EC2 instance as the non-admin user
-          ssh -i "$env:USERPROFILE\.ssh\id_rsa" -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\NonAdminUser\\Desktop\\hostname.bat"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
-        env:
-          EC2_PUBLIC_IP: 52.90.29.139
+      # - name: Run batch file as non-admin user on EC2 instance
+      #   run: |
+      #     # Run the batch file on the EC2 instance as the non-admin user
+      #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\NonAdminUser\\Desktop\\hostname.bat"
+      #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
+      #   env:
+      #     EC2_PUBLIC_IP: 52.90.29.139
 
       - name: Run Test Script with PsExec
         shell: powershell
@@ -149,7 +149,7 @@ jobs:
           # Step 3: Execute the command using PsExec
           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
           Start-Process powershell.exe -ArgumentList "-Command", "mkdir C:\Users\nonadmin\test-dir > '$logPathOut' 2> '$logPathErr'"
-          # & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
+          & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
           
           # Step 4: Check if output log file exists
           if (-Not (Test-Path -Path $logPathOut)) {
