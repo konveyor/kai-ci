@@ -41,6 +41,7 @@ jobs:
 #          $scriptPath = "$runnerDir\run-tests.ps1"
 #          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
+
       # - name: Delete existing SSH keys (if any)
       #   run: |
       #     # Ensure the .ssh directory exists
@@ -120,6 +121,22 @@ jobs:
       #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
       #   env:
       #     EC2_PUBLIC_IP: 52.90.29.139
+
+      - name: Setup EC2 SSH connection
+        uses: appleboy/ssh-action@v0.1.0
+        with:
+          host: ip-172-31-90-85.ec2.internal
+          username: nonadmin
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          port: 22
+
+    # Step 5: Clone the GitHub repository
+      - name: Clone the Kai-CI repository
+        run: |
+          git clone https://github.com/konveyor/kai-ci.git $env:USERPROFILE\kai-ci
+
+
+
 
       - name: Run Test Script with PsExec
         shell: powershell
