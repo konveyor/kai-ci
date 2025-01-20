@@ -12,7 +12,11 @@ jobs:
     
     - name: Clone repository on EC2 Windows instance using SSH password
       run: |
-        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "git clone https://github.com/konveyor/kai-ci.git C:\\Users\\nonadmin\\kai-ci"'
+        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "
+        Set-Content -Path C:\\Users\\nonadmin\\clone-repo.bat -Value \"git clone https://github.com/konveyor/kai-ci.git C:\\Users\\nonadmin\\kai-ci\";
+        # Run the batch file after creating it
+        Start-Process -FilePath C:\\Users\\nonadmin\\clone-repo.bat -NoNewWindow -Wait;
+        "'
       env:
         EC2_USER: nonadmin
         EC2_HOST: ec2-52-90-29-139.compute-1.amazonaws.com
