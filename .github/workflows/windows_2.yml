@@ -15,11 +15,11 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H ${EC2_HOST} >> ~/.ssh/known_hosts
+        ssh-keyscan -H ec2-52-90-29-139.compute-1.amazonaws.com >> ~/.ssh/known_hosts
     
     - name: Clone repository on EC2 Windows instance
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${EC2_USER}@${EC2_HOST} 'powershell -Command "git clone https://github.com/konveyor/kai-ci.git C:\\Users\\nonadmin\\kai-ci"'
       env:
         EC2_USER: nonadmin
-        EC2_HOST: ip-172-31-90-85.ec2.internal
+        EC2_HOST: ec2-52-90-29-139.compute-1.amazonaws.com
