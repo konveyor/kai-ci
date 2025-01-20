@@ -51,38 +51,6 @@ jobs:
           # Persist the updated PATH to make it available for subsequent steps
           "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      #      - name: Check Visual Studio Code and Node.js Installation Paths
-      #        shell: powershell
-      #        run: |
-      #          # Check if Visual Studio Code is installed and print the installation path
-      #          $vscodePaths = @(
-      #              'C:\Program Files\Microsoft VS Code\Code.exe',
-      #              'C:\Users\*\AppData\Local\Programs\Microsoft VS Code\Code.exe'
-      #          )
-      #
-      #          $vscodeInstalled = $false
-      #
-      #          foreach ($path in $vscodePaths) {
-      #              $resolvedPaths = Get-ChildItem -Path $path -ErrorAction SilentlyContinue
-      #              foreach ($resolvedPath in $resolvedPaths) {
-      #                  Write-Output "VSCode is installed at: $($resolvedPath.FullName)"
-      #                  $vscodeInstalled = $true
-      #              }
-      #          }
-      #
-      #          if (-not $vscodeInstalled) {
-      #              Write-Output "VSCode is not installed."
-      #          }
-      #
-      #          # Check if Node.js is installed and print the installation path
-      #          try {
-      #              $nodejsPath = (& where.exe node)
-      #              Write-Output "Node.js is installed at: $nodejsPath"
-      #          } catch {
-      #              Write-Output "Node.js is not installed."
-      #          }
-
-
       - name: Verify VSCode and Node.js Installation
         shell: powershell
         run: |
@@ -107,7 +75,7 @@ jobs:
           cd C:\actions-runner\work
           git clone https://github.com/konveyor/kai-ci.git
           cd ./kai-ci
-          git checkout windows-vm
+          git checkout vscode-extension-installation-fix
 
       - name: Install npm dependencies
         shell: powershell
@@ -155,14 +123,14 @@ jobs:
         if: always()
 
 
-#  stop-ec2-instance:
-#    needs: [ start-ec2-instance, run-tests ]
-#    if: always()
-#    uses: ./.github/workflows/remove-runner.yml
-#    with:
-#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
-#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    secrets:
-#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  stop-ec2-instance:
+    needs: [ start-ec2-instance, run-tests ]
+    if: always()
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
