@@ -3,24 +3,23 @@ name: (Windows admin) Run Playwright tests nightly on main branch
 on: [push]
 
 jobs:
-#  start-ec2-instance:
-#    uses: ./.github/workflows/provision-runner.yml
-#    with:
-#      ec2-image-id: ami-01fa2492704e48175
-#      ec2-instance-type: t2.micro
-#      security-group-id: sg-0a3e6b53e86d0e69d
-#      subnet-id: subnet-06113672589e7e836
-#      ec2-os-type: windows
-#    secrets:
-#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-#      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+  start-ec2-instance:
+    uses: ./.github/workflows/provision-runner.yml
+    with:
+      ec2-image-id: ami-01fa2492704e48175
+      ec2-instance-type: t2.micro
+      security-group-id: sg-0a3e6b53e86d0e69d
+      subnet-id: subnet-06113672589e7e836
+      ec2-os-type: windows
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
   run-tests:
-#    needs: start-ec2-instance
-#    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
-    runs-on: 5y0yd
+    needs: start-ec2-instance
+    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
 
       - name: Install Chocolatey
@@ -76,7 +75,7 @@ jobs:
           cd C:\actions-runner\work
           git clone https://github.com/konveyor/kai-ci.git
           cd ./kai-ci
-          git checkout vscode-extension-installation-fix
+#          git checkout vscode-extension-installation-fix
 
       - name: Install npm dependencies
         shell: powershell
@@ -91,7 +90,6 @@ jobs:
         run: |
           Copy-Item -Path .env.example -Destination .env
           (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" |
-          ForEach-Object { $_ -replace "DEFAULT_VSIX_DOWNLOAD_URL=.*", "DEFAULT_VSIX_DOWNLOAD_URL='https://github.com/konveyor/editor-extensions/releases/download/v0.0.1-dev%2B20241022/konveyor-windows-0.0.1.vsix'" } |
           Set-Content .env
 
       - name: Run tests
