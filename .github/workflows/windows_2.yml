@@ -21,8 +21,7 @@ jobs:
 
     - name: Install Visual Studio Code on EC2 Windows instance and Clone Repository
       run: |
-        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "
-        Invoke-WebRequest -Uri https://update.code.visualstudio.com/latest/win32-x64-user/stable -OutFile C:\\Users\\nonadmin\\vscode-installer.exe"'
+        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "Invoke-WebRequest -Uri https://update.code.visualstudio.com/latest/win32-x64-user/stable -OutFile C:\\Users\\nonadmin\\vscode-installer.exe"'
         env:
           EC2_USER: nonadmin
           EC2_HOST: ec2-52-90-29-139.compute-1.amazonaws.com
