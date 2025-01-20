@@ -94,7 +94,7 @@ jobs:
       - name: Copy the public key to EC2 instance
         run: |
           # Copy the public key to the EC2 instance to allow SSH access
-          ssh -i "$env:USERPROFILE\.ssh\id_rsa" EC2AMAZ-VDK8A62 "mkdir -p C:\\Users\\Administrator\\.ssh && echo $(cat "$env:USERPROFILE\.ssh\id_rsa.pub") >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
+          ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-90-29-139.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $(cat "$env:USERPROFILE\.ssh\id_rsa.pub") >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
           
         env:
           EC2_PUBLIC_IP: 52.90.29.139
@@ -108,7 +108,7 @@ jobs:
       - name: Copy batch file to EC2 instance
         run: |
           # Copy the batch file to the EC2 instance using SCP
-          scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat EC2AMAZ-VDK8A62:C:\\Users\\NonAdminUser\\Desktop\\hostname.bat
+          scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat Administrator@ec2-52-90-29-139.compute-1.amazonaws.com:C:\\Users\\NonAdminUser\\Desktop\\hostname.bat
           
         env:
           EC2_PUBLIC_IP: 52.90.29.139
@@ -116,8 +116,8 @@ jobs:
       - name: Run batch file as non-admin user on EC2 instance
         run: |
           # Run the batch file on the EC2 instance as the non-admin user
-          ssh -i "$env:USERPROFILE\.ssh\id_rsa" -o StrictHostKeyChecking=no nonadmin@52.87.190.114 "C:\\Users\\NonAdminUser\\Desktop\\hostname.bat"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.87.190.114 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
+          ssh -i "$env:USERPROFILE\.ssh\id_rsa" -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\NonAdminUser\\Desktop\\hostname.bat"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
         env:
           EC2_PUBLIC_IP: 52.90.29.139
 
