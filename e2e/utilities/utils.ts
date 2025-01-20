@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as util from 'util';
 import { exec } from 'child_process';
 import * as path from 'path';
+import { execSync } from 'child_process';
 
 const execPromise = util.promisify(exec);
 const repoDir = path.resolve('coolstore');
@@ -24,9 +25,8 @@ export function getOSInfo(): string {
 }
 
 export function getKAIPluginName(): string {
-  const vsixFileName =
-    process.env.VSIX_FILE_NAME || 'konveyor-linux-0.0.1.vsix';
-  return vsixFileName.replace(/(konveyor-)(\w+)(-.*)/, `$1${getOSInfo()}$3`);
+  const vsixFileName = process.env.VSIX_FILE_NAME || 'konveyor-v0.0.4.vsix';
+  return vsixFileName;
 }
 
 export async function cleanupRepo() {
@@ -38,5 +38,15 @@ export async function cleanupRepo() {
     }
   } else {
     console.warn(`Directory ${repoDir} does not exist, skipping cleanup.`);
+  }
+}
+
+export async function uninstallExtension() {
+  try {
+    execSync('code --uninstall-extension konveyor.konveyor', {
+      stdio: 'inherit',
+    });
+  } catch (error) {
+    console.error('Error uninstalling Konveyor extension:', error);
   }
 }
