@@ -89,7 +89,7 @@ jobs:
 
           ssh-keyscan -H EC2AMAZ-VDK8A62 >> "$env:USERPROFILE\.ssh\known_hosts"
         env:
-          EC2_PUBLIC_IP: 52.87.190.114
+          EC2_PUBLIC_IP: 52.90.29.139
 
       - name: Copy the public key to EC2 instance
         run: |
@@ -97,7 +97,7 @@ jobs:
           ssh -i "$env:USERPROFILE\.ssh\id_rsa" EC2AMAZ-VDK8A62 "mkdir -p C:\\Users\\Administrator\\.ssh && echo $(cat "$env:USERPROFILE\.ssh\id_rsa.pub") >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
           
         env:
-          EC2_PUBLIC_IP: 52.87.190.114
+          EC2_PUBLIC_IP: 52.90.29.139
   
       - name: Create batch file for non-admin user
         run: |
@@ -111,7 +111,7 @@ jobs:
           scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat EC2AMAZ-VDK8A62:C:\\Users\\NonAdminUser\\Desktop\\hostname.bat
           
         env:
-          EC2_PUBLIC_IP: 52.87.190.114
+          EC2_PUBLIC_IP: 52.90.29.139
   
       - name: Run batch file as non-admin user on EC2 instance
         run: |
@@ -119,7 +119,7 @@ jobs:
           ssh -i "$env:USERPROFILE\.ssh\id_rsa" -o StrictHostKeyChecking=no nonadmin@52.87.190.114 "C:\\Users\\NonAdminUser\\Desktop\\hostname.bat"
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.87.190.114 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
         env:
-          EC2_PUBLIC_IP: 52.87.190.114
+          EC2_PUBLIC_IP: 52.90.29.139
 
       - name: Run Test Script with PsExec
         shell: powershell
