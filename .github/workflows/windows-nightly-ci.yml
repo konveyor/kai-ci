@@ -1,4 +1,4 @@
-name: Windows Nightly Run
+name: (Windows admin) Run Playwright tests nightly on main branch
 
 on: [push]
 
