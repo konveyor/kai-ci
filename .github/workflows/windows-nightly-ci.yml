@@ -105,13 +105,13 @@ jobs:
           echo "hostname" > ./hostname.bat
           echo "Batch file created to execute 'hostname' command."
   
-      - name: Copy batch file to EC2 instance
-        run: |
-          # Copy the batch file to the EC2 instance using SCP
-          scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat Administrator@ec2-52-90-29-139.compute-1.amazonaws.com:C:\\Users\\NonAdminUser\\Desktop\\hostname.bat
+      # - name: Copy batch file to EC2 instance
+      #   run: |
+      #     # Copy the batch file to the EC2 instance using SCP
+      #     scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat Administrator@ec2-52-90-29-139.compute-1.amazonaws.com:C:\\Users\\NonAdminUser\\Desktop\\hostname.bat
           
-        env:
-          EC2_PUBLIC_IP: 52.90.29.139
+      #   env:
+      #     EC2_PUBLIC_IP: 52.90.29.139
   
       - name: Run batch file as non-admin user on EC2 instance
         run: |
