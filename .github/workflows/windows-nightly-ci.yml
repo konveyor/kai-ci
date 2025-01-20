@@ -3,23 +3,23 @@ name: Windows Nightly Run
 on: [push]
 
 jobs:
-  start-ec2-instance:
-    uses: ./.github/workflows/provision-runner.yml
-    with:
-      ec2-image-id: ami-0cf05b9bbda99aed3
-      ec2-instance-type: t2.micro
-      security-group-id: sg-0a3e6b53e86d0e69d
-      subnet-id: subnet-06113672589e7e836
-      ec2-os-type: windows
-    secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+  # start-ec2-instance:
+  #   uses: ./.github/workflows/provision-runner.yml
+  #   with:
+  #     ec2-image-id: ami-0cf05b9bbda99aed3
+  #     ec2-instance-type: t2.micro
+  #     security-group-id: sg-0a3e6b53e86d0e69d
+  #     subnet-id: subnet-06113672589e7e836
+  #     ec2-os-type: windows
+  #   secrets:
+  #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  #     nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
   run-tests:
-    needs: start-ec2-instance
-    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    # needs: start-ec2-instance
+    runs-on: ofi6i
     steps:
 
 #      - name: Write Test Script
@@ -94,7 +94,7 @@ jobs:
       - name: Copy the public key to EC2 instance
         run: |
           # Copy the public key to the EC2 instance to allow SSH access
-          ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-87-190-114.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $(cat "$env:USERPROFILE\.ssh\id_rsa.pub") >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
+          ssh -i "$env:USERPROFILE\.ssh\id_rsa" EC2AMAZ-VDK8A62 "mkdir -p C:\\Users\\Administrator\\.ssh && echo $(cat "$env:USERPROFILE\.ssh\id_rsa.pub") >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
           
         env:
           EC2_PUBLIC_IP: 52.87.190.114
@@ -108,7 +108,7 @@ jobs:
       - name: Copy batch file to EC2 instance
         run: |
           # Copy the batch file to the EC2 instance using SCP
-          scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat Administrator@52.87.190.114:C:\\Users\\NonAdminUser\\Desktop\\hostname.bat
+          scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat EC2AMAZ-VDK8A62:C:\\Users\\NonAdminUser\\Desktop\\hostname.bat
           
         env:
           EC2_PUBLIC_IP: 52.87.190.114
