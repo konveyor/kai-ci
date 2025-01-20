@@ -91,14 +91,14 @@ jobs:
         env:
           EC2_PUBLIC_IP: 52.90.29.139
 
-      - name: Copy the public key to EC2 instance
-        run: |
-          # Read the public key content and pass it to SSH
-          $publicKey = Get-Content -Path "$env:USERPROFILE\.ssh\id_rsa.pub" -Raw
-          ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-90-29-139.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $publicKey >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
-        env:
-          EC2_PUBLIC_IP: 52.90.29.139
-          
+      # - name: Copy the public key to EC2 instance
+      #   run: |
+      #     # Read the public key content and pass it to SSH
+      #     $publicKey = Get-Content -Path "$env:USERPROFILE\.ssh\id_rsa.pub" -Raw
+      #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-90-29-139.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $publicKey >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
+      #   env:
+      #     EC2_PUBLIC_IP: 52.90.29.139
+
       - name: Create batch file for non-admin user
         run: |
           # Create a batch file that runs the "hostname" command as the non-admin user
