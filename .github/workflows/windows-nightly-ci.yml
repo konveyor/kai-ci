@@ -19,88 +19,150 @@ jobs:
 
   run-tests:
     needs: start-ec2-instance
-    runs-on: kxtnh
+    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
-      - name: Run Test Script with PsExec
+
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        shell: powershell
+
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
+
+      - name: Install VSCode
+        run: choco install vscode -y
+        shell: powershell
+
+      - name: Define Node.js and VSCode Paths
         shell: powershell
         run: |
-          # Define paths
-          $gitRepo = "https://github.com/konveyor/kai-ci.git"
-          $workDir = "C:\Users\nonadmin\Documents\actions-runner\work"
-          $testScriptPath = "$workDir\test-script.bat"
-          $wrapperScriptPath = "$workDir\user-wrapper.bat"
-          $logPathOut = "$workDir\run-tests-output.log"
-          $logPathErr = "$workDir\run-tests-error.log"
-          
-          # Create a credential object for non-admin user
-          $UserName = "nonadmin"  # Replace with actual non-admin username
-          $Password = ConvertTo-SecureString "pass123!" -AsPlainText -Force  # Replace with the actual password
-          $Credential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
-          
-          # Ensure the working directory exists
-          if (-Not (Test-Path -Path $workDir)) {
-            New-Item -Path $workDir -ItemType Directory -Force
-          }
-          
-          # Create the test-script.bat
-          Write-Output "Creating test script: $testScriptPath"
-          
-          $testScriptContent = @"
-          mkdir test
-          git clone $gitRepo
-          "@
-          
-          $testScriptContent | Out-File -FilePath $testScriptPath -Encoding ascii -Force
-          
-          if (-Not (Test-Path -Path $testScriptPath)) {
-              Write-Output "Test script does not exist: $testScriptPath"
-              exit 1
-          }
-          
-          # Create the user-wrapper.bat
-          Write-Output "Creating user wrapper script: $wrapperScriptPath"
-          $wrapperScriptContent = @"
-          PowerShell -Command "& {
-          \$securePassword = ConvertTo-SecureString '$Password' -AsPlainText -Force;
-          \$credential = New-Object System.Management.Automation.PSCredential('$UserName', \$securePassword);
-          Start-Process -FilePath '$testScriptPath' -Credential \$credential -RedirectStandardOutput '$logPathOut' -RedirectStandardError '$logPathErr' -NoNewWindow -Wait;
-          }"
-          "@
-          $wrapperScriptContent | Out-File -FilePath $wrapperScriptPath -Encoding ascii -Force
-            
-          if (-Not (Test-Path -Path $wrapperScriptPath)) {
-          Write-Output "User wrapper script does not exist: $wrapperScriptPath"
-            exit 1
-          }
-          
-          # Run the user-wrapper.bat as admin
-          Write-Output "Running user wrapper script..."
-          Start-Process -FilePath "powershell.exe" -ArgumentList "/c $wrapperScriptPath" -NoNewWindow -Wait
-                    
-          # Output logs
-          Write-Output "--- Run Output ---"
-          if (Test-Path -Path $logPathOut) {
-              Get-Content -Path $logPathOut
-          } else {
-              Write-Output "Output log file not found: $logPathOut"
-          }
-          
-          Write-Output "--- Run Error ---"
-          if (Test-Path -Path $logPathErr) {
-              Get-Content -Path $logPathErr
-          } else {
-              Write-Output "Error log file not found: $logPathErr"
-          }
+
+          $nodePath = 'C:\Program Files\nodejs'
+          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
+
+          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
+          $newPath = "$env:PATH;$nodePath;$vscodePath"
+          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
+
+          # Persist the updated PATH to make it available for subsequent steps
+          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      #      - name: Check Visual Studio Code and Node.js Installation Paths
+      #        shell: powershell
+      #        run: |
+      #          # Check if Visual Studio Code is installed and print the installation path
+      #          $vscodePaths = @(
+      #              'C:\Program Files\Microsoft VS Code\Code.exe',
+      #              'C:\Users\*\AppData\Local\Programs\Microsoft VS Code\Code.exe'
+      #          )
+      #
+      #          $vscodeInstalled = $false
+      #
+      #          foreach ($path in $vscodePaths) {
+      #              $resolvedPaths = Get-ChildItem -Path $path -ErrorAction SilentlyContinue
+      #              foreach ($resolvedPath in $resolvedPaths) {
+      #                  Write-Output "VSCode is installed at: $($resolvedPath.FullName)"
+      #                  $vscodeInstalled = $true
+      #              }
+      #          }
+      #
+      #          if (-not $vscodeInstalled) {
+      #              Write-Output "VSCode is not installed."
+      #          }
+      #
+      #          # Check if Node.js is installed and print the installation path
+      #          try {
+      #              $nodejsPath = (& where.exe node)
+      #              Write-Output "Node.js is installed at: $nodejsPath"
+      #          } catch {
+      #              Write-Output "Node.js is not installed."
+      #          }
 
 
-#  stop-ec2-instance:
-#    needs: [ start-ec2-instance, run-tests ]
-#    if: always()
-#    uses: ./.github/workflows/remove-runner.yml
-#    with:
-#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
-#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    secrets:
-#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+      - name: Verify VSCode and Node.js Installation
+        shell: powershell
+        run: |
+          code --version
+          node --version
+
+      - name: Close All VSCode Instances
+        shell: powershell
+        run: |
+          # Close all running instances of VSCode
+          Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
+
+      - name: Create Temporary Work Directory
+        shell: powershell
+        run: |
+          # Creating a directory outside System32 for better permissions
+          New-Item -Path "C:\actions-runner\work" -ItemType Directory -Force
+
+      - name: Clone kai-ci repo
+        shell: powershell
+        run: |
+          cd C:\actions-runner\work
+          git clone https://github.com/konveyor/kai-ci.git
+          cd ./kai-ci
+          # git checkout windows-vm
+
+      - name: Install npm dependencies
+        shell: powershell
+        working-directory: C:\actions-runner\work\kai-ci
+        run: |
+          npm install .
+          npm ci
+
+      - name: Copy .env.example to .env and update executable path
+        shell: powershell
+        working-directory: C:\actions-runner\work\kai-ci
+        run: |
+          Copy-Item -Path .env.example -Destination .env
+          (Get-Content .env) -replace "VSCODE_EXECUTABLE_PATH=.*", "VSCODE_EXECUTABLE_PATH='C:/Program Files/Microsoft VS Code/Code.exe'" |
+          ForEach-Object { $_ -replace "DEFAULT_VSIX_DOWNLOAD_URL=.*", "DEFAULT_VSIX_DOWNLOAD_URL='https://github.com/konveyor/editor-extensions/releases/download/v0.0.1-dev%2B20241022/konveyor-windows-0.0.1.vsix'" } |
+          Set-Content .env
+
+      - name: Run tests
+        shell: powershell
+        continue-on-error: true  # Allow this step to continue even if some tests fail
+        working-directory: C:\actions-runner\work\kai-ci
+        run: |
+          npx playwright test  
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode-screenshots
+          path: |
+            C:\actions-runner\work\kai-ci\vscode-initialized-screenshot.png
+            C:\actions-runner\work\kai-ci\kai-installed-screenshot.png
+        if: always()
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: C:\actions-runner\work\kai-ci\playwright-report\
+          retention-days: 30
+
+      - name: Clean Up Kai Temp Directory
+        shell: powershell
+        run: |
+          Remove-Item -Recurse -Force C:\actions-runner
+        if: always()
+
+
+  stop-ec2-instance:
+    needs: [ start-ec2-instance, run-tests ]
+    if: always()
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
