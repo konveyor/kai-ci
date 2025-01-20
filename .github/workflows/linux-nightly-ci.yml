@@ -1,4 +1,4 @@
-name: Run Playwright tests nightly on main branch
+name: (Linux) Run Playwright tests nightly on main branch
 
 on:
   schedule:
@@ -77,6 +77,7 @@ jobs:
         path: |
           vscode-initialized-screenshot.png
           kai-installed-screenshot.png
+          start-analyzer-screenshot.png
       if: always()  # This ensures the upload runs regardless of previous step results
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

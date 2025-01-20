@@ -54,7 +54,7 @@ class VSCode {
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
         executablePath: executablePath,
-        args: [path.resolve(cloneDir)],
+        args: [path.resolve(cloneDir), '--disable-workspace-trust'],
       });
 
       const window = await vscodeApp.firstWindow();
@@ -72,10 +72,22 @@ class VSCode {
   private static async installExtensionFromVSIX(
     vsixFilePath: string
   ): Promise<void> {
+    const extensionId = 'konveyor.editor-extensions-vscode';
+
+    try {
+      const installedExtensions = execSync('code --list-extensions', {
+        encoding: 'utf-8',
+      });
+      if (installedExtensions.includes(extensionId)) {
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking installed extensions:', error);
+    }
+
     await downloadLatestKAIPlugin();
 
     try {
-      // Execute command to install VSIX file using VSCode CLI
       console.log(`Installing extension from ${vsixFilePath}...`);
       const result = execSync(`code --install-extension "${vsixFilePath}"`, {
         stdio: 'inherit',
