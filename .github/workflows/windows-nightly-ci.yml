@@ -23,34 +23,34 @@ jobs:
     runs-on: 5y0yd
     steps:
 
-#      - name: Install Chocolatey
-#        run: |
-#          Set-ExecutionPolicy Bypass -Scope Process -Force;
-#          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-#          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-#        shell: powershell
-#
-#      - name: Install Node.js
-#        run: choco install nodejs -y
-#        shell: powershell
-#
-#      - name: Install VSCode
-#        run: choco install vscode -y
-#        shell: powershell
-#
-#      - name: Define Node.js and VSCode Paths
-#        shell: powershell
-#        run: |
-#
-#          $nodePath = 'C:\Program Files\nodejs'
-#          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
-#
-#          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
-#          $newPath = "$env:PATH;$nodePath;$vscodePath"
-#          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
-#
-#          # Persist the updated PATH to make it available for subsequent steps
-#          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        shell: powershell
+
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
+
+      - name: Install VSCode
+        run: choco install vscode -y
+        shell: powershell
+
+      - name: Define Node.js and VSCode Paths
+        shell: powershell
+        run: |
+
+          $nodePath = 'C:\Program Files\nodejs'
+          $vscodePath = 'C:\Program Files\Microsoft VS Code\bin'
+
+          # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
+          $newPath = "$env:PATH;$nodePath;$vscodePath"
+          [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
+
+          # Persist the updated PATH to make it available for subsequent steps
+          "PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Verify VSCode and Node.js Installation
         shell: powershell
