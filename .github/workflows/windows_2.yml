@@ -43,6 +43,7 @@ jobs:
 
     - name: Create batch file locally to execute tests
       run: |
+        echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" > execute-tests.bat
         echo "npx playwright test" >> execute-tests.bat
       shell: bash
