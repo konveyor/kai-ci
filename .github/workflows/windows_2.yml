@@ -10,6 +10,7 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
   
+      
     - name: Clone repository on EC2 Windows instance using SSH password
       run: |
         sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\clone-repo.bat -NoNewWindow -Wait"'
