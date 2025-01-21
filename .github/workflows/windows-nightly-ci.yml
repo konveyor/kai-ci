@@ -43,7 +43,7 @@ jobs:
 
 
     - name: Install Node.js
-      run: choco uninstall nodejs.install
+      run: choco install nodejs -y
       shell: powershell
 
     - name: Define Node.js 
