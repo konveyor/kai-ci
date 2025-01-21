@@ -1,25 +1,257 @@
+name: Windows Nightly Run
+
+on: [push]
+
+jobs:
+  # start-ec2-instance:
+  #   uses: ./.github/workflows/provision-runner.yml
+  #   with:
+  #     ec2-image-id: ami-0cf05b9bbda99aed3
+  #     ec2-instance-type: t2.micro
+  #     security-group-id: sg-0a3e6b53e86d0e69d
+  #     subnet-id: subnet-06113672589e7e836
+  #     ec2-os-type: windows
+  #   secrets:
+  #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  #     nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+
+  run-tests:
+    # needs: start-ec2-instance
+    runs-on: ofi6i
+    steps:
+
+#      - name: Write Test Script
+#        shell: powershell
+#        run: |
+#          # Ensure the directory exists
+#          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+#          if (-not (Test-Path -Path $runnerDir)) {
+#            New-Item -Path $runnerDir -ItemType Directory -Force
+#          }
+#
+#          # Create the test script
+#          $scriptContent = @"
+#          # Redirect output directly in the script
+#          code --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+#          node --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
+#          "@
+#
+#          $scriptPath = "$runnerDir\run-tests.ps1"
+#          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
+
+
+    - name: Install Node.js using Chocolatey on EC2 Windows instance
+      run: |
+        choco install nodejs -y  
+
+      # - name: Delete existing SSH keys (if any)
+      #   run: |
+      #     # Ensure the .ssh directory exists
+      #     $sshDir = "$env:USERPROFILE\.ssh"
+      #     if (-not (Test-Path -Path $sshDir)) {
+      #       New-Item -ItemType Directory -Force -Path $sshDir
+      #     }
+      #     # Delete existing SSH key files (id_rsa and id_rsa.pub) if they exist
+      #     if (Test-Path -Path "$sshDir\id_rsa") {
+      #       Remove-Item -Path "$sshDir\id_rsa" -Force
+      #     }
+      #     if (Test-Path -Path "$sshDir\id_rsa.pub") {
+      #       Remove-Item -Path "$sshDir\id_rsa.pub" -Force
+      #     }
+      #     echo "Existing SSH keys deleted (if any)."
+
+      # - name: Generate SSH key pair
+      #   id: generate-ssh-key
+      #   run: |
+          
+      #     # Ensure the .ssh directory exists
+      #     $sshDir = "$env:USERPROFILE\.ssh"
+      #     if (-not (Test-Path -Path $sshDir)) {
+      #       New-Item -ItemType Directory -Force -Path $sshDir
+      #     }
+
+      #     # Generate an SSH key pair for EC2 connection with no passphrase
+      #     ssh-keygen -t rsa -b 2048 -f "$sshDir\id_rsa" -N None
+      #     echo "SSH key generated successfully."
+                
+      # - name: Add EC2 host to known hosts
+      #   run: |
+      #     # Add EC2 host to known hosts to prevent SSH warnings
+
+      #     # Ensure the .ssh directory exists
+      #     $sshDir = "$env:USERPROFILE\.ssh"
+      #     if (-not (Test-Path -Path $sshDir)) {
+      #       New-Item -ItemType Directory -Force -Path $sshDir
+      #     }
+
+      #     # Ensure known_hosts file exists, if not create it
+      #     $knownHostsFile = "$sshDir\known_hosts"
+      #     if (-not (Test-Path -Path $knownHostsFile)) {
+      #       New-Item -ItemType File -Force -Path $knownHostsFile
+      #     }
+
+      #     ssh-keyscan -H EC2AMAZ-VDK8A62 >> "$env:USERPROFILE\.ssh\known_hosts"
+      #   env:
+      #     EC2_PUBLIC_IP: 52.90.29.139
+
+      # # - name: Copy the public key to EC2 instance
+      # #   run: |
+      # #     # Read the public key content and pass it to SSH
+      # #     $publicKey = Get-Content -Path "$env:USERPROFILE\.ssh\id_rsa.pub" -Raw
+      # #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-90-29-139.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $publicKey >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
+      # #   env:
+      # #     EC2_PUBLIC_IP: 52.90.29.139
+
+      # - name: Create batch file for non-admin user
+      #   run: |
+      #     # Create a batch file that runs the "hostname" command as the non-admin user
+      #     echo "hostname" > ./hostname.bat
+      #     echo "Batch file created to execute 'hostname' command."
+  
+      # - name: Copy batch file to EC2 instance
+      #   run: |
+      #     # Copy the batch file to the EC2 instance using SCP
+      #     scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat Administrator@ec2-52-90-29-139.compute-1.amazonaws.com:C:\\Users\\nonadmin\\Desktop\\hostname.bat
+          
+      #   env:
+      #     EC2_PUBLIC_IP: 52.90.29.139
+  
+      # - name: Run batch file as non-admin user on EC2 instance
+      #   run: |
+      #     # Run the batch file on the EC2 instance as the non-admin user
+      #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\NonAdminUser\\Desktop\\hostname.bat"
+      #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
+      #   env:
+      #     EC2_PUBLIC_IP: 52.90.29.139
+
+    #   - name: Setup EC2 SSH connection
+    #     uses: appleboy/ssh-action@v0.1.0
+    #     with:
+    #       host: ${{ secrets.EC2_PUBLIC_IP }}
+    #       username: nonadmin
+    #       key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+    #       port: 22
+
+    # # Step 5: Clone the GitHub repository
+    #   - name: Clone the Kai-CI repository
+    #     run: |
+    #       git clone https://github.com/konveyor/kai-ci.git $env:USERPROFILE\kai-ci
+
+
+
+
+    #   - name: Run Test Script with PsExec
+    #     shell: powershell
+    #     run: |
+    #       # Define paths
+    #       $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
+    #       $toolsDir = "C:\tools"
+    #       $psExecPath = "$toolsDir\PsExec64.exe"
+    #       $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
+    #       $logPathOut = "$logDir\run-tests-output.log"
+    #       $logPathErr = "$logDir\run-tests-error.log"
+          
+    #       # Step 1: Install PsExec
+    #       Write-Output "Downloading and installing PsExec..."
+    #       if (Test-Path -Path $toolsDir) { Remove-Item -Recurse -Force $toolsDir }
+    #       New-Item -Path $toolsDir -ItemType Directory -Force
+    #       Invoke-WebRequest -Uri $psExecUrl -OutFile "$toolsDir\PSTools.zip"
+    #       Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
+    #       Write-Output "PsExec installed successfully."
+          
+    #       # Step 2: Ensure the log directory exists
+    #       Write-Output "Ensuring log directory exists: $logDir"
+    #       if (-Not (Test-Path -Path $logDir)) {
+    #           New-Item -Path $logDir -ItemType Directory -Force
+    #       }
+          
+    #       # Step 3: Execute the command using PsExec
+    #       Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
+    #       # Start-Process powershell.exe -ArgumentList "-Command", "mkdir C:\Users\nonadmin\test-dir > '$logPathOut' 2> '$logPathErr'"
+    #       & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
+          
+    #       # Step 4: Check if output log file exists
+    #       if (-Not (Test-Path -Path $logPathOut)) {
+    #           Write-Output "Log file does not exist: $logPathOut"
+    #           Write-Output "Check $logPathErr for any errors."
+    #           exit 1
+    #       }
+          
+    #       # Step 5: Output log files to GitHub Actions
+    #       Write-Output "--- Run Output ---"
+    #       Get-Content -Path $logPathOut
+    #       Write-Output "--- Run Error ---"
+    #       Get-Content -Path $logPathErr
+
+
+
+#  stop-ec2-instance:
+#    needs: [ start-ec2-instance, run-tests ]
+#    if: always()
+#    uses: ./.github/workflows/remove-runner.yml
+#    with:
+#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+#    secrets:
+#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # name: Windows Nightly Run
 
-# on: [push]
+# on: [pull_request]
 
 # jobs:
-#   # start-ec2-instance:
-#   #   uses: ./.github/workflows/provision-runner.yml
-#   #   with:
-#   #     ec2-image-id: ami-0cf05b9bbda99aed3
-#   #     ec2-instance-type: t2.micro
-#   #     security-group-id: sg-0a3e6b53e86d0e69d
-#   #     subnet-id: subnet-06113672589e7e836
-#   #     ec2-os-type: windows
-#   #   secrets:
-#   #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#   #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#   #     github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-#   #     nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+#   #start-ec2-instance:
+#     # uses: ./.github/workflows/provision-runner.yml
+#     # with:
+#     #   ec2-image-id: ami-01fa2492704e48175
+#     #   ec2-instance-type: t2.micro
+#     #   security-group-id: sg-0a3e6b53e86d0e69d
+#     #   subnet-id: subnet-06113672589e7e836
+#     #   ec2-os-type: windows
+#     # secrets:
+#     #   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#     #   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#     #   github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+#     #   nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
 #   run-tests:
-#     # needs: start-ec2-instance
-#     runs-on: ofi6i
+#     #needs: start-ec2-instance
+#     runs-on: 60rhn
 #     steps:
 
 # #      - name: Write Test Script
@@ -41,103 +273,6 @@
 # #          $scriptPath = "$runnerDir\run-tests.ps1"
 # #          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
 
-
-#       # - name: Delete existing SSH keys (if any)
-#       #   run: |
-#       #     # Ensure the .ssh directory exists
-#       #     $sshDir = "$env:USERPROFILE\.ssh"
-#       #     if (-not (Test-Path -Path $sshDir)) {
-#       #       New-Item -ItemType Directory -Force -Path $sshDir
-#       #     }
-#       #     # Delete existing SSH key files (id_rsa and id_rsa.pub) if they exist
-#       #     if (Test-Path -Path "$sshDir\id_rsa") {
-#       #       Remove-Item -Path "$sshDir\id_rsa" -Force
-#       #     }
-#       #     if (Test-Path -Path "$sshDir\id_rsa.pub") {
-#       #       Remove-Item -Path "$sshDir\id_rsa.pub" -Force
-#       #     }
-#       #     echo "Existing SSH keys deleted (if any)."
-
-#       # - name: Generate SSH key pair
-#       #   id: generate-ssh-key
-#       #   run: |
-          
-#       #     # Ensure the .ssh directory exists
-#       #     $sshDir = "$env:USERPROFILE\.ssh"
-#       #     if (-not (Test-Path -Path $sshDir)) {
-#       #       New-Item -ItemType Directory -Force -Path $sshDir
-#       #     }
-
-#       #     # Generate an SSH key pair for EC2 connection with no passphrase
-#       #     ssh-keygen -t rsa -b 2048 -f "$sshDir\id_rsa" -N None
-#       #     echo "SSH key generated successfully."
-                
-#       # - name: Add EC2 host to known hosts
-#       #   run: |
-#       #     # Add EC2 host to known hosts to prevent SSH warnings
-
-#       #     # Ensure the .ssh directory exists
-#       #     $sshDir = "$env:USERPROFILE\.ssh"
-#       #     if (-not (Test-Path -Path $sshDir)) {
-#       #       New-Item -ItemType Directory -Force -Path $sshDir
-#       #     }
-
-#       #     # Ensure known_hosts file exists, if not create it
-#       #     $knownHostsFile = "$sshDir\known_hosts"
-#       #     if (-not (Test-Path -Path $knownHostsFile)) {
-#       #       New-Item -ItemType File -Force -Path $knownHostsFile
-#       #     }
-
-#       #     ssh-keyscan -H EC2AMAZ-VDK8A62 >> "$env:USERPROFILE\.ssh\known_hosts"
-#       #   env:
-#       #     EC2_PUBLIC_IP: 52.90.29.139
-
-#       # # - name: Copy the public key to EC2 instance
-#       # #   run: |
-#       # #     # Read the public key content and pass it to SSH
-#       # #     $publicKey = Get-Content -Path "$env:USERPROFILE\.ssh\id_rsa.pub" -Raw
-#       # #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" Administrator@ec2-52-90-29-139.compute-1.amazonaws.com "mkdir -p C:\\Users\\Administrator\\.ssh && echo $publicKey >> C:\\Users\\Administrator\\.ssh\\authorized_keys"
-#       # #   env:
-#       # #     EC2_PUBLIC_IP: 52.90.29.139
-
-#       # - name: Create batch file for non-admin user
-#       #   run: |
-#       #     # Create a batch file that runs the "hostname" command as the non-admin user
-#       #     echo "hostname" > ./hostname.bat
-#       #     echo "Batch file created to execute 'hostname' command."
-  
-#       # - name: Copy batch file to EC2 instance
-#       #   run: |
-#       #     # Copy the batch file to the EC2 instance using SCP
-#       #     scp -i "$env:USERPROFILE\.ssh\id_rsa" ./hostname.bat Administrator@ec2-52-90-29-139.compute-1.amazonaws.com:C:\\Users\\nonadmin\\Desktop\\hostname.bat
-          
-#       #   env:
-#       #     EC2_PUBLIC_IP: 52.90.29.139
-  
-#       # - name: Run batch file as non-admin user on EC2 instance
-#       #   run: |
-#       #     # Run the batch file on the EC2 instance as the non-admin user
-#       #     ssh -i "$env:USERPROFILE\.ssh\id_rsa" -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\NonAdminUser\\Desktop\\hostname.bat"
-#       #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nonadmin@52.90.29.139 "C:\\Users\\nonadmin\\Desktop\\hostname.bat"
-#       #   env:
-#       #     EC2_PUBLIC_IP: 52.90.29.139
-
-#       - name: Setup EC2 SSH connection
-#         uses: appleboy/ssh-action@v0.1.0
-#         with:
-#           host: ip-172-31-90-85.ec2.internal
-#           username: nonadmin
-#           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-#           port: 22
-
-#     # Step 5: Clone the GitHub repository
-#       - name: Clone the Kai-CI repository
-#         run: |
-#           git clone https://github.com/konveyor/kai-ci.git $env:USERPROFILE\kai-ci
-
-
-
-
 #       - name: Run Test Script with PsExec
 #         shell: powershell
 #         run: |
@@ -145,43 +280,42 @@
 #           $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
 #           $toolsDir = "C:\tools"
 #           $psExecPath = "$toolsDir\PsExec64.exe"
+#           $paExecPath = "$toolsDir\paexec.exe"
 #           $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
 #           $logPathOut = "$logDir\run-tests-output.log"
 #           $logPathErr = "$logDir\run-tests-error.log"
           
-#           # Step 1: Install PsExec
-#           Write-Output "Downloading and installing PsExec..."
-#           if (Test-Path -Path $toolsDir) { Remove-Item -Recurse -Force $toolsDir }
-#           New-Item -Path $toolsDir -ItemType Directory -Force
-#           Invoke-WebRequest -Uri $psExecUrl -OutFile "$toolsDir\PSTools.zip"
-#           Expand-Archive -Path "$toolsDir\PSTools.zip" -DestinationPath $toolsDir -Force
-#           Write-Output "PsExec installed successfully."
-          
-#           # Step 2: Ensure the log directory exists
-#           Write-Output "Ensuring log directory exists: $logDir"
-#           if (-Not (Test-Path -Path $logDir)) {
-#               New-Item -Path $logDir -ItemType Directory -Force
-#           }
-          
-#           # Step 3: Execute the command using PsExec
-#           Write-Output "Executing PsExec as nonadmin to run 'code --version'..."
-#           # Start-Process powershell.exe -ArgumentList "-Command", "mkdir C:\Users\nonadmin\test-dir > '$logPathOut' 2> '$logPathErr'"
-#           & $psExecPath -accepteula -nobanner -u nonadmin -p "pass123!" powershell.exe -Command "hostname > '$logPathOut' 2> '$logPathErr'"
-          
-#           # Step 4: Check if output log file exists
-#           if (-Not (Test-Path -Path $logPathOut)) {
-#               Write-Output "Log file does not exist: $logPathOut"
-#               Write-Output "Check $logPathErr for any errors."
-#               exit 1
-#           }
-          
-#           # Step 5: Output log files to GitHub Actions
-#           Write-Output "--- Run Output ---"
-#           Get-Content -Path $logPathOut
-#           Write-Output "--- Run Error ---"
-#           Get-Content -Path $logPathErr
+#       - name: Download PaExec
+#         run: |
+#           Invoke-WebRequest -Uri "https://www.poweradmin.com/paexec/paexec.exe" -OutFile "C:\tools\paexec.exe"
 
+#       - name: Execute command
+#         run: |
+#           $psExecPath = "C:\tools\psexec.exe"
+#           $paExecPath = "C:\tools\paexec.exe"
+#           Write-Output "psExec ..."
 
+#           # Check whoami to verify the user context
+#           Write-Output "Running whoami..."
+#           whoami
+  
+#           # Display the batch file location
+#           Write-Output "Batch file path: C:\temp\shveta.bat"
+#           more C:\temp\shveta.bat
+  
+#           # Ensure the batch file exists
+#           if (Test-Path "C:\temp\shveta.bat") {
+#             Write-Output "Batch file exists."
+#           } else {
+#             Write-Output "Batch file does not exist."
+#             exit 1
+#           }
+
+#           Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "-i", "cmd.exe" ,"/C", "C:\temp\shveta.bat"
+#           #Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "cmd.exe" ,"/C",  "cd C:\temp\ && git clone https://github.com/konveyor/kai-ci"
+#           Write-Output "psExec .Completed.."
+          
+          
 
 # #  stop-ec2-instance:
 # #    needs: [ start-ec2-instance, run-tests ]
@@ -194,135 +328,5 @@
 # #      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
 # #      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 # #      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # name: Windows Nightly Run
-
-# # on: [pull_request]
-
-# # jobs:
-# #   #start-ec2-instance:
-# #     # uses: ./.github/workflows/provision-runner.yml
-# #     # with:
-# #     #   ec2-image-id: ami-01fa2492704e48175
-# #     #   ec2-instance-type: t2.micro
-# #     #   security-group-id: sg-0a3e6b53e86d0e69d
-# #     #   subnet-id: subnet-06113672589e7e836
-# #     #   ec2-os-type: windows
-# #     # secrets:
-# #     #   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-# #     #   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-# #     #   github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-# #     #   nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
-
-# #   run-tests:
-# #     #needs: start-ec2-instance
-# #     runs-on: 60rhn
-# #     steps:
-
-# # #      - name: Write Test Script
-# # #        shell: powershell
-# # #        run: |
-# # #          # Ensure the directory exists
-# # #          $runnerDir = "C:\Users\nonadmin\Documents\actions-runner\work"
-# # #          if (-not (Test-Path -Path $runnerDir)) {
-# # #            New-Item -Path $runnerDir -ItemType Directory -Force
-# # #          }
-# # #
-# # #          # Create the test script
-# # #          $scriptContent = @"
-# # #          # Redirect output directly in the script
-# # #          code --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-# # #          node --version >> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-output.log" 2>> "C:\Users\nonadmin\Documents\actions-runner\work\run-tests-error.log"
-# # #          "@
-# # #
-# # #          $scriptPath = "$runnerDir\run-tests.ps1"
-# # #          $scriptContent | Out-File -FilePath $scriptPath -Encoding utf8 -Force
-
-# #       - name: Run Test Script with PsExec
-# #         shell: powershell
-# #         run: |
-# #           # Define paths
-# #           $psExecUrl = "https://download.sysinternals.com/files/PSTools.zip"
-# #           $toolsDir = "C:\tools"
-# #           $psExecPath = "$toolsDir\PsExec64.exe"
-# #           $paExecPath = "$toolsDir\paexec.exe"
-# #           $logDir = "C:\Users\nonadmin\Documents\actions-runner\work"
-# #           $logPathOut = "$logDir\run-tests-output.log"
-# #           $logPathErr = "$logDir\run-tests-error.log"
-          
-# #       - name: Download PaExec
-# #         run: |
-# #           Invoke-WebRequest -Uri "https://www.poweradmin.com/paexec/paexec.exe" -OutFile "C:\tools\paexec.exe"
-
-# #       - name: Execute command
-# #         run: |
-# #           $psExecPath = "C:\tools\psexec.exe"
-# #           $paExecPath = "C:\tools\paexec.exe"
-# #           Write-Output "psExec ..."
-
-# #           # Check whoami to verify the user context
-# #           Write-Output "Running whoami..."
-# #           whoami
-  
-# #           # Display the batch file location
-# #           Write-Output "Batch file path: C:\temp\shveta.bat"
-# #           more C:\temp\shveta.bat
-  
-# #           # Ensure the batch file exists
-# #           if (Test-Path "C:\temp\shveta.bat") {
-# #             Write-Output "Batch file exists."
-# #           } else {
-# #             Write-Output "Batch file does not exist."
-# #             exit 1
-# #           }
-
-# #           Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "-i", "cmd.exe" ,"/C", "C:\temp\shveta.bat"
-# #           #Start-Process $psExecPath -ArgumentList "-u",  "nonadmin",  "-p",  "pass123!" , "cmd.exe" ,"/C",  "cd C:\temp\ && git clone https://github.com/konveyor/kai-ci"
-# #           Write-Output "psExec .Completed.."
-          
-          
-
-# # #  stop-ec2-instance:
-# # #    needs: [ start-ec2-instance, run-tests ]
-# # #    if: always()
-# # #    uses: ./.github/workflows/remove-runner.yml
-# # #    with:
-# # #      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
-# # #      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
-# # #    secrets:
-# # #      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-# # #      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-# # #      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
 
 
