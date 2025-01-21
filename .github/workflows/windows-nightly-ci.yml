@@ -1,6 +1,8 @@
 name: (Windows admin) Run Playwright tests nightly on main branch
 
-on: [push]
+on:
+  schedule:
+    - cron: "5 3 * * *"
 
 jobs:
   start-ec2-instance:
@@ -15,7 +17,6 @@ jobs:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
   run-tests:
     needs: start-ec2-instance
@@ -75,7 +76,6 @@ jobs:
           cd C:\actions-runner\work
           git clone https://github.com/konveyor/kai-ci.git
           cd ./kai-ci
-#          git checkout vscode-extension-installation-fix
 
       - name: Install npm dependencies
         shell: powershell
@@ -115,20 +115,20 @@ jobs:
           path: C:\actions-runner\work\kai-ci\playwright-report\
           retention-days: 30
 
-#      - name: Clean Up Kai Temp Directory
-#        shell: powershell
-#        run: |
-#          Remove-Item -Recurse -Force C:\actions-runner
-#        if: always()
+      - name: Clean Up Kai Temp Directory
+        shell: powershell
+        run: |
+          Remove-Item -Recurse -Force C:\actions-runner
+        if: always()
 
-#  stop-ec2-instance:
-#    needs: [ start-ec2-instance, run-tests ]
-#    if: always()
-#    uses: ./.github/workflows/remove-runner.yml
-#    with:
-#      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
-#      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
-#    secrets:
-#      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  stop-ec2-instance:
+    needs: [ start-ec2-instance, run-tests ]
+    if: always()
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}

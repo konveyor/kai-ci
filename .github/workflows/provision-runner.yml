@@ -38,9 +38,6 @@ on:
       github-token:
         description: 'Personal Access Token For GH'
         required: true
-      nonadmin-password:
-        description: 'Password for the non-admin user'
-        required: true
     outputs:
       instance_label:
         description: "The label of the VM that was created."
