@@ -81,23 +81,13 @@ jobs:
           ec2-image-id: ${{ inputs.ec2-image-id }}
           subnet-id: ${{ inputs.subnet-id }}
           security-group-id: ${{ inputs.security-group-id }}
-
-      - name: Debug instance ID
-        run: |
-          EC2_INSTANCE_ID="${{ steps.ec2.outputs.ec2-instance-id }}"
-          # Remove the surrounding brackets and parse the string as a JSON array
-          EC2_INSTANCE_ID=$(echo $EC2_INSTANCE_ID | sed 's/^\[\(.*\)\]$/\1/')
-          echo $EC2_INSTANCE_ID
           
       - name: Get EC2 Host (Public IP/DNS)
         id: get-ec2-host
         run: |
           EC2_INSTANCE_ID="${{ steps.ec2.outputs.ec2-instance-id }}"
-          # Remove the surrounding brackets and parse the string as a JSON array
           EC2_INSTANCE_ID=$(echo $EC2_INSTANCE_ID | sed 's/^\[\(.*\)\]$/\1/')
-          echo $EC2_INSTANCE_ID
-          EC2_HOST=$(aws ec2 describe-instances --instance-ids $EC2_INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-          echo "EC2 Host: $EC2_HOST"
+          ec2-host=$(aws ec2 describe-instances --instance-ids $EC2_INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
           echo "ec2-host=$EC2_HOST" >> $GITHUB_ENV
 
       - name: Output EC2 Instance ID

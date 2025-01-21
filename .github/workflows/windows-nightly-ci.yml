@@ -58,7 +58,7 @@ jobs:
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@${EC2_HOST}:C:\\Users\\nonadmin\\execute-tests.bat
       env:
         EC2_USER: nonadmin
-        EC2_HOST: ${{ needs.start-ec2-instance.outputs.ec2-host }}
+        EC2_HOST: ${{ env.ec2-host }}
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
     - name: Execute batch file on EC2 Windows instance
