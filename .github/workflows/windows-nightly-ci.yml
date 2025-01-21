@@ -43,8 +43,16 @@ jobs:
 
 
     - name: Install Node.js
-      run: choco uninstall nodejs.install
+      run: choco install nodejs -y
       shell: powershell
+
+    - name: Define Node.js 
+      shell: powershell
+      run: |
+        $nodePath = 'C:\Program Files\nodejs'
+        # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
+        $newPath = "$env:PATH;$nodePath"
+        [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
 
       # - name: Delete existing SSH keys (if any)
       #   run: |
