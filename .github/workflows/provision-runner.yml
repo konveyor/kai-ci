@@ -87,7 +87,8 @@ jobs:
         run: |
           EC2_INSTANCE_ID="${{ steps.ec2.outputs.ec2-instance-id }}"
           EC2_INSTANCE_ID=$(echo $EC2_INSTANCE_ID | sed 's/^\[\(.*\)\]$/\1/')
-          ec2-host=$(aws ec2 describe-instances --instance-ids $EC2_INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+          EC2_HOST=$(aws ec2 describe-instances --instance-ids $EC2_INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+          echo "EC2 Host: $EC2_HOST"
           echo "ec2-host=$EC2_HOST" >> $GITHUB_ENV
 
       - name: Output EC2 Instance ID

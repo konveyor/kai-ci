@@ -67,7 +67,7 @@ jobs:
         sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
       env:
         EC2_USER: nonadmin
-        EC2_HOST: ${{ needs.start-ec2-instance.outputs.ec2-host }}
+        EC2_HOST: ${{ env.ec2-host }}
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
   stop-ec2-instance:
