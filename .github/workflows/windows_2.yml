@@ -36,6 +36,7 @@ jobs:
       run: |
         echo "set nodePath=C:\Program Files\nodejs" > clone-repo.bat
         echo "set PATH=%PATH%;%nodePath%" >> clone-repo.bat
+        echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
         echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
         echo "npm install" >> clone-repo.bat
