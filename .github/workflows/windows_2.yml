@@ -12,7 +12,7 @@ jobs:
 
     - name: Install Node.js using Chocolatey on EC2 Windows instance
       run: |
-        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "choco install nodejs -y"
+        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "choco install nodejs -y"'
     
     - name: Clone repository on EC2 Windows instance using SSH password
       run: |
