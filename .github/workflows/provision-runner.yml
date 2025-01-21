@@ -84,10 +84,11 @@ jobs:
 
       - name: Debug instance ID
         run: |
-          echo "Instance ID: ${{ steps.ec2.outputs.ec2-instance-id }}"
-          EC2_INSTANCE_ID=$(echo ${{ steps.ec2.outputs.ec2-instance-id }} | jq -r '.[0]')
+          EC2_INSTANCE_ID="${{ steps.ec2.outputs.ec2-instance-id }}"
+          # Remove the surrounding brackets and parse the string as a JSON array
+          EC2_INSTANCE_ID=$(echo $EC2_INSTANCE_ID | sed 's/^\[\(.*\)\]$/\1/')          echo $EC2_INSTANCE_ID
           echo $EC2_INSTANCE_ID
-        
+
       - name: Get EC2 Host (Public IP/DNS)
         id: get-ec2-host
         run: |
