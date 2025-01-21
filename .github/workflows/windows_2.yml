@@ -34,17 +34,7 @@ jobs:
   
     - name: Create batch file with repository cloning and hostname
       run: |
-        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'powershell -Command "
-        echo hostname > C:\\Users\\nonadmin\\clone-repo.bat;
-        echo set nodePath=C:\\Program Files\\nodejs >> C:\\Users\\nonadmin\\clone-repo.bat;
-        echo set PATH=%PATH%;%nodePath% >> C:\\Users\\nonadmin\\clone-repo.bat;
-        echo git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci >> C:\\Users\\nonadmin\\clone-repo.bat;
-        echo cd C:\\Users\\nonadmin\\kai-ci >> C:\\Users\\nonadmin\\clone-repo.bat;
-        echo npm install >> C:\\Users\\nonadmin\\clone-repo.bat;
-        echo npm ci >> C:\\Users\\nonadmin\\clone-repo.bat;
-        echo copy .env.example .env >> C:\\Users\\nonadmin\\clone-repo.bat;
-        echo npx playwright test >> C:\\Users\\nonadmin\\clone-repo.bat;
-        "'
+        sshpass -p "pass123!" ssh -o StrictHostKeyChecking=no nonadmin@ec2-52-90-29-139.compute-1.amazonaws.com 'powershell -Command "echo git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci >> C:\\Users\\nonadmin\\clone-repo.bat;echo cd C:\\Users\\nonadmin\\kai-ci >> C:\\Users\\nonadmin\\clone-repo.bat;echo npm install >> C:\\Users\\nonadmin\\clone-repo.bat;echo npm ci >> C:\\Users\\nonadmin\\clone-repo.bat;echo copy .env.example .env >> C:\\Users\\nonadmin\\clone-repo.bat;echo npx playwright test >> C:\\Users\\nonadmin\\clone-repo.bat;"'
       env:
         EC2_USER: nonadmin
         EC2_HOST: ec2-52-90-29-139.compute-1.amazonaws.com
