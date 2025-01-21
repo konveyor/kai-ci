@@ -43,13 +43,13 @@ jobs:
 
 
     - name: Install Node.js
-      run: choco install nodejs -y
+      run: choco uninstall nodejs -y
       shell: powershell
 
     - name: Define Node.js 
       shell: powershell
       run: |
-        $nodePath = 'C:\Program Files\nodejs'
+        $nodePath = 'C:\ProgramData\chocolatey\lib\nodejs\bin'
         # Update PATH so that Node.js, npm, npx, and VSCode can be called directly
         $newPath = "$env:PATH;$nodePath"
         [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Process)
