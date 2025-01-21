@@ -39,7 +39,6 @@ jobs:
         echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
         echo "npm install" >> clone-repo.bat
-        echo "npm ci" >> clone-repo.bat
         echo "copy .env.example .env" >> clone-repo.bat
         echo "npx playwright test" >> clone-repo.bat
       shell: bash
