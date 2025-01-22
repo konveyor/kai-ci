@@ -54,6 +54,7 @@ jobs:
 
     - name: Copy batch file to Windows EC2 instance
       run: |
+        echo "host : ${{ env.ec2-host }}"
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no clone-repo.bat ${EC2_USER}@${EC2_HOST}:C:\\Users\\nonadmin\\clone-repo.bat
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@${EC2_HOST}:C:\\Users\\nonadmin\\execute-tests.bat
       env:
