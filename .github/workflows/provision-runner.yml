@@ -58,7 +58,7 @@ jobs:
     outputs:
       instance_id: ${{ steps.ec2.outputs.ec2-instance-id }}
       label: ${{ steps.ec2.outputs.label }}
-      ec2-host: ${{ steps.get-ec2-host.outputs.EC2_HOST }}
+      ec2-host: ${{ steps.get-ec2-host.outputs.ec2-host }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
