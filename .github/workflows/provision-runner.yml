@@ -48,9 +48,6 @@ on:
       ec2-instance-id: 
         description: "Instance id of the VM that was created."
         value: ${{ jobs.provision-ec2.outputs.instance_id }}
-      ec2-host: 
-        description: "Public IP or DNS of the EC2 instance."
-        value: ${{ jobs.provision-ec2.outputs.ec2-host }}
 
 jobs:
   provision-ec2:
@@ -58,7 +55,6 @@ jobs:
     outputs:
       instance_id: ${{ steps.ec2.outputs.ec2-instance-id }}
       label: ${{ steps.ec2.outputs.label }}
-      ec2-host: ${{ steps.get-ec2-host.outputs.ec2-host }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -96,5 +92,5 @@ jobs:
       - name: Output EC2 Instance ID
         run: |
           echo "EC2 Instance ID: ${{ steps.ec2.outputs.ec2-instance-id }}"
-          echo "EC2 Host (Public IP/DNS): ${{ env.ec2-host }}"
+          echo "EC2 Host (Public IP/DNS): ${{ steps.get-ec2-host.outputs.ec2-host }}"
           echo "Label : ${{ steps.ec2.outputs.label }}"
