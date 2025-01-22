@@ -1,8 +1,6 @@
 name: (Windows admin) Run Playwright tests nightly on main branch
 
-on:
-  schedule:
-    - cron: "5 3 * * *"
+on: [push]
 
 jobs:
   start-ec2-instance:
