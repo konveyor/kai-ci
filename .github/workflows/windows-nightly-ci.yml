@@ -22,7 +22,11 @@ jobs:
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
     - name: Install Node.js
-      run: choco install nodejs -y
+      run: |
+        echo "host : ${{ needs.start-ec2-instance.get-ec2-host.outputs.ec2-host }}"
+        echo "host : ${{ needs.start-ec2-instance.get-ec2-host.ec2-host }}"
+        echo "host : ${{ needs.start-ec2-instance.outputs.ec2-host }}"
+        choco install nodejs -y
       shell: powershell
 
   run-test-as-nonadmin:
