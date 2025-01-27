@@ -14,8 +14,7 @@ test.describe('VSCode Tests', () => {
       getOSInfo() == 'windows'
         ? process.env.WINDOWS_VSCODE_EXECUTABLE_PATH
         : process.env.VSCODE_EXECUTABLE_PATH;
-    console.log(`Windows executable path: ${executablePath}`);
-    console.log(`repoUrl: ${repoUrl}`);
+    console.log(`VSCode executable path: ${executablePath}`);
     vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
   });
 
