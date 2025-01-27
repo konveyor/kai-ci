@@ -91,7 +91,7 @@ class VSCode {
 
     try {
       console.log(`Installing extension from ${vsixFilePath}...`);
-      const result = execSync(`code --install-extension "${vsixFilePath}"`, {
+      execSync(`code --install-extension "${vsixFilePath}"`, {
         stdio: 'inherit',
       });
       console.log('Extension installed successfully.');
@@ -99,12 +99,6 @@ class VSCode {
       console.error('Error installing the VSIX extension:', error);
       throw error;
     }
-  }
-
-  public async extensionInstalled() {
-    const installedExtensions = execSync('code --list-extensions').toString();
-    console.log(`Installed extensions: ${installedExtensions}`);
-    return installedExtensions.includes('konveyor') ? true : false;
   }
 
   /**
