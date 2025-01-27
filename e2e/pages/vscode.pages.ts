@@ -30,6 +30,7 @@ class VSCode {
     cloneDir: string
   ): Promise<VSCode> {
     try {
+      console.log('Cloning repo');
       execSync(`git clone ${repoUrl}`);
     } catch (error) {
       throw new Error('Failed to clone the repository');
@@ -50,7 +51,7 @@ class VSCode {
           'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
         );
       }
-
+      console.log('launching vscode ... ');
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
         executablePath: executablePath,
@@ -58,6 +59,7 @@ class VSCode {
       });
 
       const window = await vscodeApp.firstWindow();
+      console.log('vscode opened');
       return new VSCode(vscodeApp, window);
     } catch (error) {
       console.error('Error launching VSCode:', error);

@@ -13,6 +13,7 @@ test.describe('VSCode Tests', () => {
     const executablePath =
       process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
     console.log(`Windows executable path: ${executablePath}`);
+    console.log(`repoUrl: ${repoUrl}`);
     vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
   });
 
