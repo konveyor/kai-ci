@@ -41,6 +41,7 @@ jobs:
           echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
           echo "cd C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
           echo "npm install" >> clone-repo.bat
+          echo "git checkout vscode-extension-installation-fix" >> clone-repo.bat
         shell: bash
 
       - name: Create batch file locally to execute tests
@@ -49,6 +50,7 @@ jobs:
           echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
           echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
           echo "copy .env.example .env" >> execute-tests.bat
+          echo "powershell -Command \"(Get-Content .env) -replace 'VSCODE_EXECUTABLE_PATH=.*', 'VSCODE_EXECUTABLE_PATH=''C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe''' | Set-Content .env\"" >> execute-tests.bat
           echo "npx playwright test" >> execute-tests.bat
         shell: bash
 
