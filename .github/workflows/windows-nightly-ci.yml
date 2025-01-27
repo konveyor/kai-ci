@@ -19,7 +19,7 @@ jobs:
 
   install-requirements-as-admin:
     needs: start-ec2-instance
-    runs-on: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
     - name: Install Node.js
       run: choco install nodejs -y
