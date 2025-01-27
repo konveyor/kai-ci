@@ -1,6 +1,9 @@
 name: (Windows)(nonadmin) Run Playwright tests nightly on main branch
 
-on: [push]
+on:
+  schedule:
+    - cron: "5 3 * * *"
+  workflow_dispatch:
 
 jobs:
   start-ec2-instance:
@@ -17,7 +20,7 @@ jobs:
       github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
       nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
-  install-nodejs-as-admin:
+  install-requirements-as-admin:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
@@ -25,8 +28,16 @@ jobs:
       run: choco install nodejs -y
       shell: powershell
 
+    - name: Install Java
+      run: choco install openjdk -y
+      shell: powershell
+
+    - name: Install Maven
+      run: choco install maven -y
+      shell: powershell
+
   run-test-as-nonadmin:
-    needs: [ start-ec2-instance, install-nodejs-as-admin]
+    needs: [ start-ec2-instance, install-requirements-as-admin]
     runs-on: ubuntu-latest
      
     steps:
@@ -69,7 +80,7 @@ jobs:
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
   stop-ec2-instance:
-    needs: [ start-ec2-instance, install-nodejs-as-admin, run-test-as-nonadmin]
+    needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin]
     if: always()
     uses: ./.github/workflows/remove-runner.yml
     with:
