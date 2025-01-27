@@ -49,7 +49,6 @@ jobs:
         echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
-        echo "powershell -Command \"(Get-Content .env) -replace 'VSCODE_EXECUTABLE_PATH=.*', 'VSCODE_EXECUTABLE_PATH=''C:/Users/nonadmin/AppData/Local/Programs/Microsoft VS Code/Code.exe''' | Set-Content .env\"" >> execute-tests.bat
         echo "npx playwright test" >> execute-tests.bat
       shell: bash
 
