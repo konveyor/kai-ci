@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
-import { cleanupRepo, uninstallExtension } from '../utilities/utils';
+import { cleanupRepo, getOSInfo } from '../utilities/utils';
 
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
@@ -11,7 +11,10 @@ test.describe('VSCode Tests', () => {
   test.beforeAll(async () => {
     test.setTimeout(60000);
     const executablePath =
-      process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
+      getOSInfo() == 'windows'
+        ? process.env.WINDOWS_VSCODE_EXECUTABLE_PATH
+        : process.env.VSCODE_EXECUTABLE_PATH;
+    console.log(`VSCode executable path: ${executablePath}`);
     vscodeApp = await VSCode.init(executablePath, repoUrl, 'coolstore');
   });
 
