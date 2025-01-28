@@ -36,6 +36,10 @@ jobs:
       run: choco install maven -y
       shell: powershell
 
+    - name: Install VSCode as admin
+      run: choco install vscode -y
+      shell: powershell
+
   run-test-as-nonadmin:
     needs: [ start-ec2-instance, install-requirements-as-admin]
     runs-on: ubuntu-latest
@@ -60,7 +64,7 @@ jobs:
         echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
-        echo "npx playwright test" >> execute-tests.bat
+        echo "npx playwright test --reporter=list" >> execute-tests.bat
       shell: bash
 
     - name: Copy batch file to Windows EC2 instance

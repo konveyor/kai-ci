@@ -25,7 +25,7 @@ export function getOSInfo(): string {
 }
 
 export function getKAIPluginName(): string {
-  const vsixFileName = process.env.VSIX_FILE_NAME || 'konveyor-v0.0.4.vsix';
+  const vsixFileName = process.env.VSIX_FILE_NAME || 'konveyor-v0.0.6.vsix';
   return vsixFileName;
 }
 
@@ -49,4 +49,13 @@ export async function uninstallExtension() {
   } catch (error) {
     console.error('Error uninstalling Konveyor extension:', error);
   }
+}
+
+export function getVscodeExecutablePath() {
+  const executablePath =
+    getOSInfo() == 'windows'
+      ? process.env.WINDOWS_VSCODE_EXECUTABLE_PATH
+      : process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
+  console.log(`VSCode executable path: ${executablePath}`);
+  return executablePath;
 }
