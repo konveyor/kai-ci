@@ -38,7 +38,7 @@ jobs:
       shell: powershell
 
   run-test-as-nonadmin:
-    needs: [ install-requirements-as-admin]
+    needs: [ start-ec2-instance, install-requirements-as-admin]
     runs-on: ubuntu-latest
 
     steps:
