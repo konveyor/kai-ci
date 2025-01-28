@@ -40,6 +40,18 @@ jobs:
       run: choco install vscode -y
       shell: powershell
 
+    - name: Verify VSCode and Node.js Installation
+      shell: powershell
+      run: |
+        code --version
+        node --version
+        
+    - name: Close All VSCode Instances
+      shell: powershell
+      run: |
+        # Close all running instances of VSCode
+        Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
+
   run-test-as-nonadmin:
     needs: [ start-ec2-instance, install-requirements-as-admin]
     runs-on: ubuntu-latest
