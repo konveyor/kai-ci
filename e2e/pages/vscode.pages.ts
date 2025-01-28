@@ -6,7 +6,11 @@ import {
 } from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
-import { getKAIPluginName, getOSInfo } from '../utilities/utils';
+import {
+  getKAIPluginName,
+  getOSInfo,
+  getVscodeExecutablePath,
+} from '../utilities/utils';
 import * as path from 'path';
 
 class VSCode {
@@ -20,15 +24,10 @@ class VSCode {
 
   /**
    * launches VSCode with KAI plugin installed and coolstore app opened.
-   * @param executablePath path to the vscode binary
    * @param repoUrl coolstore app to be cloned
    * @param cloneDir path to repo
    */
-  public static async init(
-    executablePath: string,
-    repoUrl: string,
-    cloneDir: string
-  ): Promise<VSCode> {
+  public static async init(repoUrl: string, cloneDir: string): Promise<VSCode> {
     try {
       console.log('Cloning repo');
       execSync(`git clone ${repoUrl}`);
@@ -51,10 +50,11 @@ class VSCode {
           'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
         );
       }
+
       console.log('launching vscode ... ');
       // Launch VSCode as an Electron app
       const vscodeApp = await electron.launch({
-        executablePath: executablePath,
+        executablePath: getVscodeExecutablePath(),
         args: [path.resolve(cloneDir), '--disable-workspace-trust'],
       });
 
