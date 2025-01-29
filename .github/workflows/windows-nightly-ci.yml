@@ -32,16 +32,6 @@ jobs:
       run: choco install maven -y
       shell: powershell
 
-    - name: Install VSCode as admin
-      run: choco install vscode -y
-      shell: powershell
-
-    - name: Close All VSCode Instances
-      shell: powershell
-      run: |
-        # Close all running instances of VSCode
-        Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
-
   run-test-as-nonadmin:
     needs: [ start-ec2-instance, install-requirements-as-admin]
     runs-on: ubuntu-latest
@@ -63,8 +53,7 @@ jobs:
     - name: Create batch file locally to execute tests
       run: |
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
-        echo "set vscodePath=C:\Program Files\Microsoft VS Code\bin" >> execute-tests.bat
-        echo "set PATH=%PATH%;%nodePath%;%vscodePath%" >> execute-tests.bat
+        echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
         echo "npx playwright test --reporter=list" >> execute-tests.bat
@@ -86,14 +75,14 @@ jobs:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
-  # stop-ec2-instance:
-  #   needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin]
-  #   if: always()
-  #   uses: ./.github/workflows/remove-runner.yml
-  #   with:
-  #     ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
-  #     ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
-  #   secrets:
-  #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #     github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  stop-ec2-instance:
+    needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin]
+    if: always()
+    uses: ./.github/workflows/remove-runner.yml
+    with:
+      ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
+      ec2-runner-label: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
