@@ -12,8 +12,10 @@ import {
   getVscodeExecutablePath,
 } from '../utilities/utils';
 import * as path from 'path';
+import { LeftBarItems } from '../enums/left-bar-items.enum';
+import { expect } from '@playwright/test';
 
-class VSCode {
+export class VSCode {
   private readonly vscodeApp?: ElectronApplication;
   private readonly window?: Page;
 
@@ -29,7 +31,7 @@ class VSCode {
    */
   public static async init(repoUrl: string, cloneDir: string): Promise<VSCode> {
     try {
-      console.log('Cloning repo');
+      console.log(`Cloning coolstore repo from ${repoUrl}`);
       execSync(`git clone ${repoUrl}`);
     } catch (error) {
       throw new Error('Failed to clone the repository');
@@ -51,7 +53,7 @@ class VSCode {
         );
       }
 
-      console.log('launching vscode ... ');
+      console.log('Launching vscode ... ');
       // Launch VSCode as an Electron app
       const vscodeExecutablePath = getVscodeExecutablePath();
       const vscodeApp = await electron.launch({
@@ -88,10 +90,9 @@ class VSCode {
       console.error('Error checking installed extensions:', error);
     }
 
-    await downloadLatestKAIPlugin();
-
     try {
       console.log(`Installing extension from ${vsixFilePath}...`);
+      await downloadLatestKAIPlugin();
       execSync(`code --install-extension "${vsixFilePath}"`, {
         stdio: 'inherit',
       });
@@ -157,6 +158,19 @@ class VSCode {
   }
 
   /**
+   * Returns the iframe that contains the main Konveyor view
+   * @return Promise<FrameLocator>
+   */
+  public async getKonveyorIframe(): Promise<FrameLocator> {
+    return this.window
+      .locator('iframe')
+      .first()
+      .contentFrame()
+      .getByTitle('Konveyor Analysis View')
+      .contentFrame();
+  }
+
+  /**
    * Opens command palette by doing ctrl+shift+P
    * and then typing "Welcome" and then "Set Up".
    */
@@ -174,6 +188,26 @@ class VSCode {
     await window.keyboard.type('set up konveyor');
     await window.keyboard.press('Enter');
   }
-}
 
-export { VSCode };
+  public async openLeftBarElement(name: LeftBarItems) {
+    const window = this.getWindow();
+    const navLi = window.locator(`a[aria-label="${name}"]`).locator('..');
+    if ((await navLi.getAttribute('aria-expanded')) === 'false') {
+      await navLi.click();
+    }
+  }
+
+  public async runAnalysis() {
+    await this.openLeftBarElement(LeftBarItems.Konveyor);
+    await this.window.getByText('Konveyor Issues').dblclick();
+    await this.window
+      .locator('a[aria-label="Open Konveyor Analysis View"]')
+      .click();
+    const analysisView = await this.getKonveyorIframe();
+    const runAnalysisBtnLocator = analysisView.getByRole('button', {
+      name: 'Run Analysis',
+    });
+    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 10000 });
+    await runAnalysisBtnLocator.click();
+  }
+}

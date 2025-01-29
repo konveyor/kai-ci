@@ -15,7 +15,7 @@ test.describe('VSCode Tests', () => {
 
   test('Should launch VSCode and check window title', async () => {
     const window = vscodeApp.getWindow();
-    await window.waitForTimeout(5000);
+
     await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
   });
 
@@ -33,17 +33,22 @@ test.describe('VSCode Tests', () => {
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 
-  test('Set Up Konevyor and Start analyzer', async () => {
+  test('Set Up Konveyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
-    await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
     await window.waitForTimeout(5000);
     await window.getByRole('button', { name: 'Start Server' }).click();
-    await window.waitForTimeout(5000);
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
-    await window.screenshot({ path: 'start-analyzer-screenshot.png' });
+  });
+
+  test('Analyze coolstore app', async () => {
+    test.setTimeout(1200000);
+    await vscodeApp.runAnalysis();
+    await expect(
+      vscodeApp.getWindow().getByText('Analysis completed').first()
+    ).toBeVisible({ timeout: 60000 });
   });
 
   test.afterAll(async () => {

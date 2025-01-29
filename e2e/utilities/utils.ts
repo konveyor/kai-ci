@@ -1,9 +1,8 @@
 import * as os from 'os';
 import * as fs from 'fs';
 import * as util from 'util';
-import { exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 import * as path from 'path';
-import { execSync } from 'child_process';
 
 const execPromise = util.promisify(exec);
 const repoDir = path.resolve('coolstore');
@@ -25,19 +24,19 @@ export function getOSInfo(): string {
 }
 
 export function getKAIPluginName(): string {
-  const vsixFileName = process.env.VSIX_FILE_NAME || 'konveyor-v0.0.6.vsix';
-  return vsixFileName;
+  return process.env.VSIX_FILE_NAME;
 }
 
 export async function cleanupRepo() {
-  if (fs.existsSync(repoDir)) {
-    try {
-      fs.rmSync(repoDir, { recursive: true, force: true });
-    } catch (error) {
-      console.error('Error while cleaning up cloned repository:', error);
-    }
-  } else {
-    console.warn(`Directory ${repoDir} does not exist, skipping cleanup.`);
+  if (!fs.existsSync(repoDir)) {
+    console.debug(`Directory ${repoDir} does not exist, skipping cleanup.`);
+    return;
+  }
+
+  try {
+    fs.rmSync(repoDir, { recursive: true, force: true });
+  } catch (error) {
+    console.error('Error while cleaning up cloned repository:', error);
   }
 }
 
