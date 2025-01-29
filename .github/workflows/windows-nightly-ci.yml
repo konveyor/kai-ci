@@ -2,23 +2,23 @@ name: (Windows)(nonadmin) Run Playwright tests nightly on main branch
 
 on: push
 jobs:
-  # start-ec2-instance:
-  #   uses: ./.github/workflows/provision-runner.yml
-  #   with:
-  #     ec2-image-id: ami-0cf05b9bbda99aed3
-  #     ec2-instance-type: t2.micro
-  #     security-group-id: sg-0a3e6b53e86d0e69d
-  #     subnet-id: subnet-06113672589e7e836
-  #     ec2-os-type: windows
-  #   secrets:
-  #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #     github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-  #     nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+  start-ec2-instance:
+    uses: ./.github/workflows/provision-runner.yml
+    with:
+      ec2-image-id: ami-0cf05b9bbda99aed3
+      ec2-instance-type: t2.micro
+      security-group-id: sg-0a3e6b53e86d0e69d
+      subnet-id: subnet-06113672589e7e836
+      ec2-os-type: windows
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
   install-requirements-as-admin:
-    # needs: start-ec2-instance
-    runs-on: mr36j
+    needs: start-ec2-instance
+    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
     - name: Install Node.js
       run: choco install nodejs -y
@@ -72,16 +72,16 @@ jobs:
 
     - name: Copy batch file to Windows EC2 instance
       run: |
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no clone-repo.bat ${EC2_USER}@18.234.187.194:C:\\Users\\nonadmin\\clone-repo.bat
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@18.234.187.194:C:\\Users\\nonadmin\\execute-tests.bat
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no clone-repo.bat ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:\\Users\\nonadmin\\clone-repo.bat
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:\\Users\\nonadmin\\execute-tests.bat
       env:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
     - name: Execute batch file on EC2 Windows instance
       run: |
-        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@18.234.187.194 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\clone-repo.bat -NoNewWindow -Wait"'
-        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@18.234.187.194 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
+        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\clone-repo.bat -NoNewWindow -Wait"'
+        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
       env:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
