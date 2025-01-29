@@ -156,24 +156,34 @@ export class VSCode {
     return null;
   }
 
-  public async selectSourcesAndTargets(sources: string[], targets: string []) {
+  public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.getWindow();
     await window.keyboard.press('Control+Shift+P');
     await window.keyboard.type('sources and targets');
     await window.keyboard.press('Enter');
 
-    await expect(window.getByPlaceholder("Choose one or more source")).toBeVisible();
+    await expect(
+      window.getByPlaceholder('Choose one or more source')
+    ).toBeVisible();
     for (const source of sources) {
       await window.keyboard.type(source);
-      await window.getByRole('checkbox', { name: `${source}` }).nth(1).click();
+      await window
+        .getByRole('checkbox', { name: `${source}` })
+        .nth(1)
+        .click();
       await window.waitForTimeout(1000);
     }
     await window.keyboard.press('Enter');
 
-    await expect(window.getByPlaceholder("Choose one or more target")).toBeVisible();
+    await expect(
+      window.getByPlaceholder('Choose one or more target')
+    ).toBeVisible();
     for (const target of targets) {
       await window.keyboard.type(target);
-      await window.getByRole('checkbox', { name: `${target}` }).nth(1).click();
+      await window
+        .getByRole('checkbox', { name: `${target}` })
+        .nth(1)
+        .click();
       await window.waitForTimeout(1000);
     }
 

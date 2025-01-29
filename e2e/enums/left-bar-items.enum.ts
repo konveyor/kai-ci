@@ -1,3 +1,3 @@
 export enum LeftBarItems {
-  Konveyor = "Konveyor"
+  Konveyor = 'Konveyor',
 }

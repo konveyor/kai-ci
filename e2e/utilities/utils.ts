@@ -59,6 +59,4 @@ export function getVscodeExecutablePath() {
   return executablePath;
 }
 
-export function takeScreenshot() {
-
-}
+export function takeScreenshot() {}

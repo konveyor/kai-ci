@@ -21,13 +21,15 @@ test.describe('VSCode Tests', () => {
       const heading = iframe.locator('h1:has-text("Konveyor Analysis")');
       await expect(heading).toBeVisible();
     }
-    await window.screenshot({ path: './screenshots/kai-installed-screenshot.png' });
+    await window.screenshot({
+      path: './screenshots/kai-installed-screenshot.png',
+    });
   });
 
   test('Set Up Konveyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
     await vscodeApp.openSetUpKonveyor();
-    await vscodeApp.selectSourcesAndTargets([], ["quarkus"]);
+    await vscodeApp.selectSourcesAndTargets([], ['quarkus']);
     await window.getByRole('button', { name: 'Start Server' }).click();
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
@@ -40,7 +42,9 @@ test.describe('VSCode Tests', () => {
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
     ).toBeVisible({ timeout: 60000 });
-    await vscodeApp.getWindow().screenshot({ path: './screenshots/analysis-finished.png' });
+    await vscodeApp
+      .getWindow()
+      .screenshot({ path: './screenshots/analysis-finished.png' });
   });
 
   test.afterAll(async () => {
