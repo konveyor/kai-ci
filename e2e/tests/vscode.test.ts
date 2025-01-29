@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
-import { cleanupRepo, getOSInfo } from '../utilities/utils';
+import { cleanupRepo } from '../utilities/utils';
 
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
@@ -25,11 +25,11 @@ test.describe('VSCode Tests', () => {
     const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
     await kaiTab.click();
     await window.waitForTimeout(500);
-    const iframe = await vscodeApp.getLeftIframe();
-    if (iframe) {
-      const heading = await iframe.locator('h1:has-text("Konveyor Analysis")');
-      await expect(heading).toBeVisible();
-    }
+    const heading = await window.getByRole('heading', {
+      name: 'Konveyor',
+      exact: true,
+    });
+    await expect(heading).toBeVisible();
     await window.screenshot({ path: 'kai-installed-screenshot.png' });
   });
 
