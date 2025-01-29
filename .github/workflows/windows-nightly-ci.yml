@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "5 3 * * *"
   workflow_dispatch:
-
+    
 jobs:
   start-ec2-instance:
     uses: ./.github/workflows/provision-runner.yml
@@ -34,10 +34,6 @@ jobs:
 
     - name: Install Maven
       run: choco install maven -y
-      shell: powershell
-
-    - name: Install VSCode as admin
-      run: choco install vscode -y
       shell: powershell
 
   run-test-as-nonadmin:
