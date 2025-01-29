@@ -141,13 +141,12 @@ export class VSCode {
 
     for (let i = 0; i < iframeCount; i++) {
       const iframeLocator = iframeLocators.nth(i);
-      const outerIframe = await iframeLocator.contentFrame();
+      const outerIframe = iframeLocator.contentFrame();
       if (outerIframe) {
         const iframe2 = outerIframe.locator('iframe[title="Konveyor"]');
         const iframe2Count = await iframe2.count();
         if (iframe2Count > 0) {
-          const innerIframe = await iframe2.contentFrame();
-          return innerIframe;
+          return iframe2.contentFrame();
         }
       }
     }
@@ -157,17 +156,29 @@ export class VSCode {
     return null;
   }
 
-  /**
-   * Returns the iframe that contains the main Konveyor view
-   * @return Promise<FrameLocator>
-   */
-  public async getKonveyorIframe(): Promise<FrameLocator> {
-    return this.window
-      .locator('iframe')
-      .first()
-      .contentFrame()
-      .getByTitle('Konveyor Analysis View')
-      .contentFrame();
+  public async selectSourcesAndTargets(sources: string[], targets: string []) {
+    const window = this.getWindow();
+    await window.keyboard.press('Control+Shift+P');
+    await window.keyboard.type('sources and targets');
+    await window.keyboard.press('Enter');
+
+    await expect(window.getByPlaceholder("Choose one or more source")).toBeVisible();
+    for (const source of sources) {
+      await window.keyboard.type(source);
+      await window.getByRole('checkbox', { name: `${source}` }).nth(1).click();
+      await window.waitForTimeout(1000);
+    }
+    await window.keyboard.press('Enter');
+
+    await expect(window.getByPlaceholder("Choose one or more target")).toBeVisible();
+    for (const target of targets) {
+      await window.keyboard.type(target);
+      await window.getByRole('checkbox', { name: `${target}` }).nth(1).click();
+      await window.waitForTimeout(1000);
+    }
+
+    await window.keyboard.press('Enter');
+    await window.keyboard.press('Enter');
   }
 
   /**
@@ -177,11 +188,7 @@ export class VSCode {
   public async openSetUpKonveyor() {
     const window = this.getWindow();
     await window.keyboard.press('Control+Shift+P');
-    await window.waitForTimeout(1000);
-
     await window.keyboard.type('welcome: open walkthrough');
-    await window.waitForTimeout(500);
-
     await window.keyboard.press('Enter');
     await window.waitForTimeout(500);
 
@@ -209,5 +216,18 @@ export class VSCode {
     });
     await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 10000 });
     await runAnalysisBtnLocator.click();
+  }
+
+  /**
+   * Returns the iframe that contains the main Konveyor view
+   * @return Promise<FrameLocator>
+   */
+  private async getKonveyorIframe(): Promise<FrameLocator> {
+    return this.window
+      .locator('iframe')
+      .first()
+      .contentFrame()
+      .getByTitle('Konveyor Analysis View')
+      .contentFrame();
   }
 }

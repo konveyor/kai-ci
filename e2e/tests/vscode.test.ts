@@ -13,30 +13,21 @@ test.describe('VSCode Tests', () => {
     vscodeApp = await VSCode.init(repoUrl, 'coolstore');
   });
 
-  test('Should launch VSCode and check window title', async () => {
-    const window = vscodeApp.getWindow();
-
-    await window.screenshot({ path: 'vscode-initialized-screenshot.png' });
-  });
-
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
-    await window.waitForTimeout(5000);
-    const kaiTab = await window.getByRole('tab', { name: 'Konveyor' });
-    await kaiTab.click();
-    await window.waitForTimeout(500);
+    await window.getByRole('tab', { name: 'Konveyor' }).click();
     const iframe = await vscodeApp.getLeftIframe();
     if (iframe) {
-      const heading = await iframe.locator('h1:has-text("Konveyor Analysis")');
+      const heading = iframe.locator('h1:has-text("Konveyor Analysis")');
       await expect(heading).toBeVisible();
     }
-    await window.screenshot({ path: 'kai-installed-screenshot.png' });
+    await window.screenshot({ path: './screenshots/kai-installed-screenshot.png' });
   });
 
   test('Set Up Konveyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
     await vscodeApp.openSetUpKonveyor();
-    await window.waitForTimeout(5000);
+    await vscodeApp.selectSourcesAndTargets([], ["quarkus"]);
     await window.getByRole('button', { name: 'Start Server' }).click();
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
@@ -49,6 +40,7 @@ test.describe('VSCode Tests', () => {
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
     ).toBeVisible({ timeout: 60000 });
+    await vscodeApp.getWindow().screenshot({ path: './screenshots/analysis-finished.png' });
   });
 
   test.afterAll(async () => {

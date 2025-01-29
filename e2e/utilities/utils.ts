@@ -58,3 +58,7 @@ export function getVscodeExecutablePath() {
   console.log(`VSCode executable path: ${executablePath}`);
   return executablePath;
 }
+
+export function takeScreenshot() {
+
+}
