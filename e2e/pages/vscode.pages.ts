@@ -1,9 +1,4 @@
-import {
-  _electron as electron,
-  ElectronApplication,
-  FrameLocator,
-  Page,
-} from 'playwright';
+import { _electron as electron, ElectronApplication, Page } from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import {
@@ -124,36 +119,6 @@ class VSCode {
       throw new Error('VSCode window is not initialized.');
     }
     return this.window;
-  }
-
-  /**
-   * Iterates through all frames and returns the
-   * left panel frame for further interactions.
-   */
-  public async getLeftIframe(): Promise<FrameLocator | null> {
-    if (!this.window) {
-      throw new Error('VSCode window is not initialized.');
-    }
-
-    const iframeLocators = this.window.locator('iframe');
-    const iframeCount = await iframeLocators.count();
-
-    for (let i = 0; i < iframeCount; i++) {
-      const iframeLocator = iframeLocators.nth(i);
-      const outerIframe = await iframeLocator.contentFrame();
-      if (outerIframe) {
-        const iframe2 = outerIframe.locator('iframe[title="Konveyor"]');
-        const iframe2Count = await iframe2.count();
-        if (iframe2Count > 0) {
-          const innerIframe = await iframe2.contentFrame();
-          return innerIframe;
-        }
-      }
-    }
-
-    // Return null if the iframe is not found
-    console.log('Iframe with title "Konveyor" not found.');
-    return null;
   }
 
   /**
