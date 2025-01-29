@@ -2,23 +2,23 @@ name: (Windows)(nonadmin) Run Playwright tests nightly on main branch
 
 on: push
 jobs:
-  start-ec2-instance:
-    uses: ./.github/workflows/provision-runner.yml
-    with:
-      ec2-image-id: ami-0cf05b9bbda99aed3
-      ec2-instance-type: t2.micro
-      security-group-id: sg-0a3e6b53e86d0e69d
-      subnet-id: subnet-06113672589e7e836
-      ec2-os-type: windows
-    secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
-      nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
+  # start-ec2-instance:
+  #   uses: ./.github/workflows/provision-runner.yml
+  #   with:
+  #     ec2-image-id: ami-0cf05b9bbda99aed3
+  #     ec2-instance-type: t2.micro
+  #     security-group-id: sg-0a3e6b53e86d0e69d
+  #     subnet-id: subnet-06113672589e7e836
+  #     ec2-os-type: windows
+  #   secrets:
+  #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
+  #     nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
   install-requirements-as-admin:
-    needs: start-ec2-instance
-    runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
+    # needs: start-ec2-instance
+    runs-on: mr36j
     steps:
     - name: Install Node.js
       run: choco install nodejs -y
@@ -43,7 +43,7 @@ jobs:
         Get-Process -Name "Code" -ErrorAction SilentlyContinue | ForEach-Object { $_.CloseMainWindow() } | Out-Null
 
   run-test-as-nonadmin:
-    needs: [ start-ec2-instance, install-requirements-as-admin]
+    needs: [ install-requirements-as-admin]
     runs-on: ubuntu-latest
 
     steps:
@@ -63,7 +63,8 @@ jobs:
     - name: Create batch file locally to execute tests
       run: |
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
-        echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
+        echo "set vscodePath=C:\Program Files\Microsoft VS Code\bin" >> execute-tests.bat
+        echo "set PATH=%PATH%;%nodePath%;%vscodePath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
         echo "npx playwright test --reporter=list" >> execute-tests.bat
