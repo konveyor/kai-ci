@@ -57,7 +57,8 @@ jobs:
     - name: Create batch file locally to execute tests
       run: |
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
-        echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
+        echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
+        echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "powershell -Command \"Stop-Process -Name code\"" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
