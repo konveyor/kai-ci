@@ -60,7 +60,6 @@ class VSCode {
         ],
         timeout: 0
       });
-
       console.log('VSCode launched successfully, ensuring it stays open...');
       await new Promise(resolve => setTimeout(resolve, 10000));
 
