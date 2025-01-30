@@ -53,12 +53,12 @@ class VSCode {
         executablePath: vscodeExecutablePath,
         args: [path.resolve(cloneDir),
           '--disable-workspace-trust',
-          '--disable-gpu',
-          '--no-sandbox',
-          '--disable-features=CalculateNativeWinOcclusion',
-          '--reuse-window',
+          // '--disable-gpu',
+          // '--no-sandbox',
+          // '--disable-features=CalculateNativeWinOcclusion',
+          // '--reuse-window',
           '--verbose',
-          '--log', 'trace',
+          '--log', 'debug',
         ],
         timeout: 0
       });
