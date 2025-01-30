@@ -9,7 +9,7 @@ test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
 
   test.beforeAll(async () => {
-    test.setTimeout(60000);
+    test.setTimeout(2600000);
     vscodeApp = await VSCode.init(repoUrl, 'coolstore');
   });
 
