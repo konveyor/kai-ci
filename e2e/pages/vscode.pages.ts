@@ -63,10 +63,19 @@ class VSCode {
       console.log('VSCode launched successfully, ensuring it stays open...');
       await new Promise(resolve => setTimeout(resolve, 10000));
 
-      vscodeApp.on('close', () => {
-        console.error('❌ ERROR: VSCode closed unexpectedly!');
-      });
-      const window = await vscodeApp.firstWindow();
+      console.log('Checking if VSCode is still running...');
+      const exitCode = vscodeApp.process().exitCode;
+      if (exitCode !== null) {
+        throw new Error(`❌ ERROR: VSCode closed unexpectedly with exit code: ${exitCode}`);
+      }
+
+      console.log('Waiting for first window...');
+      const window = await vscodeApp.waitForEvent('window', { timeout: 45000 });
+
+      await window.waitForLoadState('domcontentloaded', {timeout: 30000});
+      await window.waitForLoadState('load', {timeout: 30000});
+
+      console.log('VSCode is fully loaded');
       return new VSCode(vscodeApp, window);
 
     } catch (error) {
