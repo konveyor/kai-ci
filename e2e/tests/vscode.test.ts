@@ -27,9 +27,12 @@ test.describe('VSCode Tests', () => {
     });
   });
 
+  test('Set Sources and targets', async () => {
+    await vscodeApp.selectSourcesAndTargets([], ['quarkus']);
+  });
+
   test('Set Up Konveyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
-    await vscodeApp.selectSourcesAndTargets([], ['quarkus']);
     await vscodeApp.openSetUpKonveyor();
     await window.getByRole('button', { name: 'Start Server' }).click();
     await window
