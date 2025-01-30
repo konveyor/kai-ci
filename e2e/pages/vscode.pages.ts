@@ -57,6 +57,8 @@ class VSCode {
           '--no-sandbox',
           '--disable-features=CalculateNativeWinOcclusion',
           '--reuse-window',
+          '--verbose',
+          '--log', 'debug',
         ],
         timeout: 0
       });
