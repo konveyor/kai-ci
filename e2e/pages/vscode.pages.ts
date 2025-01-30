@@ -59,6 +59,7 @@ class VSCode {
           '--reuse-window',
           '--verbose',
           '--log', 'debug',
+          '--wait'
         ],
         timeout: 0
       });
