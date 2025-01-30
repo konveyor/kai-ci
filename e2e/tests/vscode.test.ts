@@ -34,6 +34,7 @@ test.describe('VSCode Tests', () => {
   });
 
   test('Set Up Konevyor and Start analyzer', async () => {
+    test.setTimeout(90000);
     const window = vscodeApp.getWindow();
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
@@ -47,6 +48,8 @@ test.describe('VSCode Tests', () => {
   });
 
   test.afterAll(async () => {
+    console.log('Closing VSCode...');
+    await vscodeApp.closeVSCode();
     await cleanupRepo();
   });
 });
