@@ -50,7 +50,7 @@ jobs:
         echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
         echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-        echo "git clone --single-branch --branch check_test-failure https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+        echo "git clone https://github.com/konveyor/kai-ci https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
