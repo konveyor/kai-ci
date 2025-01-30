@@ -44,28 +44,21 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
 
-    - name: Create batch file locally to git clone
-      run: |
-        echo "set nodePath=C:\Program Files\nodejs" > clone-repo.bat
-        echo "set PATH=%PATH%;%nodePath%" >> clone-repo.bat
-        echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
-        echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
-        echo "cd C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
-        echo "npm install" >> clone-repo.bat
-      shell: bash
-
     - name: Create batch file locally to execute tests
       run: |
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
-        echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
+        echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
+        echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
+        echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+        echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+        echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
         echo "npx playwright test --reporter=list" >> execute-tests.bat
       shell: bash
 
     - name: Copy batch file to Windows EC2 instance
       run: |
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no clone-repo.bat ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:\\Users\\nonadmin\\clone-repo.bat
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:\\Users\\nonadmin\\execute-tests.bat
       env:
         EC2_USER: nonadmin
@@ -73,7 +66,6 @@ jobs:
 
     - name: Execute batch file on EC2 Windows instance
       run: |
-        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\clone-repo.bat -NoNewWindow -Wait"'
         sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
       env:
         EC2_USER: nonadmin
