@@ -57,6 +57,7 @@ jobs:
         echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
+        echo "set DEBUG=pw:browser" >> execute-tests.bat
         echo "npx playwright test --reporter=list" >> execute-tests.bat
       shell: bash
 
