@@ -51,6 +51,9 @@ jobs:
         echo "npm install" >> clone-repo.bat
       shell: bash
 
+    - name: kill all vscode instances
+      run:  taskkill /IM Code.exe /F
+
     - name: Create batch file locally to execute tests
       run: |
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
