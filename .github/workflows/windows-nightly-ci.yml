@@ -51,9 +51,12 @@ jobs:
         echo "npm install" >> clone-repo.bat
       shell: bash
 
-    - name: kill all vscode instances
-      run:  taskkill /IM Code.exe /F
-      shell: powershell
+    - name: Kill all VSCode instances on Windows EC2
+      run: |
+        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "taskkill /IM Code.exe /F /T"'
+      env:
+        EC2_USER: nonadmin
+        EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
     - name: Create batch file locally to execute tests
       run: |
