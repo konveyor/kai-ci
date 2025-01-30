@@ -189,7 +189,6 @@ export class VSCode {
         .click();
       await window.waitForTimeout(1000);
       await this.window.waitForTimeout(5000); // delete-later
-
     }
     await sourceInput.press('Enter');
 
@@ -205,7 +204,6 @@ export class VSCode {
         .click();
       await window.waitForTimeout(1000);
       await this.window.waitForTimeout(5000); // delete-later
-
     }
 
     await targetInput.press('Enter');
@@ -228,7 +226,6 @@ export class VSCode {
 
     await window.keyboard.press('Enter');
     await this.window.waitForTimeout(5000); // delete-later
-
   }
 
   public async openLeftBarElement(name: LeftBarItems) {
@@ -278,6 +275,5 @@ export class VSCode {
       .contentFrame()
       .getByTitle('Konveyor Analysis View')
       .contentFrame();
-
   }
 }
