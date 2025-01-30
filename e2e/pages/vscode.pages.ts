@@ -158,11 +158,16 @@ export class VSCode {
 
   private async executeQuickCommand(command: string) {
     await this.window.keyboard.press('Control+Shift+P');
+    await this.window.waitForTimeout(5000); // delete-later
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
+    await this.window.waitForTimeout(5000); // delete-later
+
     await expect(input).toBeVisible({ timeout: 5000 });
     await input.fill(`>${command}`);
+    await this.window.waitForTimeout(5000); // delete-later
+
     await input.press('Enter');
     await this.window.waitForTimeout(500);
   }
@@ -170,16 +175,21 @@ export class VSCode {
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
+    await this.window.waitForTimeout(5000); // delete-later
 
     const sourceInput = window.getByPlaceholder('Choose one or more source');
     await expect(sourceInput).toBeVisible();
     for (const source of sources) {
       await sourceInput.fill(source);
+      await this.window.waitForTimeout(5000); // delete-later
+
       await window
         .getByRole('checkbox', { name: `${source}` })
         .nth(1)
         .click();
       await window.waitForTimeout(1000);
+      await this.window.waitForTimeout(5000); // delete-later
+
     }
     await sourceInput.press('Enter');
 
@@ -187,14 +197,20 @@ export class VSCode {
     await expect(targetInput).toBeVisible();
     for (const target of targets) {
       await targetInput.fill(target);
+      await this.window.waitForTimeout(5000); // delete-later
+
       await window
         .getByRole('checkbox', { name: `${target}` })
         .nth(1)
         .click();
       await window.waitForTimeout(1000);
+      await this.window.waitForTimeout(5000); // delete-later
+
     }
 
     await targetInput.press('Enter');
+    await this.window.waitForTimeout(5000); // delete-later
+
     await window.keyboard.press('Enter');
   }
 
@@ -205,13 +221,23 @@ export class VSCode {
   public async openSetUpKonveyor() {
     const window = this.getWindow();
     await this.executeQuickCommand('welcome: open walkthrough');
+    await this.window.waitForTimeout(5000); // delete-later
+
     await window.keyboard.type('set up konveyor');
+    await this.window.waitForTimeout(5000); // delete-later
+
     await window.keyboard.press('Enter');
+    await this.window.waitForTimeout(5000); // delete-later
+
   }
 
   public async openLeftBarElement(name: LeftBarItems) {
     const window = this.getWindow();
+    await this.window.waitForTimeout(5000); // delete-later
+
     const navLi = window.locator(`a[aria-label="${name}"]`).locator('..');
+    await this.window.waitForTimeout(5000); // delete-later
+
     if ((await navLi.getAttribute('aria-expanded')) === 'false') {
       await navLi.click();
     }
@@ -219,15 +245,23 @@ export class VSCode {
 
   public async runAnalysis() {
     await this.openLeftBarElement(LeftBarItems.Konveyor);
+    await this.window.waitForTimeout(5000); // delete-later
+
     await this.window.getByText('Konveyor Issues').dblclick();
+    await this.window.waitForTimeout(5000); // delete-later
+
     await this.window
       .locator('a[aria-label="Open Konveyor Analysis View"]')
       .click();
+    await this.window.waitForTimeout(5000); // delete-later
+
     const analysisView = await this.getKonveyorIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
     });
     await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 10000 });
+    await this.window.waitForTimeout(5000); // delete-later
+
     await runAnalysisBtnLocator.click();
   }
 
@@ -236,11 +270,14 @@ export class VSCode {
    * @return Promise<FrameLocator>
    */
   private async getKonveyorIframe(): Promise<FrameLocator> {
+    await this.window.waitForTimeout(5000); // delete-later
+
     return this.window
       .locator('iframe')
       .first()
       .contentFrame()
       .getByTitle('Konveyor Analysis View')
       .contentFrame();
+
   }
 }
