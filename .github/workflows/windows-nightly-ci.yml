@@ -59,6 +59,7 @@ jobs:
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
         echo "set PATH=%PATH%;%nodePath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+        echo "Stop-Process -Name code" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
         echo "npx playwright test --reporter=list" >> execute-tests.bat
       shell: bash
