@@ -58,7 +58,7 @@ jobs:
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
         echo "set DEBUG=pw:browser" >> execute-tests.bat
-        echo "npx playwright test --reporter=list" >> execute-tests.bat
+        echo "npx playwright test --reporter=list --headed" >> execute-tests.bat
       shell: bash
 
     - name: Copy batch file to Windows EC2 instance
