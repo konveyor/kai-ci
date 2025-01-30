@@ -48,8 +48,6 @@ test.describe('VSCode Tests', () => {
   });
 
   test.afterAll(async () => {
-    console.log('Closing VSCode...');
-    await vscodeApp.closeVSCode();
     await cleanupRepo();
   });
 });
