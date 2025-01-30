@@ -63,6 +63,9 @@ class VSCode {
       console.log('VSCode launched successfully, ensuring it stays open...');
       await new Promise(resolve => setTimeout(resolve, 10000));
 
+      vscodeApp.on('close', () => {
+        console.error('❌ ERROR: VSCode closed unexpectedly!');
+      });
       const window = await vscodeApp.firstWindow();
       return new VSCode(vscodeApp, window);
 
