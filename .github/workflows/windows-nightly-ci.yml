@@ -51,7 +51,7 @@ jobs:
         echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
         echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> clone-repo.bat
-        echo "npm install" >> clone-repo.bat
+        echo powershell -Command "npm install" >> clone-repo.bat
       shell: bash
 
     - name: Create batch file locally to execute tests
@@ -61,6 +61,7 @@ jobs:
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
+        echo powershell -Command "npx playwright test --reporter=list" >> execute-tests.bat
       shell: bash
 
     - name: Copy batch file to Windows EC2 instance
@@ -75,14 +76,6 @@ jobs:
       run: |
         sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\clone-repo.bat -NoNewWindow -Wait"'
         sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
-      env:
-        EC2_USER: nonadmin
-        EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
-
-    # Run the Playwright tests separately
-    - name: Run Playwright tests on EC2 Windows instance
-      run: |
-        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'cd C:\\Users\\nonadmin\\kai-ci && npx playwright test --reporter=list'
       env:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
