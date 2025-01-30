@@ -52,9 +52,9 @@ jobs:
         echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-        echo powershell -Command "npm install" >> execute-tests.bat
+        echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
-        echo powershell -Command "npx playwright test --reporter=list" >> execute-tests.bat
+        echo powershell -Command "\"npx playwright test --reporter=list\"" >> execute-tests.bat
       shell: bash
 
     - name: Copy batch file to Windows EC2 instance
