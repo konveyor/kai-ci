@@ -63,14 +63,9 @@ class VSCode {
       console.log('VSCode launched successfully, ensuring it stays open...');
       await new Promise(resolve => setTimeout(resolve, 5000));
 
-      console.log('vscode opened ...');
-
-      // console.log('Waiting for VSCode window to be ready...');
-      // await vscodeApp.waitForEvent('window', { timeout: 30000 });
       const window = await vscodeApp.firstWindow();
-      // await window.waitForLoadState('domcontentloaded');
-      // await window.waitForLoadState('load');
       return new VSCode(vscodeApp, window);
+
     } catch (error) {
       console.error('Error launching VSCode:', error);
       throw error;
