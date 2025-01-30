@@ -13,6 +13,6 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    trace: 'on',
+    trace: 'retain-on-failure',
   },
 });
