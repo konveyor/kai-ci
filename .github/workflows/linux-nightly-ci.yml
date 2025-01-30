@@ -62,9 +62,7 @@ jobs:
     - name: Ensure no VSCode instances are running
       run: |
         pkill -f code || true  # Kills all VSCode processes if they are running
-    - name: Install playwright dependencies
-      run: npm install
-    - name: More dependencies
+    - name: Install dependencies
       run: npm ci
     - name: Copy .env.example to .env
       run: cp .env.example .env  

@@ -158,9 +158,11 @@ export class VSCode {
 
   private async executeQuickCommand(command: string) {
     await this.window.keyboard.press('Control+Shift+P');
-    const input = this.window.getByPlaceholder("Type the name of a command to run.");
+    const input = this.window.getByPlaceholder(
+      'Type the name of a command to run.'
+    );
     await input.fill(`>${command}`);
-    await input.press("Enter");
+    await input.press('Enter');
     await this.window.waitForTimeout(500);
   }
 
@@ -181,9 +183,7 @@ export class VSCode {
     await sourceInput.press('Enter');
 
     const targetInput = window.getByPlaceholder('Choose one or more target');
-    await expect(
-      targetInput
-    ).toBeVisible();
+    await expect(targetInput).toBeVisible();
     for (const target of targets) {
       await targetInput.fill(target);
       await window
