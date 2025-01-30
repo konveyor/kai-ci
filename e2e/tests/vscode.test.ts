@@ -46,7 +46,7 @@ test.describe('VSCode Tests', () => {
     await window.screenshot({ path: 'start-analyzer-screenshot.png' });
   });
 
-  test.afterAll(async () => {
-    await cleanupRepo();
-  });
+  // test.afterAll(async () => {
+  //   await cleanupRepo();
+  // });
 });
