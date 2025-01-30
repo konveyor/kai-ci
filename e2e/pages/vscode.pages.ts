@@ -55,13 +55,14 @@ class VSCode {
           '--disable-workspace-trust',
           '--disable-gpu',
           '--no-sandbox',
+          '--disable-features=CalculateNativeWinOcclusion',
           '--reuse-window',
         ],
         timeout: 0
       });
 
       console.log('VSCode launched successfully, ensuring it stays open...');
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      await new Promise(resolve => setTimeout(resolve, 10000));
 
       const window = await vscodeApp.firstWindow();
       return new VSCode(vscodeApp, window);
