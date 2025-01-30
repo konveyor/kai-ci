@@ -74,10 +74,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: vscode-screenshots
-        path: |
-          vscode-initialized-screenshot.png
-          kai-installed-screenshot.png
-          start-analyzer-screenshot.png
+        path: screenshots
       if: always()  # This ensures the upload runs regardless of previous step results
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

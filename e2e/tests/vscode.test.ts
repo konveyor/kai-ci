@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { VSCode } from '../pages/vscode.pages';
 import { cleanupRepo } from '../utilities/utils';
+import { LeftBarItems } from '../enums/left-bar-items.enum';
 
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
@@ -15,8 +16,7 @@ test.describe('VSCode Tests', () => {
 
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
-    await window.getByRole('tab', { name: 'Konveyor' }).click();
-    await window.getByRole('tab', { name: 'Konveyor' }).click();
+    await vscodeApp.openLeftBarElement(LeftBarItems.Konveyor);
     const heading = window.getByRole('heading', {
       name: 'Konveyor',
       exact: true,
@@ -29,8 +29,8 @@ test.describe('VSCode Tests', () => {
 
   test('Set Up Konveyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
-    await vscodeApp.openSetUpKonveyor();
     await vscodeApp.selectSourcesAndTargets([], ['quarkus']);
+    await vscodeApp.openSetUpKonveyor();
     await window.getByRole('button', { name: 'Start Server' }).click();
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })

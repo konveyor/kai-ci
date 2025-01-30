@@ -156,30 +156,36 @@ export class VSCode {
     return null;
   }
 
-  public async selectSourcesAndTargets(sources: string[], targets: string[]) {
-    const window = this.getWindow();
-    await window.keyboard.press('Control+Shift+P');
-    await window.keyboard.type('sources and targets');
-    await window.keyboard.press('Enter');
+  private async executeQuickCommand(command: string) {
+    await this.window.keyboard.press('Control+Shift+P');
+    const input = this.window.getByPlaceholder("Type the name of a command to run.");
+    await input.fill(`>${command}`);
+    await input.press("Enter");
+    await this.window.waitForTimeout(500);
+  }
 
-    await expect(
-      window.getByPlaceholder('Choose one or more source')
-    ).toBeVisible();
+  public async selectSourcesAndTargets(sources: string[], targets: string[]) {
+    const window = this.window;
+    await this.executeQuickCommand('sources and targets');
+
+    const sourceInput = window.getByPlaceholder('Choose one or more source');
+    await expect(sourceInput).toBeVisible();
     for (const source of sources) {
-      await window.keyboard.type(source);
+      await sourceInput.fill(source);
       await window
         .getByRole('checkbox', { name: `${source}` })
         .nth(1)
         .click();
       await window.waitForTimeout(1000);
     }
-    await window.keyboard.press('Enter');
+    await sourceInput.press('Enter');
 
+    const targetInput = window.getByPlaceholder('Choose one or more target');
     await expect(
-      window.getByPlaceholder('Choose one or more target')
+      targetInput
     ).toBeVisible();
     for (const target of targets) {
-      await window.keyboard.type(target);
+      await targetInput.fill(target);
       await window
         .getByRole('checkbox', { name: `${target}` })
         .nth(1)
@@ -187,7 +193,7 @@ export class VSCode {
       await window.waitForTimeout(1000);
     }
 
-    await window.keyboard.press('Enter');
+    await targetInput.press('Enter');
     await window.keyboard.press('Enter');
   }
 
@@ -197,11 +203,7 @@ export class VSCode {
    */
   public async openSetUpKonveyor() {
     const window = this.getWindow();
-    await window.keyboard.press('Control+Shift+P');
-    await window.keyboard.type('welcome: open walkthrough');
-    await window.keyboard.press('Enter');
-    await window.waitForTimeout(500);
-
+    await this.executeQuickCommand('welcome: open walkthrough');
     await window.keyboard.type('set up konveyor');
     await window.keyboard.press('Enter');
   }
