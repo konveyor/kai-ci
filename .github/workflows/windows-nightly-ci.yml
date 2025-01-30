@@ -60,7 +60,9 @@ jobs:
         echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-        echo "powershell -Command \"Stop-Process -Name code\"" >> execute-tests.bat
+        echo "echo Checking if VSCode is installed..." >> execute-tests.bat
+        echo "where code" >> execute-tests.bat
+        echo "code --version" >> execute-tests.bat
         echo "copy .env.example .env" >> execute-tests.bat
         echo "npx playwright test --reporter=list" >> execute-tests.bat
       shell: bash
