@@ -161,6 +161,7 @@ export class VSCode {
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
+    await expect(input).toBeVisible({ timeout: 5000 });
     await input.fill(`>${command}`);
     await input.press('Enter');
     await this.window.waitForTimeout(500);
