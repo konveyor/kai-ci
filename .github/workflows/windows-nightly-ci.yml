@@ -53,6 +53,7 @@ jobs:
 
     - name: kill all vscode instances
       run:  taskkill /IM Code.exe /F
+      shell: powershell
 
     - name: Create batch file locally to execute tests
       run: |
