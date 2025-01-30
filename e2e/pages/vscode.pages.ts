@@ -1,4 +1,9 @@
-import { _electron as electron, ElectronApplication, FrameLocator, Page } from 'playwright';
+import {
+  _electron as electron,
+  ElectronApplication,
+  FrameLocator,
+  Page,
+} from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import {
