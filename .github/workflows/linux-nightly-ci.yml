@@ -67,7 +67,8 @@ jobs:
     - name: Copy .env.example to .env
       run: cp .env.example .env  
     - name: Run Playwright tests
-      run: npx playwright test --reporter=list|| true  # Ensures the workflow continues even if tests fail
+      run: npx playwright test --reporter=list
+      continue-on-error: true
     - name: Upload screenshots
       uses: actions/upload-artifact@v4
       with:
