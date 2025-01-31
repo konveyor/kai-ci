@@ -43,6 +43,7 @@ test.describe('VSCode Tests', () => {
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
+    await window.waitForTimeout(5000);
   });
 
   test('Analyze coolstore app', async () => {
