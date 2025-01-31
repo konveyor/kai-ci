@@ -44,6 +44,9 @@ test.describe('VSCode Tests', () => {
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
     await window.waitForTimeout(5000);
+    await vscodeApp
+      .getWindow()
+      .screenshot({ path: './screenshots/server-started.png' });
   });
 
   test('Analyze coolstore app', async () => {
