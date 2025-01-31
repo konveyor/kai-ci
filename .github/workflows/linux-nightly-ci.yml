@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: "5 3 * * *"
   workflow_dispatch:
+  push:
 
 jobs:
   main-nightly:
@@ -28,7 +29,6 @@ jobs:
           sudo apt install code
     - name: Set up virtual X11
       run: |
-        sudo apt-get update
         sudo apt-get install -y \
           xvfb \
           x11-xserver-utils \
