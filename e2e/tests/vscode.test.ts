@@ -34,7 +34,6 @@ test.describe('VSCode Tests', () => {
   });
 
   test('Set Up Konveyor and Start analyzer', async () => {
-    test.setTimeout(160000);
     const window = vscodeApp.getWindow();
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
@@ -56,8 +55,20 @@ test.describe('VSCode Tests', () => {
     await vscodeApp
       .getWindow()
       .screenshot({ path: './screenshots/server-started.png' });
+  });
 
+  test('Analyze coolstore app', async () => {
     test.setTimeout(1600000);
+    const window = vscodeApp.getWindow();
+
+    await vscodeApp.openSetUpKonveyor();
+    await window.waitForTimeout(5000);
+    await window.getByRole('button', { name: 'Start Server' }).click();
+    await window.waitForTimeout(5000);
+    await window
+      .getByRole('button', { name: 'Start Analyzer', exact: true })
+      .click();
+    await window.waitForTimeout(5000);
     await vscodeApp.runAnalysis();
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
