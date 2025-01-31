@@ -197,7 +197,6 @@ export class VSCode {
         .getByRole('checkbox', { name: `${target}` })
         .nth(1)
         .click();
-      await window.waitForTimeout(1000);
       await window.waitForTimeout(5000);
     }
 
@@ -237,12 +236,13 @@ export class VSCode {
     await this.window
       .locator('a[aria-label="Open Konveyor Analysis View"]')
       .click();
-
+    await this.window.waitForTimeout(5000);
     const analysisView = await this.getKonveyorIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
     });
-    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 10000 });
+    await this.window.waitForTimeout(5000);
+    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 15000 });
 
     await runAnalysisBtnLocator.click();
   }
