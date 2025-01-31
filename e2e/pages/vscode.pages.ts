@@ -172,7 +172,7 @@ export class VSCode {
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
-
+    await window.waitForTimeout(5000);
     const sourceInput = window.getByPlaceholder('Choose one or more source');
     await expect(sourceInput).toBeVisible();
     for (const source of sources) {
@@ -184,22 +184,25 @@ export class VSCode {
         .click();
       await window.waitForTimeout(1000);
     }
+    await window.waitForTimeout(5000);
     await sourceInput.press('Enter');
-
+    await window.waitForTimeout(5000);
     const targetInput = window.getByPlaceholder('Choose one or more target');
+    await window.waitForTimeout(5000);
     await expect(targetInput).toBeVisible();
     for (const target of targets) {
       await targetInput.fill(target);
-
+      await window.waitForTimeout(5000);
       await window
         .getByRole('checkbox', { name: `${target}` })
         .nth(1)
         .click();
       await window.waitForTimeout(1000);
+      await window.waitForTimeout(5000);
     }
 
     await targetInput.press('Enter');
-
+    await window.waitForTimeout(5000);
     await window.keyboard.press('Enter');
   }
 

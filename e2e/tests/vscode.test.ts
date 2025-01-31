@@ -16,6 +16,7 @@ test.describe('VSCode Tests', () => {
 
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
+    await window.waitForTimeout(5000);
     await vscodeApp.openLeftBarElement(LeftBarItems.Konveyor);
     const heading = window.getByRole('heading', {
       name: 'Konveyor',
@@ -28,13 +29,17 @@ test.describe('VSCode Tests', () => {
   });
 
   test('Set Sources and targets', async () => {
+    await vscodeApp.getWindow().waitForTimeout(5000);
     await vscodeApp.selectSourcesAndTargets([], ['quarkus']);
   });
 
   test('Set Up Konveyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
+    await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
+    await window.waitForTimeout(5000);
     await window.getByRole('button', { name: 'Start Server' }).click();
+    await window.waitForTimeout(5000);
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
