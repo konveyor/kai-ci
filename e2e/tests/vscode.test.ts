@@ -38,6 +38,14 @@ test.describe('VSCode Tests', () => {
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
     await window.waitForTimeout(5000);
+    await window.getByRole('button', { name: 'Configure Generative AI' }).click();
+    await window.waitForTimeout(5000);
+    await window
+      .getByRole('button', { name: 'Configure GenAI model settings file' })
+      .click();
+    await window.waitForTimeout(5000);
+    await vscodeApp.openSetUpKonveyor();
+    await window.waitForTimeout(5000);
     await window.getByRole('button', { name: 'Start Server' }).click();
     await window.waitForTimeout(5000);
     await window
