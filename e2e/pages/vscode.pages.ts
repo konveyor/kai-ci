@@ -243,7 +243,7 @@ export class VSCode {
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
     });
-    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 120000 });
+    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 15000 });
 
     await runAnalysisBtnLocator.click();
   }
