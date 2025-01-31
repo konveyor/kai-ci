@@ -79,10 +79,10 @@ jobs:
         name: vscode-screenshots
         path: screenshots
       if: ${{ !cancelled() }}
-    - name: Upload reports
+    - name: Upload kai logs
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: report
-        path: .
+        name: kai-logs
+        path: ./coolstore/.vscode/konveyor-logs
     

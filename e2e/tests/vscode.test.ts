@@ -70,6 +70,6 @@ test.describe('VSCode Tests', () => {
 
   test.afterAll(async () => {
     await vscodeApp.closeVSCode();
-    await cleanupRepo();
+    //await cleanupRepo();
   });
 });
