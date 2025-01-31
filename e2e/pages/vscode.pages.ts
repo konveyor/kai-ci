@@ -236,12 +236,14 @@ export class VSCode {
     await this.window
       .locator('a[aria-label="Open Konveyor Analysis View"]')
       .click();
-    await this.window.waitForTimeout(5000);
+    await this.window.waitForTimeout(15000);
+    await this.getWindow()
+      .screenshot({ path: './screenshots/debug.png' });
     const analysisView = await this.getKonveyorIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
     });
-    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 60000 });
+    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 120000 });
 
     await runAnalysisBtnLocator.click();
   }

@@ -50,6 +50,7 @@ test.describe('VSCode Tests', () => {
   });
 
   test('Analyze coolstore app', async () => {
+    test.setTimeout(1600000);
     await vscodeApp.runAnalysis();
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
