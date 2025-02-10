@@ -70,7 +70,7 @@ class VSCode {
   private static async installExtensionFromVSIX(
     vsixFilePath: string
   ): Promise<void> {
-    const extensionId = 'konveyor.editor-extensions-vscode';
+    const extensionId = 'konveyor.konveyor-ai';
 
     try {
       const installedExtensions = execSync('code --list-extensions', {
