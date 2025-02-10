@@ -43,6 +43,8 @@ test.describe('VSCode Tests', () => {
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
+    const konveyorView = await window.getByText('Konveyor Analysis View');
+    await expect(konveyorView).toBeVisible();
     await window.screenshot({ path: 'start-analyzer-screenshot.png' });
   });
 
