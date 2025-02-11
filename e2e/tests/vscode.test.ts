@@ -39,7 +39,7 @@ test.describe('VSCode Tests', () => {
     await vscodeApp.openSetUpKonveyor();
     await window.waitForTimeout(10000);
     await window.getByRole('button', { name: 'Start Server' }).click();
-    await window.waitForTimeout(7000);
+    await window.waitForTimeout(10000);
     await window
       .getByRole('button', { name: 'Start Analyzer', exact: true })
       .click();
