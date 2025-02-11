@@ -43,6 +43,18 @@ test.describe('VSCode Tests', () => {
     await window.locator('span:has-text("Start Analyzer")').click();
     const konveyorView = await window.getByText('Konveyor Analysis View');
     await expect(konveyorView).toBeVisible();
+    const serverStatusframe = await vscodeApp.getServerStatusIframe();
+    if (serverStatusframe) {
+      const serverRunning = serverStatusframe.locator(
+        'span.pf-v6-c-label__text',
+        { hasText: 'Running' }
+      );
+      console.log('Waiting for Server to start...');
+
+      await serverRunning.waitFor();
+      console.log('Server is Running');
+    }
+
     await window.screenshot({ path: 'start-analyzer-screenshot.png' });
   });
 
