@@ -159,15 +159,23 @@ class VSCode {
   public async openSetUpKonveyor() {
     const window = this.getWindow();
     await window.keyboard.press('Control+Shift+P');
-    await window.waitForTimeout(1000);
+    const commandPaletteInput = await window.locator(
+      'input[placeholder="Type the name of a command to run."]'
+    );
+    await commandPaletteInput.waitFor();
 
     await window.keyboard.type('welcome: open walkthrough');
-    await window.waitForTimeout(500);
-
+    await window
+      .locator(
+        'span.monaco-highlighted-label:has-text("Welcome: Open Walkthrough...")'
+      )
+      .waitFor();
     await window.keyboard.press('Enter');
-    await window.waitForTimeout(500);
 
     await window.keyboard.type('set up konveyor');
+    await window
+      .locator('span.monaco-highlighted-label:has-text("set up konveyor")')
+      .waitFor();
     await window.keyboard.press('Enter');
   }
 }
