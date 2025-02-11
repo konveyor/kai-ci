@@ -37,12 +37,10 @@ test.describe('VSCode Tests', () => {
     const window = vscodeApp.getWindow();
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
-    await window.waitForTimeout(10000);
-    await window.getByRole('button', { name: 'Start Server' }).click();
-    await window.waitForTimeout(7000);
-    await window
-      .getByRole('button', { name: 'Start Analyzer', exact: true })
-      .click();
+    await window.waitForSelector('h3.step-title:has-text("Start Server")');
+    await window.locator('h3.step-title:has-text("Start Server")').click();
+    await window.waitForSelector('span:text("Start Analyzer")');
+    await window.locator('span:has-text("Start Analyzer")').click();
     const konveyorView = await window.getByText('Konveyor Analysis View');
     await expect(konveyorView).toBeVisible();
     await window.screenshot({ path: 'start-analyzer-screenshot.png' });
