@@ -50,6 +50,7 @@ test.describe('VSCode Tests', () => {
         { hasText: 'Running' }
       );
       console.log('Waiting for Server to start...');
+      
       await serverRunning.waitFor();
       console.log('Server is Running');
     }
