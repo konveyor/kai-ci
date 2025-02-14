@@ -38,11 +38,30 @@ test.describe('VSCode Tests', () => {
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
     await window.waitForTimeout(5000);
-    await window.getByRole('button', { name: 'Configure Generative AI' }).click();
+    await window
+      .getByRole('button', { name: 'Configure Generative AI' })
+      .click();
     await window.waitForTimeout(5000);
     await window
       .getByRole('button', { name: 'Configure GenAI model settings file' })
       .click();
+    await window.waitForTimeout(5000);
+
+    await window.keyboard.press('Control+a+Delete');
+    await vscodeApp.pasteContent(
+      [
+        'models:',
+        '  OpenAI: &active',
+        '    environment:',
+        `      OPENAI_API_KEY: "${process.env.OPENAI_API_KEY}"`,
+        '    provider: "ChatOpenAI"',
+        '    args:',
+        '      model: "gpt-4o"',
+        'active: *active',
+      ].join('\n')
+    );
+    await window.keyboard.press('Control+s');
+
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
     await window.waitForTimeout(5000);
@@ -59,16 +78,6 @@ test.describe('VSCode Tests', () => {
 
   test('Analyze coolstore app', async () => {
     test.setTimeout(1600000);
-    const window = vscodeApp.getWindow();
-
-    await vscodeApp.openSetUpKonveyor();
-    await window.waitForTimeout(5000);
-    await window.getByRole('button', { name: 'Start Server' }).click();
-    await window.waitForTimeout(5000);
-    await window
-      .getByRole('button', { name: 'Start Analyzer', exact: true })
-      .click();
-    await window.waitForTimeout(5000);
     await vscodeApp.runAnalysis();
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
