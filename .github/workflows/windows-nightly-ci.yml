@@ -73,6 +73,28 @@ jobs:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
+    - name: Fetch artifacts
+      run: |
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:"C:\\Users\\nonadmin\\AppData\\Roaming\\Code\\logs" ./vscode-logs
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:"C:\\Users\\nonadmin\\kai-ci\\screenshots" ./screenshots
+      env:
+        EC2_USER: nonadmin
+        EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+
+    - name: Upload Test screenshots
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: screenshots
+        path: ./screenshots
+
+    - name: Upload VSCode logs
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: vscode-logs
+        path: ./vscode-logs
+
   stop-ec2-instance:
     needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin]
     if: always()
