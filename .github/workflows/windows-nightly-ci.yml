@@ -49,6 +49,7 @@ jobs:
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
         echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
+        echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
         echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
