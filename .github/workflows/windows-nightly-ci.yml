@@ -75,9 +75,9 @@ jobs:
 
     - name: Fetch artifacts
       run: |
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:"C:\\Users\\nonadmin\\AppData\\Roaming\\Code\\logs" ./vscode-logs
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:"C:\\Users\\nonadmin\\kai-ci\\screenshots" ./screenshots
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:"C:\\Users\\nonadmin\\kai-ci\\coolstore\\.vscode\\konveyor-logs" ./kai-logs
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/screenshots ./screenshots
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode/konveyor-logs ./kai-logs
       env:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
