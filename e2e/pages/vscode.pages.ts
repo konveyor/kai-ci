@@ -1,19 +1,22 @@
 import {
   _electron as electron,
   ElectronApplication,
-  Page,
   FrameLocator,
+  Page,
 } from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import {
+  cleanupRepo,
   getKAIPluginName,
   getOSInfo,
   getVscodeExecutablePath,
 } from '../utilities/utils';
 import * as path from 'path';
+import { LeftBarItems } from '../enums/left-bar-items.enum';
+import { expect } from '@playwright/test';
 
-class VSCode {
+export class VSCode {
   private readonly vscodeApp?: ElectronApplication;
   private readonly window?: Page;
 
@@ -29,7 +32,8 @@ class VSCode {
    */
   public static async init(repoUrl: string, cloneDir: string): Promise<VSCode> {
     try {
-      console.log('Cloning repo');
+      await cleanupRepo();
+      console.log(`Cloning coolstore repo from ${repoUrl}`);
       execSync(`git clone ${repoUrl}`);
     } catch (error) {
       throw new Error('Failed to clone the repository');
@@ -51,7 +55,7 @@ class VSCode {
         );
       }
 
-      console.log('launching vscode ... ');
+      console.log('Launching vscode ... ');
       // Launch VSCode as an Electron app
       const vscodeExecutablePath = getVscodeExecutablePath();
       const vscodeApp = await electron.launch({
@@ -75,23 +79,20 @@ class VSCode {
   private static async installExtensionFromVSIX(
     vsixFilePath: string
   ): Promise<void> {
-    const extensionId = 'konveyor.konveyor-ai';
-
     try {
       const installedExtensions = execSync('code --list-extensions', {
         encoding: 'utf-8',
       });
-      if (installedExtensions.includes(extensionId)) {
+      if (installedExtensions.includes('konveyor.konveyor-ai')) {
         return;
       }
     } catch (error) {
       console.error('Error checking installed extensions:', error);
     }
 
-    await downloadLatestKAIPlugin();
-
     try {
       console.log(`Installing extension from ${vsixFilePath}...`);
+      await downloadLatestKAIPlugin();
       execSync(`code --install-extension "${vsixFilePath}"`, {
         stdio: 'inherit',
       });
@@ -128,28 +129,82 @@ class VSCode {
 
   /**
    * Iterates through all frames and returns the
-   * server status panel frame .
+   * left panel frame for further interactions.
    */
-  public async getServerStatusIframe(): Promise<FrameLocator | null> {
+  public async getLeftIframe(): Promise<FrameLocator | null> {
     if (!this.window) {
       throw new Error('VSCode window is not initialized.');
     }
+
     const iframeLocators = this.window.locator('iframe');
     const iframeCount = await iframeLocators.count();
+
     for (let i = 0; i < iframeCount; i++) {
       const iframeLocator = iframeLocators.nth(i);
-      const outerIframe = await iframeLocator.contentFrame();
+      const outerIframe = iframeLocator.contentFrame();
       if (outerIframe) {
-        const iframe2 = outerIframe.locator(
-          'iframe[title="Konveyor Analysis View"]'
-        );
-        const innerIframe = await iframe2.contentFrame();
-        return innerIframe;
+        const iframe2 = outerIframe.locator('iframe[title="Konveyor"]');
+        const iframe2Count = await iframe2.count();
+        if (iframe2Count > 0) {
+          return iframe2.contentFrame();
+        }
       }
     }
+
     // Return null if the iframe is not found
     console.log('Iframe with title "Konveyor" not found.');
     return null;
+  }
+
+  private async executeQuickCommand(command: string) {
+    await this.window.keyboard.press('Control+Shift+P');
+    const input = this.window.getByPlaceholder(
+      'Type the name of a command to run.'
+    );
+
+    await expect(input).toBeVisible({ timeout: 5000 });
+    await input.fill(`>${command}`);
+
+    await input.press('Enter');
+    await this.window.waitForTimeout(500);
+  }
+
+  public async selectSourcesAndTargets(sources: string[], targets: string[]) {
+    const window = this.window;
+    await this.executeQuickCommand('sources and targets');
+    await window.waitForTimeout(5000);
+    const targetInput = window.getByPlaceholder('Choose one or more target');
+    await window.waitForTimeout(5000);
+    await expect(targetInput).toBeVisible();
+    for (const target of targets) {
+      await targetInput.fill(target);
+      await window.waitForTimeout(5000);
+      await window
+        .getByRole('checkbox', { name: `${target}` })
+        .nth(1)
+        .click();
+      await window.waitForTimeout(5000);
+    }
+
+    await window.waitForTimeout(5000);
+    await targetInput.press('Enter');
+    await window.waitForTimeout(5000);
+
+    const sourceInput = window.getByPlaceholder('Choose one or more source');
+    await expect(sourceInput).toBeVisible();
+    for (const source of sources) {
+      await sourceInput.fill(source);
+
+      await window
+        .getByRole('checkbox', { name: `${source}` })
+        .nth(1)
+        .click();
+      await window.waitForTimeout(1000);
+    }
+
+    await sourceInput.press('Enter');
+    await window.waitForTimeout(5000);
+    await window.keyboard.press('Enter');
   }
 
   /**
@@ -158,26 +213,60 @@ class VSCode {
    */
   public async openSetUpKonveyor() {
     const window = this.getWindow();
-    await window.keyboard.press('Control+Shift+P');
-    const commandPaletteInput = await window.locator(
-      'input[placeholder="Type the name of a command to run."]'
-    );
-    await commandPaletteInput.waitFor();
-
-    await window.keyboard.type('welcome: open walkthrough');
-    await window
-      .locator(
-        'span.monaco-highlighted-label:has-text("Welcome: Open Walkthrough...")'
-      )
-      .waitFor();
-    await window.keyboard.press('Enter');
+    await this.executeQuickCommand('welcome: open walkthrough');
 
     await window.keyboard.type('set up konveyor');
-    await window
-      .locator('span.monaco-highlighted-label:has-text("set up konveyor")')
-      .waitFor();
+    await window.waitForTimeout(5000);
     await window.keyboard.press('Enter');
   }
-}
 
-export { VSCode };
+  public async openLeftBarElement(name: LeftBarItems) {
+    const window = this.getWindow();
+
+    const navLi = window.locator(`a[aria-label="${name}"]`).locator('..');
+
+    if ((await navLi.getAttribute('aria-expanded')) === 'false') {
+      await navLi.click();
+    }
+  }
+
+  public async runAnalysis() {
+    await this.openLeftBarElement(LeftBarItems.Konveyor);
+
+    await this.window.getByText('Konveyor Issues').dblclick();
+
+    await this.window
+      .locator('a[aria-label="Open Konveyor Analysis View"]')
+      .click();
+    await this.window.waitForTimeout(15000);
+    await this.getWindow().screenshot({ path: './screenshots/debug.png' });
+    const analysisView = await this.getKonveyorIframe();
+    const runAnalysisBtnLocator = analysisView.getByRole('button', {
+      name: 'Run Analysis',
+    });
+    await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 600000 });
+
+    await runAnalysisBtnLocator.click();
+  }
+
+  /**
+   * Returns the iframe that contains the main Konveyor view
+   * @return Promise<FrameLocator>
+   */
+  private async getKonveyorIframe(): Promise<FrameLocator> {
+    return this.window
+      .locator('iframe')
+      .first()
+      .contentFrame()
+      .getByTitle('Konveyor Analysis View')
+      .contentFrame();
+  }
+
+  // TODO create parent class and move generic functions there
+  public async pasteContent(content: string) {
+    await this.vscodeApp.evaluate(({ clipboard }, content) => {
+      clipboard.writeText(content);
+    }, content);
+    await this.window.keyboard.press('Control+v');
+  }
+}

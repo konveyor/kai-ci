@@ -11,8 +11,9 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   reporter: 'html',
+  timeout: 120000,
 
   use: {
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
   },
 });

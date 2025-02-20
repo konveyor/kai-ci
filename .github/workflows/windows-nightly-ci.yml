@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/provision-runner.yml
     with:
       ec2-image-id: ami-0cf05b9bbda99aed3
-      ec2-instance-type: t2.micro
+      ec2-instance-type: t2.small
       security-group-id: sg-0a3e6b53e86d0e69d
       subnet-id: subnet-06113672589e7e836
       ec2-os-type: windows
@@ -49,11 +49,18 @@ jobs:
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
         echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
+    
+        echo "set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2" >> execute-tests.bat
+        echo "set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9" >> execute-tests.bat
+        echo "set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin" >> execute-tests.bat
+        
+        echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
         echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-        echo "git clone https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+        echo "git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
+        echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat
         echo "npx playwright test --reporter=list" >> execute-tests.bat
       shell: bash
 
@@ -66,14 +73,44 @@ jobs:
 
     - name: Execute batch file on EC2 Windows instance
       run: |
-        sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
+        sshpass -p ${EC2_PASSWORD} ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
       env:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
+    - name: Fetch artifacts
+      run: |
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/screenshots ./screenshots
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode ./kai-logs
+      env:
+        EC2_USER: nonadmin
+        EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+
+    - name: Upload Test screenshots
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: screenshots
+        path: ./screenshots
+
+    - name: Upload VSCode logs
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: vscode-logs
+        path: ./vscode-logs
+
+    - name: Upload KAI logs
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: kai-logs
+        path: ./kai-logs
+
   stop-ec2-instance:
     needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin]
-    if: always()
+    if: ${{ !cancelled() }}
     uses: ./.github/workflows/remove-runner.yml
     with:
       ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
