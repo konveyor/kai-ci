@@ -129,30 +129,26 @@ export class VSCode {
 
   /**
    * Iterates through all frames and returns the
-   * left panel frame for further interactions.
+   * server status panel frame .
    */
-  public async getLeftIframe(): Promise<FrameLocator | null> {
+  public async getServerStatusIframe(): Promise<FrameLocator | null> {
     if (!this.window) {
       throw new Error('VSCode window is not initialized.');
     }
-
     const iframeLocators = this.window.locator('iframe');
     const iframeCount = await iframeLocators.count();
-
     for (let i = 0; i < iframeCount; i++) {
       const iframeLocator = iframeLocators.nth(i);
       const outerIframe = iframeLocator.contentFrame();
       if (outerIframe) {
-        const iframe2 = outerIframe.locator('iframe[title="Konveyor"]');
-        const iframe2Count = await iframe2.count();
-        if (iframe2Count > 0) {
-          return iframe2.contentFrame();
-        }
+        const iframe2 = outerIframe.locator(
+          'iframe[title="Konveyor Analysis View"]'
+        );
+        return iframe2.contentFrame();
       }
     }
-
     // Return null if the iframe is not found
-    console.log('Iframe with title "Konveyor" not found.');
+    console.info('Iframe with title "Konveyor" not found.');
     return null;
   }
 
