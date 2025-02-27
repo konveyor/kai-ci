@@ -163,7 +163,7 @@ export class VSCode {
     await this.window.waitForTimeout(1000);
 
     await input.press('Enter');
-    await this.window.waitForTimeout(500);
+    await this.window.waitForTimeout(1000);
   }
 
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {

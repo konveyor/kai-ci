@@ -12,7 +12,7 @@ export default defineConfig({
   workers: 1,
   reporter: [
     ['html', { open: 'never' }],
-  ]
+  ],
   timeout: 120000,
 
   use: {
