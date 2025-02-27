@@ -61,8 +61,8 @@ jobs:
         echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
         echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat
-        echo "npx playwright test --reporter=list" >> execute-tests.bat
-        echo "exit" >> execute-tests.bat
+        echo "npx playwright test" >> execute-tests.bat
+        echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
       shell: bash
 
     - name: Copy batch file to Windows EC2 instance
@@ -74,7 +74,7 @@ jobs:
 
     - name: Execute batch file on EC2 Windows instance
       run: |
-        sshpass -p ${EC2_PASSWORD} ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'powershell -Command "Start-Process -FilePath C:\\Users\\nonadmin\\execute-tests.bat -NoNewWindow -Wait"'
+        sshpass -p ${EC2_PASSWORD} ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'cmd /c C:\\Users\\nonadmin\\execute-tests.bat'
       env:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
