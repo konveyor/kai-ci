@@ -160,6 +160,7 @@ export class VSCode {
 
     await expect(input).toBeVisible({ timeout: 5000 });
     await input.fill(`>${command}`);
+    await this.window.waitForTimeout(1000);
 
     await input.press('Enter');
     await this.window.waitForTimeout(500);
