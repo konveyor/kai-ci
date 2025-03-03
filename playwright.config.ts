@@ -11,9 +11,7 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   timeout: 120000,
-  reporter: [
-    ['html', { open: 'never' }],
-  ],
+  reporter: [['html', { open: 'never' }]],
   use: {
     trace: 'retain-on-failure',
   },
