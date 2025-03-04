@@ -75,7 +75,7 @@ test.describe('VSCode Tests', () => {
       .screenshot({ path: './screenshots/server-started.png' });
   });
 
-  test.skip('Analyze coolstore app', async () => {
+  test('Analyze coolstore app', async () => {
     test.setTimeout(3600000);
     await vscodeApp.runAnalysis();
     await expect(
