@@ -22,6 +22,7 @@ test.describe('VSCode Tests', () => {
       exact: true,
     });
     await expect(heading).toBeVisible();
+    await vscodeApp.getWindow().waitForTimeout(10000);
     await window.screenshot({
       path: './screenshots/kai-installed-screenshot.png',
     });
