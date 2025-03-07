@@ -16,7 +16,7 @@ test.describe('VSCode Tests', () => {
   test.beforeEach(async () => {
     // This is for debugging purposes until the Windows tests are stable
     await vscodeApp.getWindow().screenshot({
-      path: `${VSCode.SCREENSHOTS_FOLDER}/before-${test.info().title.replace(' ', '-')}`,
+      path: `${VSCode.SCREENSHOTS_FOLDER}/before-${test.info().title.replace(' ', '-')}.png`,
     });
   });
 
@@ -99,7 +99,7 @@ test.describe('VSCode Tests', () => {
   test.afterEach(async () => {
     // This is for debugging purposes until the Windows tests are stable
     await vscodeApp.getWindow().screenshot({
-      path: `${VSCode.SCREENSHOTS_FOLDER}/after-${test.info().title.replace(' ', '-')}`,
+      path: `${VSCode.SCREENSHOTS_FOLDER}/after-${test.info().title.replace(' ', '-')}.png`,
     });
   });
 
