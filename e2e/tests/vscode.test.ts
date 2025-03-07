@@ -89,11 +89,9 @@ test.describe('VSCode Tests', () => {
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
     ).toBeVisible({ timeout: 1800000 });
-    await vscodeApp
-      .getWindow()
-      .screenshot({
-        path: `${VSCode.SCREENSHOTS_FOLDER}/analysis-finished.png`,
-      });
+    await vscodeApp.getWindow().screenshot({
+      path: `${VSCode.SCREENSHOTS_FOLDER}/analysis-finished.png`,
+    });
   });
 
   test.afterEach(async () => {
