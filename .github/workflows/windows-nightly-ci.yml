@@ -1,4 +1,4 @@
-name: (Windows)(nonadmin) Run Playwright tests nightly on main branch
+name: (Windows)(nonadmin) Run Playwright tests
 
 on:
   schedule:
@@ -90,12 +90,12 @@ jobs:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
-    - name: Upload Test screenshots
+    - name: Upload test artifacts
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: screenshots
-        path: ./screenshots
+        name: tests-output
+        path: ./tests-output
 
     - name: Upload VSCode logs
       uses: actions/upload-artifact@v4

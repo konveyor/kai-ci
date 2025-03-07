@@ -13,6 +13,13 @@ test.describe('VSCode Tests', () => {
     vscodeApp = await VSCode.init(repoUrl, 'coolstore');
   });
 
+  test.beforeEach(async () => {
+    // This is for debugging purposes until the Windows tests are stable
+    await vscodeApp.getWindow().screenshot({
+      path: `${VSCode.SCREENSHOTS_FOLDER}/before-${test.info().title.replace(' ', '-')}`,
+    });
+  });
+
   test('Should open Extensions tab and verify installed extension', async () => {
     const window = vscodeApp.getWindow();
     await window.waitForTimeout(5000);
@@ -24,7 +31,7 @@ test.describe('VSCode Tests', () => {
     await expect(heading).toBeVisible();
     await vscodeApp.getWindow().waitForTimeout(10000);
     await window.screenshot({
-      path: './screenshots/kai-installed-screenshot.png',
+      path: `${VSCode.SCREENSHOTS_FOLDER}/kai-installed-screenshot.png`,
     });
   });
 
@@ -73,7 +80,7 @@ test.describe('VSCode Tests', () => {
     await window.waitForTimeout(5000);
     await vscodeApp
       .getWindow()
-      .screenshot({ path: './screenshots/server-started.png' });
+      .screenshot({ path: `${VSCode.SCREENSHOTS_FOLDER}/server-started.png` });
   });
 
   test('Analyze coolstore app', async () => {
@@ -84,7 +91,16 @@ test.describe('VSCode Tests', () => {
     ).toBeVisible({ timeout: 1800000 });
     await vscodeApp
       .getWindow()
-      .screenshot({ path: './screenshots/analysis-finished.png' });
+      .screenshot({
+        path: `${VSCode.SCREENSHOTS_FOLDER}/analysis-finished.png`,
+      });
+  });
+
+  test.afterEach(async () => {
+    // This is for debugging purposes until the Windows tests are stable
+    await vscodeApp.getWindow().screenshot({
+      path: `${VSCode.SCREENSHOTS_FOLDER}/after-${test.info().title.replace(' ', '-')}`,
+    });
   });
 
   test.afterAll(async () => {
