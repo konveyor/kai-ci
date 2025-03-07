@@ -17,6 +17,9 @@ import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 
 export class VSCode {
+  // TODO (@abrugaro) find a better place for constants
+  public static SCREENSHOTS_FOLDER = 'tests-output/screenshots';
+
   private readonly vscodeApp?: ElectronApplication;
   private readonly window?: Page;
 
@@ -55,7 +58,6 @@ export class VSCode {
         );
       }
 
-      console.log('Launching vscode ... ');
       // Launch VSCode as an Electron app
       const vscodeExecutablePath = getVscodeExecutablePath();
       const vscodeApp = await electron.launch({
@@ -157,7 +159,6 @@ export class VSCode {
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
-    await this.window.waitForTimeout(1000);
 
     await expect(input).toBeVisible({ timeout: 5000 });
     await input.fill(`>${command}`);
@@ -170,6 +171,9 @@ export class VSCode {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
     await window.waitForTimeout(5000);
+    await window.screenshot({
+      path: `${VSCode.SCREENSHOTS_FOLDER}/debug-target.png`,
+    });
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await window.waitForTimeout(5000);
     await expect(targetInput).toBeVisible();
@@ -236,7 +240,6 @@ export class VSCode {
       .locator('a[aria-label="Open Konveyor Analysis View"]')
       .click();
     await this.window.waitForTimeout(15000);
-    await this.getWindow().screenshot({ path: './screenshots/debug.png' });
     const analysisView = await this.getKonveyorIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
