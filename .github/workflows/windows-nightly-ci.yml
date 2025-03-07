@@ -84,7 +84,7 @@ jobs:
       if: ${{ !cancelled() }}
       run: |
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/screenshots ./screenshots
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/tests-output ./tests-output
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode ./kai-logs
       env:
         EC2_USER: nonadmin
