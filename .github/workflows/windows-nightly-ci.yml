@@ -1,4 +1,4 @@
-name: (Windows)(nonadmin) Run Playwright tests nightly on main branch
+name: (Windows)(nonadmin) Run Playwright tests
 
 on:
   schedule:
@@ -84,18 +84,18 @@ jobs:
       if: ${{ !cancelled() }}
       run: |
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/screenshots ./screenshots
+        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/tests-output ./tests-output
         sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode ./kai-logs
       env:
         EC2_USER: nonadmin
         EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
-    - name: Upload Test screenshots
+    - name: Upload test artifacts
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: screenshots
-        path: ./screenshots
+        name: tests-output
+        path: ./tests-output
 
     - name: Upload VSCode logs
       uses: actions/upload-artifact@v4

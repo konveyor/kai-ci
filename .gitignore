@@ -86,3 +86,4 @@ playwright-report/
 test-results/
 screenshots/
 coolstore/
+tests-output
