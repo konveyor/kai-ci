@@ -170,26 +170,26 @@ export class VSCode {
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
-    await window.waitForTimeout(5000);
+    await window.waitForTimeout(500); // this was 5000
     await window.screenshot({
       path: `${VSCode.SCREENSHOTS_FOLDER}/debug-target.png`,
     });
     const targetInput = window.getByPlaceholder('Choose one or more target');
-    await window.waitForTimeout(5000);
+    await window.waitForTimeout(500); // this was 5000
     await expect(targetInput).toBeVisible();
     for (const target of targets) {
       await targetInput.fill(target);
-      await window.waitForTimeout(5000);
+      await window.waitForTimeout(500); // this was 5000
       await window
         .getByRole('checkbox', { name: `${target}` })
         .nth(1)
         .click();
-      await window.waitForTimeout(5000);
+      await window.waitForTimeout(500); // this was 5000
     }
 
-    await window.waitForTimeout(5000);
+    await window.waitForTimeout(500); // this was 5000
     await targetInput.press('Enter');
-    await window.waitForTimeout(5000);
+    await window.waitForTimeout(500); // this was 5000
 
     const sourceInput = window.getByPlaceholder('Choose one or more source');
     await expect(sourceInput).toBeVisible();
@@ -204,7 +204,7 @@ export class VSCode {
     }
 
     await sourceInput.press('Enter');
-    await window.waitForTimeout(5000);
+    await window.waitForTimeout(500); // this was 5000
     await window.keyboard.press('Enter');
   }
 
@@ -217,21 +217,21 @@ export class VSCode {
     await this.executeQuickCommand('welcome: open walkthrough');
 
     await window.keyboard.type('set up konveyor');
-    await window.waitForTimeout(5000);
+    await window.waitForTimeout(500); // this was 5000
     await window.keyboard.press('Enter');
   }
 
   public async openLeftBarElement(name: LeftBarItems) {
     const window = this.getWindow();
 
-    const navLi = window.locator(`a[aria-label="${name}"]`).locator('..');
+    const navLi = window.locator(`a[aria-label^="${name}"]`).locator('..');
 
     if ((await navLi.getAttribute('aria-expanded')) === 'false') {
       await navLi.click();
     }
   }
 
-  public async runAnalysis() {
+  public async openAnalysisView(): Promise<void> {
     await this.openLeftBarElement(LeftBarItems.Konveyor);
 
     await this.window.getByText('Konveyor Issues').dblclick();
@@ -239,6 +239,16 @@ export class VSCode {
     await this.window
       .locator('a[aria-label="Open Konveyor Analysis View"]')
       .click();
+  }
+
+  public async startServer(): Promise<void> {
+    await this.openAnalysisView();
+    const analysisView = await this.getKonveyorIframe();
+    await analysisView.getByRole('button', { name: 'Start' }).click();
+  }
+
+  public async runAnalysis() {
+    await this.openAnalysisView();
     await this.window.waitForTimeout(15000);
     const analysisView = await this.getKonveyorIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
@@ -253,7 +263,7 @@ export class VSCode {
    * Returns the iframe that contains the main Konveyor view
    * @return Promise<FrameLocator>
    */
-  private async getKonveyorIframe(): Promise<FrameLocator> {
+  public async getKonveyorIframe(): Promise<FrameLocator> {
     return this.window
       .locator('iframe')
       .first()

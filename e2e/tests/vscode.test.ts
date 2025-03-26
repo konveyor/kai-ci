@@ -71,13 +71,11 @@ test.describe('VSCode Tests', () => {
 
     await window.waitForTimeout(5000);
     await vscodeApp.openSetUpKonveyor();
-    await window.waitForSelector('h3.step-title:has-text("Start Server")');
-    await window.locator('h3.step-title:text("Start Server")').click();
-    await window.waitForSelector('span:text("Start Analyzer")');
+    await window.locator('h3.step-title:text("Open Analysis Panel")').click();
     await window
-      .getByRole('button', { name: 'Start Analyzer', exact: true })
+      .getByRole('button', { name: 'Open Analysis Panel', exact: true })
       .click();
-    await window.waitForTimeout(5000);
+    await vscodeApp.startServer();
     await vscodeApp
       .getWindow()
       .screenshot({ path: `${VSCode.SCREENSHOTS_FOLDER}/server-started.png` });
@@ -86,6 +84,22 @@ test.describe('VSCode Tests', () => {
   test('Analyze coolstore app', async () => {
     test.setTimeout(3600000);
     await vscodeApp.runAnalysis();
+    await expect(
+      vscodeApp.getWindow().getByText('Analysis completed').first()
+    ).toBeVisible({ timeout: 1800000 });
+    await vscodeApp.getWindow().screenshot({
+      path: `${VSCode.SCREENSHOTS_FOLDER}/analysis-finished.png`,
+    });
+  });
+
+  test('Fix Issue with low effort', async () => {
+    test.setTimeout(3600000);
+    const window = vscodeApp.getWindow();
+    await vscodeApp.openAnalysisView();
+    const analysisView = await vscodeApp.getKonveyorIframe();
+    const searchInput = analysisView.locator('input[aria-label="Search violations and incidents"]');
+
+
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
     ).toBeVisible({ timeout: 1800000 });
