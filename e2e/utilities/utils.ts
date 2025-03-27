@@ -1,10 +1,8 @@
 import * as os from 'os';
 import * as fs from 'fs';
-import * as util from 'util';
-import { exec, execSync } from 'child_process';
+import { execSync } from 'child_process';
 import * as path from 'path';
 
-const execPromise = util.promisify(exec);
 const repoDir = path.resolve('coolstore');
 
 // Function to get OS information
@@ -51,10 +49,7 @@ export async function uninstallExtension() {
 }
 
 export function getVscodeExecutablePath() {
-  const executablePath =
-    getOSInfo() == 'windows'
-      ? process.env.WINDOWS_VSCODE_EXECUTABLE_PATH
-      : process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
-  console.log(`VSCode executable path: ${executablePath}`);
-  return executablePath;
+  return getOSInfo() == 'windows'
+    ? process.env.WINDOWS_VSCODE_EXECUTABLE_PATH
+    : process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
 }

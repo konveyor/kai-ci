@@ -28,15 +28,27 @@ export class VSCode {
     this.window = window;
   }
 
+  public static async open(workspaceDir: string) {
+    const vscodeExecutablePath = getVscodeExecutablePath();
+    const vscodeApp = await electron.launch({
+      executablePath: vscodeExecutablePath,
+      args: [path.resolve(workspaceDir), '--disable-workspace-trust'],
+    });
+
+    const window = await vscodeApp.firstWindow();
+    console.log('VSCode opened');
+    return new VSCode(vscodeApp, window);
+  }
+
   /**
-   * launches VSCode with KAI plugin installed and coolstore app opened.
-   * @param repoUrl coolstore app to be cloned
+   * launches VSCode with KAI plugin installed and repoUrl app opened.
+   * @param repoUrl app to be cloned
    * @param cloneDir path to repo
    */
   public static async init(repoUrl: string, cloneDir: string): Promise<VSCode> {
     try {
       await cleanupRepo();
-      console.log(`Cloning coolstore repo from ${repoUrl}`);
+      console.log(`Cloning repository from ${repoUrl}`);
       execSync(`git clone ${repoUrl}`);
     } catch (error) {
       throw new Error('Failed to clone the repository');
@@ -58,16 +70,7 @@ export class VSCode {
         );
       }
 
-      // Launch VSCode as an Electron app
-      const vscodeExecutablePath = getVscodeExecutablePath();
-      const vscodeApp = await electron.launch({
-        executablePath: vscodeExecutablePath,
-        args: [path.resolve(cloneDir), '--disable-workspace-trust'],
-      });
-
-      const window = await vscodeApp.firstWindow();
-      console.log('vscode opened');
-      return new VSCode(vscodeApp, window);
+      return VSCode.open(cloneDir);
     } catch (error) {
       console.error('Error launching VSCode:', error);
       throw error;
@@ -244,11 +247,14 @@ export class VSCode {
   public async startServer(): Promise<void> {
     await this.openAnalysisView();
     const analysisView = await this.getAnalysisIframe();
-    await analysisView.getByRole('button', { name: 'Start' }).click();
+    if (
+      !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
+    ) {
+      await analysisView.getByRole('button', { name: 'Start' }).click();
+    }
   }
 
   public async runAnalysis() {
-    await this.openAnalysisView();
     await this.window.waitForTimeout(15000);
     const analysisView = await this.getAnalysisIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
