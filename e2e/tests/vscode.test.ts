@@ -37,7 +37,10 @@ test.describe('VSCode Tests', () => {
 
   test('Set Sources and targets', async () => {
     await vscodeApp.getWindow().waitForTimeout(5000);
-    await vscodeApp.selectSourcesAndTargets([], ['quarkus']);
+    await vscodeApp.selectSourcesAndTargets(
+      [],
+      ['cloud-readiness', 'jakarta-ee', 'jakarta-ee8', 'jakarta-ee9', 'quarkus']
+    );
   });
 
   test('Set Up Konveyor and Start analyzer', async () => {
@@ -96,16 +99,19 @@ test.describe('VSCode Tests', () => {
     test.setTimeout(3600000);
     const window = vscodeApp.getWindow();
     await vscodeApp.openAnalysisView();
-    const analysisView = await vscodeApp.getKonveyorIframe();
-    const searchInput = analysisView.locator('input[aria-label="Search violations and incidents"]');
-
-
-    await expect(
-      vscodeApp.getWindow().getByText('Analysis completed').first()
-    ).toBeVisible({ timeout: 1800000 });
-    await vscodeApp.getWindow().screenshot({
-      path: `${VSCode.SCREENSHOTS_FOLDER}/analysis-finished.png`,
-    });
+    const analysisView = await vscodeApp.getAnalysisIframe();
+    const searchInput = analysisView.locator(
+      'input[aria-label="Search violations and incidents"]'
+    );
+    await searchInput.fill('InventoryEntity');
+    await analysisView
+      .locator('div.pf-v6-c-card__header-toggle')
+      .nth(0)
+      .click();
+    await analysisView.locator('button#get-solution-button').nth(3).click();
+    const resolutionView = await vscodeApp.getResolutionIframe();
+    await resolutionView.locator('button[aria-label="Apply fix"]').click();
+    await window.waitForTimeout(5000);
   });
 
   test.afterEach(async () => {

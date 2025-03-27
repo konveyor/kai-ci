@@ -243,14 +243,14 @@ export class VSCode {
 
   public async startServer(): Promise<void> {
     await this.openAnalysisView();
-    const analysisView = await this.getKonveyorIframe();
+    const analysisView = await this.getAnalysisIframe();
     await analysisView.getByRole('button', { name: 'Start' }).click();
   }
 
   public async runAnalysis() {
     await this.openAnalysisView();
     await this.window.waitForTimeout(15000);
-    const analysisView = await this.getKonveyorIframe();
+    const analysisView = await this.getAnalysisIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
     });
@@ -263,12 +263,25 @@ export class VSCode {
    * Returns the iframe that contains the main Konveyor view
    * @return Promise<FrameLocator>
    */
-  public async getKonveyorIframe(): Promise<FrameLocator> {
+  public async getAnalysisIframe(): Promise<FrameLocator> {
     return this.window
       .locator('iframe')
       .first()
       .contentFrame()
       .getByTitle('Konveyor Analysis View')
+      .contentFrame();
+  }
+
+  /**
+   * Returns the iframe that contains the main Konveyor view
+   * @return Promise<FrameLocator>
+   */
+  public async getResolutionIframe(): Promise<FrameLocator> {
+    return this.window
+      .locator('iframe')
+      .nth(1)
+      .contentFrame()
+      .getByTitle('Resolution Details')
       .contentFrame();
   }
 
