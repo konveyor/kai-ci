@@ -75,11 +75,11 @@ jobs:
       run: npx playwright test --reporter=list
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-    - name: Upload screenshots
+    - name: Upload test artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: vscode-screenshots
-        path: screenshots
+        name: tests-output
+        path: ./tests-output
       if: ${{ !cancelled() }}
     - name: Upload kai logs
       uses: actions/upload-artifact@v4
