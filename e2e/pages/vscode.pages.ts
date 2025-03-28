@@ -248,6 +248,7 @@ export class VSCode {
   public async startServer(): Promise<void> {
     await this.openAnalysisView();
     const analysisView = await this.getAnalysisIframe();
+    await this.waitDefault();
     if (
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
