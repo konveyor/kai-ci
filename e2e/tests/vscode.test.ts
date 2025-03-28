@@ -40,10 +40,7 @@ test.describe('VSCode Tests', () => {
     test.setTimeout(3600000);
     await vscodeApp.openAnalysisView();
     const analysisView = await vscodeApp.getAnalysisIframe();
-    const searchInput = analysisView.locator(
-      'input[aria-label="Search violations and incidents"]'
-    );
-    await searchInput.fill('InventoryEntity');
+    await vscodeApp.searchViolation('InventoryEntity');
     await analysisView
       .locator('div.pf-v6-c-card__header-toggle')
       .nth(0)
