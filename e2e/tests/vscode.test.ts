@@ -23,7 +23,10 @@ test.describe('VSCode Tests', () => {
   test('Analyze coolstore app', async () => {
     test.setTimeout(3600000);
     await vscodeApp.runAnalysis();
-
+    await vscodeApp.waitDefault();
+    await vscodeApp.getWindow().screenshot({
+      path: `${VSCode.SCREENSHOTS_FOLDER}/analysis-running.png`,
+    });
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
     ).toBeVisible({ timeout: 1800000 });

@@ -255,6 +255,7 @@ export class VSCode {
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
       await analysisView.getByRole('button', { name: 'Start' }).click();
+      await analysisView.getByRole('button', { name: 'Stop' }).isVisible()
     }
   }
 
