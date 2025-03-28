@@ -47,7 +47,9 @@ test.describe('VSCode Tests', () => {
       .click();
     await analysisView.locator('button#get-solution-button').nth(3).click();
     const resolutionView = await vscodeApp.getResolutionIframe();
-    const fixLocator = resolutionView.locator('button[aria-label="Apply fix"]').first();
+    const fixLocator = resolutionView
+      .locator('button[aria-label="Apply fix"]')
+      .first();
     await expect(fixLocator).toBeVisible({ timeout: 60000 });
     await fixLocator.click({ force: true });
   });

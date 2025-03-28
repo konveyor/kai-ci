@@ -165,7 +165,9 @@ export class VSCode {
 
     await expect(input).toBeVisible({ timeout: 5000 });
     await input.fill(`>${command}`);
-    await expect(this.window.locator('a.label-name span.highlight', { hasText: command })).toBeVisible();
+    await expect(
+      this.window.locator('a.label-name span.highlight', { hasText: command })
+    ).toBeVisible();
 
     await input.press('Enter');
     await this.window.waitForTimeout(1000);

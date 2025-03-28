@@ -87,11 +87,9 @@ setup.describe(
         .getByRole('button', { name: 'Open Analysis Panel', exact: true })
         .click();
       await vscodeApp.startServer();
-      await vscodeApp
-        .getWindow()
-        .screenshot({
-          path: `${VSCode.SCREENSHOTS_FOLDER}/server-started.png`,
-        });
+      await vscodeApp.getWindow().screenshot({
+        path: `${VSCode.SCREENSHOTS_FOLDER}/server-started.png`,
+      });
     });
   }
 );

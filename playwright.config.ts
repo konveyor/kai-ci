@@ -16,8 +16,12 @@ export default defineConfig({
     timeout: 10000,
   },
   use: {
+    viewport: { width: 1920, height: 1080 },
     screenshot: 'only-on-failure', // Not yet supported on Electron
     trace: 'retain-on-failure',
+    launchOptions: {
+      args: ['--window-size=1920,1080', '--start-maximized'],
+    },
   },
   projects: [
     {
