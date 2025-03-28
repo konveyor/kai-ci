@@ -61,7 +61,8 @@ jobs:
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
-        echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat
+        echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat 
+        echo "echo CI=true >> .env" >> execute-tests.bat 
         echo "npx playwright test" >> execute-tests.bat
         echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
       shell: bash

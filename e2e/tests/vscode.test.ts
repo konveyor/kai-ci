@@ -33,9 +33,8 @@ test.describe('VSCode Tests', () => {
     });
   });
 
-  test('Fix Issue with low effort', async () => {
+  test('Fix Issue with default effort', async () => {
     test.setTimeout(3600000);
-    const window = vscodeApp.getWindow();
     await vscodeApp.openAnalysisView();
     const analysisView = await vscodeApp.getAnalysisIframe();
     const searchInput = analysisView.locator(
@@ -48,8 +47,9 @@ test.describe('VSCode Tests', () => {
       .click();
     await analysisView.locator('button#get-solution-button').nth(3).click();
     const resolutionView = await vscodeApp.getResolutionIframe();
-    await resolutionView.locator('button[aria-label="Apply fix"]').click();
-    await window.waitForTimeout(5000);
+    const fixLocator = resolutionView.locator('button[aria-label="Apply fix"]').first();
+    await expect(fixLocator).toBeVisible({ timeout: 60000 });
+    await fixLocator.click();
   });
 
   test.afterEach(async () => {

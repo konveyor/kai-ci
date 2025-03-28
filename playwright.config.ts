@@ -12,6 +12,9 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   timeout: 120000,
   reporter: 'line',
+  expect: {
+    timeout: 10000,
+  },
   use: {
     screenshot: 'only-on-failure', // Not yet supported on Electron
     trace: 'retain-on-failure',

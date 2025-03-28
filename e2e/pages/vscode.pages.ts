@@ -165,6 +165,7 @@ export class VSCode {
 
     await expect(input).toBeVisible({ timeout: 5000 });
     await input.fill(`>${command}`);
+    await expect(this.window.locator('a.label-name span.highlight', { hasText: command })).toBeVisible();
 
     await input.press('Enter');
     await this.window.waitForTimeout(1000);
@@ -173,26 +174,26 @@ export class VSCode {
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
-    await window.waitForTimeout(500); // this was 5000
+    await this.waitDefault();
     await window.screenshot({
       path: `${VSCode.SCREENSHOTS_FOLDER}/debug-target.png`,
     });
     const targetInput = window.getByPlaceholder('Choose one or more target');
-    await window.waitForTimeout(500); // this was 5000
+    await this.waitDefault();
     await expect(targetInput).toBeVisible();
     for (const target of targets) {
       await targetInput.fill(target);
-      await window.waitForTimeout(500); // this was 5000
+      await this.waitDefault();
       await window
         .getByRole('checkbox', { name: `${target}` })
         .nth(1)
         .click();
-      await window.waitForTimeout(500); // this was 5000
+      await this.waitDefault();
     }
 
-    await window.waitForTimeout(500); // this was 5000
+    await this.waitDefault();
     await targetInput.press('Enter');
-    await window.waitForTimeout(500); // this was 5000
+    await this.waitDefault();
 
     const sourceInput = window.getByPlaceholder('Choose one or more source');
     await expect(sourceInput).toBeVisible();
@@ -207,7 +208,7 @@ export class VSCode {
     }
 
     await sourceInput.press('Enter');
-    await window.waitForTimeout(500); // this was 5000
+    await this.waitDefault();
     await window.keyboard.press('Enter');
   }
 
@@ -220,7 +221,7 @@ export class VSCode {
     await this.executeQuickCommand('welcome: open walkthrough');
 
     await window.keyboard.type('set up konveyor');
-    await window.waitForTimeout(500); // this was 5000
+    await this.waitDefault();
     await window.keyboard.press('Enter');
   }
 
@@ -297,5 +298,13 @@ export class VSCode {
       clipboard.writeText(content);
     }, content);
     await this.window.keyboard.press('Control+v');
+  }
+
+  /**
+   * Even with Playwright default waiting for actionability, in Electron,
+   * Playwright tries to perform some actions before the elements are ready to handle those actions
+   */
+  public async waitDefault() {
+    await this.window.waitForTimeout(process.env.CI ? 50000 : 500);
   }
 }
