@@ -305,6 +305,6 @@ export class VSCode {
    * Playwright tries to perform some actions before the elements are ready to handle those actions
    */
   public async waitDefault() {
-    await this.window.waitForTimeout(process.env.CI ? 50000 : 500);
+    await this.window.waitForTimeout(process.env.CI ? 5000 : 500);
   }
 }
