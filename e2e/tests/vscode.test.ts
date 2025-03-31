@@ -36,7 +36,7 @@ test.describe('VSCode Tests', () => {
     });
   });
 
-  test('Fix Issue with default effort', async () => {
+  test('Fix Issue with default (Low) effort', async () => {
     test.setTimeout(3600000);
     await vscodeApp.openAnalysisView();
     const analysisView = await vscodeApp.getAnalysisIframe();
