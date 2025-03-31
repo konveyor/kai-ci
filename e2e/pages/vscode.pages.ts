@@ -28,15 +28,27 @@ export class VSCode {
     this.window = window;
   }
 
+  public static async open(workspaceDir: string) {
+    const vscodeExecutablePath = getVscodeExecutablePath();
+    const vscodeApp = await electron.launch({
+      executablePath: vscodeExecutablePath,
+      args: [path.resolve(workspaceDir), '--disable-workspace-trust'],
+    });
+
+    const window = await vscodeApp.firstWindow();
+    console.log('VSCode opened');
+    return new VSCode(vscodeApp, window);
+  }
+
   /**
-   * launches VSCode with KAI plugin installed and coolstore app opened.
-   * @param repoUrl coolstore app to be cloned
+   * launches VSCode with KAI plugin installed and repoUrl app opened.
+   * @param repoUrl app to be cloned
    * @param cloneDir path to repo
    */
   public static async init(repoUrl: string, cloneDir: string): Promise<VSCode> {
     try {
       await cleanupRepo();
-      console.log(`Cloning coolstore repo from ${repoUrl}`);
+      console.log(`Cloning repository from ${repoUrl}`);
       execSync(`git clone ${repoUrl}`);
     } catch (error) {
       throw new Error('Failed to clone the repository');
@@ -58,16 +70,7 @@ export class VSCode {
         );
       }
 
-      // Launch VSCode as an Electron app
-      const vscodeExecutablePath = getVscodeExecutablePath();
-      const vscodeApp = await electron.launch({
-        executablePath: vscodeExecutablePath,
-        args: [path.resolve(cloneDir), '--disable-workspace-trust'],
-      });
-
-      const window = await vscodeApp.firstWindow();
-      console.log('vscode opened');
-      return new VSCode(vscodeApp, window);
+      return VSCode.open(cloneDir);
     } catch (error) {
       console.error('Error launching VSCode:', error);
       throw error;
@@ -162,6 +165,9 @@ export class VSCode {
 
     await expect(input).toBeVisible({ timeout: 5000 });
     await input.fill(`>${command}`);
+    await expect(
+      this.window.locator('a.label-name span.highlight', { hasText: command })
+    ).toBeVisible();
 
     await input.press('Enter');
     await this.window.waitForTimeout(1000);
@@ -170,26 +176,26 @@ export class VSCode {
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
-    await window.waitForTimeout(5000);
+    await this.waitDefault();
     await window.screenshot({
       path: `${VSCode.SCREENSHOTS_FOLDER}/debug-target.png`,
     });
     const targetInput = window.getByPlaceholder('Choose one or more target');
-    await window.waitForTimeout(5000);
+    await this.waitDefault();
     await expect(targetInput).toBeVisible();
     for (const target of targets) {
       await targetInput.fill(target);
-      await window.waitForTimeout(5000);
+      await this.waitDefault();
       await window
         .getByRole('checkbox', { name: `${target}` })
         .nth(1)
         .click();
-      await window.waitForTimeout(5000);
+      await this.waitDefault();
     }
 
-    await window.waitForTimeout(5000);
+    await this.waitDefault();
     await targetInput.press('Enter');
-    await window.waitForTimeout(5000);
+    await this.waitDefault();
 
     const sourceInput = window.getByPlaceholder('Choose one or more source');
     await expect(sourceInput).toBeVisible();
@@ -204,7 +210,7 @@ export class VSCode {
     }
 
     await sourceInput.press('Enter');
-    await window.waitForTimeout(5000);
+    await this.waitDefault();
     await window.keyboard.press('Enter');
   }
 
@@ -217,21 +223,21 @@ export class VSCode {
     await this.executeQuickCommand('welcome: open walkthrough');
 
     await window.keyboard.type('set up konveyor');
-    await window.waitForTimeout(5000);
+    await this.waitDefault();
     await window.keyboard.press('Enter');
   }
 
   public async openLeftBarElement(name: LeftBarItems) {
     const window = this.getWindow();
 
-    const navLi = window.locator(`a[aria-label="${name}"]`).locator('..');
+    const navLi = window.locator(`a[aria-label^="${name}"]`).locator('..');
 
     if ((await navLi.getAttribute('aria-expanded')) === 'false') {
       await navLi.click();
     }
   }
 
-  public async runAnalysis() {
+  public async openAnalysisView(): Promise<void> {
     await this.openLeftBarElement(LeftBarItems.Konveyor);
 
     await this.window.getByText('Konveyor Issues').dblclick();
@@ -239,8 +245,42 @@ export class VSCode {
     await this.window
       .locator('a[aria-label="Open Konveyor Analysis View"]')
       .click();
+  }
+
+  public async startServer(): Promise<void> {
+    await this.openAnalysisView();
+    const analysisView = await this.getAnalysisIframe();
+    await this.waitDefault();
+    if (
+      !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
+    ) {
+      await analysisView.getByRole('button', { name: 'Start' }).click();
+      await analysisView.getByRole('button', { name: 'Stop' }).isVisible();
+    }
+  }
+
+  public async searchViolation(term: string): Promise<void> {
+    const analysisView = await this.getAnalysisIframe();
+
+    const toggleFilterButton = analysisView.locator(
+      'button[aria-label="Show Filters"]'
+    );
+    const searchInput = analysisView.locator(
+      'input[aria-label="Search violations and incidents"]'
+    );
+    if (await searchInput.isVisible()) {
+      await searchInput.fill(term);
+      return;
+    }
+
+    await toggleFilterButton.click();
+    await searchInput.fill(term);
+    await toggleFilterButton.click();
+  }
+
+  public async runAnalysis() {
     await this.window.waitForTimeout(15000);
-    const analysisView = await this.getKonveyorIframe();
+    const analysisView = await this.getAnalysisIframe();
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
     });
@@ -253,12 +293,25 @@ export class VSCode {
    * Returns the iframe that contains the main Konveyor view
    * @return Promise<FrameLocator>
    */
-  private async getKonveyorIframe(): Promise<FrameLocator> {
+  public async getAnalysisIframe(): Promise<FrameLocator> {
     return this.window
       .locator('iframe')
       .first()
       .contentFrame()
       .getByTitle('Konveyor Analysis View')
+      .contentFrame();
+  }
+
+  /**
+   * Returns the iframe that contains the main Konveyor view
+   * @return Promise<FrameLocator>
+   */
+  public async getResolutionIframe(): Promise<FrameLocator> {
+    return this.window
+      .locator('iframe')
+      .nth(1)
+      .contentFrame()
+      .getByTitle('Resolution Details')
       .contentFrame();
   }
 
@@ -268,5 +321,13 @@ export class VSCode {
       clipboard.writeText(content);
     }, content);
     await this.window.keyboard.press('Control+v');
+  }
+
+  /**
+   * Even with Playwright default waiting for actionability, in Electron,
+   * Playwright tries to perform some actions before the elements are ready to handle those actions
+   */
+  public async waitDefault() {
+    await this.window.waitForTimeout(process.env.CI ? 5000 : 500);
   }
 }
