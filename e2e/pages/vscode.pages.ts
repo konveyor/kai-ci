@@ -17,8 +17,7 @@ import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 
 export class VSCode {
-  // TODO (@abrugaro) find a better place for constants
-  public static SCREENSHOTS_FOLDER = 'tests-output/screenshots';
+
 
   private readonly vscodeApp?: ElectronApplication;
   private readonly window?: Page;
@@ -177,9 +176,6 @@ export class VSCode {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
     await this.waitDefault();
-    await window.screenshot({
-      path: `${VSCode.SCREENSHOTS_FOLDER}/debug-target.png`,
-    });
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await this.waitDefault();
     await expect(targetInput).toBeVisible();

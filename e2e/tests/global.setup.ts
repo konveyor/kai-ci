@@ -1,6 +1,7 @@
 import { expect, test, test as setup } from '@playwright/test';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { VSCode } from '../pages/vscode.pages';
+import { SCREENSHOTS_FOLDER } from '../utilities/consts';
 
 // TODO : Get repo URL from fixtures
 const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
@@ -18,7 +19,7 @@ setup.describe(
     test.beforeEach(async () => {
       // This is for debugging purposes until the Windows tests are stable
       await vscodeApp.getWindow().screenshot({
-        path: `${VSCode.SCREENSHOTS_FOLDER}/before-${test.info().title.replace(' ', '-')}.png`,
+        path: `${SCREENSHOTS_FOLDER}/before-${test.info().title.replace(' ', '-')}.png`,
       });
     });
 
@@ -33,7 +34,7 @@ setup.describe(
       await expect(heading).toBeVisible();
       await vscodeApp.getWindow().waitForTimeout(10000);
       await window.screenshot({
-        path: `${VSCode.SCREENSHOTS_FOLDER}/kai-installed-screenshot.png`,
+        path: `${SCREENSHOTS_FOLDER}/kai-installed-screenshot.png`,
       });
     });
 
@@ -78,6 +79,16 @@ setup.describe(
           'active: *active',
         ].join('\n')
       );
+      /*await vscodeApp.pasteContent(
+        [
+          'models:',
+          '  AmazonBedrock: &active',
+          '    provider: "ChatBedrock"',
+          '    args:',
+          '      model_id: "meta.llama3-70b-instruct-v1:0"',
+          'active: *active',
+        ].join('\n')
+      );*/
       await window.keyboard.press('Control+s');
 
       await window.waitForTimeout(5000);
@@ -88,7 +99,7 @@ setup.describe(
         .click();
       await vscodeApp.startServer();
       await vscodeApp.getWindow().screenshot({
-        path: `${VSCode.SCREENSHOTS_FOLDER}/server-started.png`,
+        path: `${SCREENSHOTS_FOLDER}/server-started.png`,
       });
     });
   }
