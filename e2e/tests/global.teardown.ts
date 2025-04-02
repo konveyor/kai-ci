@@ -1,8 +1,9 @@
 import { test, test as setup } from '@playwright/test';
 import * as fs from 'node:fs';
 import path from 'path';
-import { TESTS_OUTPUT_FOLDER } from '../utilities/consts';
-import { getOSInfo } from '../utilities/utils';
+import { COOLSTORE_REPO_URL, TESTS_OUTPUT_FOLDER } from '../utilities/consts';
+import { cleanupRepo, getOSInfo } from '../utilities/utils';
+import { execSync } from 'child_process';
 
 setup.describe('global teardown', async () => {
   test('save coolstore folder as test output and map incidents and files', async () => {
@@ -24,6 +25,20 @@ setup.describe('global teardown', async () => {
 
     Object.keys(incidentsMap).forEach((fileUri) => {
       incidentsMap[fileUri].updatedContent = fs.readFileSync(
+        fileUri.replace(getOSInfo() === 'windows' ? 'file:///' : 'file://', ''),
+        'utf-8'
+      );
+    });
+
+    /**
+     * Removes the modified repo which is already saved as a test artifact
+     * and clones the original one to get the original files
+    */
+    await cleanupRepo();
+    execSync(`git clone ${COOLSTORE_REPO_URL}`);
+
+    Object.keys(incidentsMap).forEach((fileUri) => {
+      incidentsMap[fileUri].originalContent = fs.readFileSync(
         fileUri.replace(getOSInfo() === 'windows' ? 'file:///' : 'file://', ''),
         'utf-8'
       );
