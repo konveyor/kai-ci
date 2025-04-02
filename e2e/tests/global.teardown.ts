@@ -31,11 +31,10 @@ setup.describe('global teardown', async () => {
     });
 
     /**
-     * Removes the modified repo which is already saved as a test artifact
-     * and clones the original one to get the original files
+     * Checkout the repository get the original files, the modified one was
+     * already saved to the tests-output folder
     */
-    await cleanupRepo();
-    execSync(`git clone ${COOLSTORE_REPO_URL}`);
+    execSync(`cd coolstore && git checkout .`);
 
     Object.keys(incidentsMap).forEach((fileUri) => {
       incidentsMap[fileUri].originalContent = fs.readFileSync(
