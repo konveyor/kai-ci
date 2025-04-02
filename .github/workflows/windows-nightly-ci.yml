@@ -56,9 +56,9 @@ jobs:
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin" >> execute-tests.bat
         
         echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
-        echo "set AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" >> execute-tests.bat
-        echo "set AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> execute-tests.bat
-        echo "set AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> execute-tests.bat
+        echo "set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> execute-tests.bat
+        echo "set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> execute-tests.bat
+        echo "set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> execute-tests.bat
         
         echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
