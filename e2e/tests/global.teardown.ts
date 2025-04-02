@@ -1,4 +1,4 @@
-import { expect, test, test as setup } from '@playwright/test';
+import { test, test as setup } from '@playwright/test';
 import * as fs from 'node:fs';
 import path from 'path';
 import { TESTS_OUTPUT_FOLDER } from '../utilities/consts';

@@ -1,10 +1,7 @@
 import { expect, test, test as setup } from '@playwright/test';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { VSCode } from '../pages/vscode.pages';
-import { SCREENSHOTS_FOLDER } from '../utilities/consts';
-
-// TODO : Get repo URL from fixtures
-const repoUrl = 'https://github.com/konveyor-ecosystem/coolstore';
+import { COOLSTORE_REPO_URL, SCREENSHOTS_FOLDER } from '../utilities/consts';
 
 setup.describe(
   'install extension and configure provider settings',
@@ -13,7 +10,7 @@ setup.describe(
 
     test.beforeAll(async () => {
       test.setTimeout(1600000);
-      vscodeApp = await VSCode.init(repoUrl, 'coolstore');
+      vscodeApp = await VSCode.init(COOLSTORE_REPO_URL, 'coolstore');
     });
 
     test.beforeEach(async () => {
@@ -39,7 +36,7 @@ setup.describe(
     });
 
     test('Set Sources and targets', async () => {
-      await vscodeApp.getWindow().waitForTimeout(5000);
+      await vscodeApp.waitDefault();
       await vscodeApp.selectSourcesAndTargets(
         [],
         [
@@ -54,20 +51,20 @@ setup.describe(
 
     test('Set Up Konveyor and Start analyzer', async () => {
       const window = vscodeApp.getWindow();
-      await window.waitForTimeout(5000);
+      await vscodeApp.waitDefault();
       await vscodeApp.openSetUpKonveyor();
-      await window.waitForTimeout(5000);
+      await vscodeApp.waitDefault();
       await window
         .getByRole('button', { name: 'Configure Generative AI' })
         .click();
-      await window.waitForTimeout(5000);
+      await vscodeApp.waitDefault();
       await window
         .getByRole('button', { name: 'Configure GenAI model settings file' })
         .click();
-      await window.waitForTimeout(5000);
+      await vscodeApp.waitDefault();
 
       await window.keyboard.press('Control+a+Delete');
-      await vscodeApp.pasteContent(
+      /*await vscodeApp.pasteContent(
         [
           'models:',
           '  OpenAI: &active',
@@ -78,8 +75,8 @@ setup.describe(
           '      model: "gpt-4o"',
           'active: *active',
         ].join('\n')
-      );
-      /*await vscodeApp.pasteContent(
+      );*/
+      await vscodeApp.pasteContent(
         [
           'models:',
           '  AmazonBedrock: &active',
@@ -88,10 +85,10 @@ setup.describe(
           '      model_id: "meta.llama3-70b-instruct-v1:0"',
           'active: *active',
         ].join('\n')
-      );*/
+      );
       await window.keyboard.press('Control+s');
 
-      await window.waitForTimeout(5000);
+      await vscodeApp.waitDefault();
       await vscodeApp.openSetUpKonveyor();
       await window.locator('h3.step-title:text("Open Analysis Panel")').click();
       await window

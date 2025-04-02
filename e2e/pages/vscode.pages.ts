@@ -15,17 +15,9 @@ import {
 import * as path from 'path';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
+import { Application } from './application.pages';
 
-export class VSCode {
-
-
-  private readonly vscodeApp?: ElectronApplication;
-  private readonly window?: Page;
-
-  private constructor(vscodeApp: ElectronApplication, window: Page) {
-    this.vscodeApp = vscodeApp;
-    this.window = window;
-  }
+export class VSCode extends Application{
 
   public static async open(workspaceDir: string) {
     const vscodeExecutablePath = getVscodeExecutablePath();
@@ -112,23 +104,13 @@ export class VSCode {
    */
   public async closeVSCode(): Promise<void> {
     try {
-      if (this.vscodeApp) {
-        await this.vscodeApp.close();
+      if (this.app) {
+        await this.app.close();
         console.log('VSCode closed successfully.');
       }
     } catch (error) {
       console.error('Error closing VSCode:', error);
     }
-  }
-
-  /**
-   * Returns the main window for further interactions.
-   */
-  public getWindow(): Page {
-    if (!this.window) {
-      throw new Error('VSCode window is not initialized.');
-    }
-    return this.window;
   }
 
   /**
@@ -311,19 +293,4 @@ export class VSCode {
       .contentFrame();
   }
 
-  // TODO create parent class and move generic functions there
-  public async pasteContent(content: string) {
-    await this.vscodeApp.evaluate(({ clipboard }, content) => {
-      clipboard.writeText(content);
-    }, content);
-    await this.window.keyboard.press('Control+v');
-  }
-
-  /**
-   * Even with Playwright default waiting for actionability, in Electron,
-   * Playwright tries to perform some actions before the elements are ready to handle those actions
-   */
-  public async waitDefault() {
-    await this.window.waitForTimeout(process.env.CI ? 5000 : 500);
-  }
 }

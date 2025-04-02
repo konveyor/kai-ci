@@ -62,6 +62,9 @@ jobs:
         echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
         echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat 
+        echo "echo AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env" >> execute-tests.bat 
+        echo "echo AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env" >> execute-tests.bat 
+        echo "echo AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> .env" >> execute-tests.bat 
         echo "echo CI=true >> .env" >> execute-tests.bat 
         echo "npx playwright test" >> execute-tests.bat
         echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
