@@ -17,8 +17,7 @@ import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 import { Application } from './application.pages';
 
-export class VSCode extends Application{
-
+export class VSCode extends Application {
   public static async open(workspaceDir: string) {
     const vscodeExecutablePath = getVscodeExecutablePath();
     const vscodeApp = await electron.launch({
@@ -232,6 +231,7 @@ export class VSCode extends Application{
     if (
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
+      await analysisView.getByRole('button', { name: 'Start' }).isVisible();
       await analysisView.getByRole('button', { name: 'Start' }).click();
       await analysisView.getByRole('button', { name: 'Stop' }).isVisible();
     }
@@ -292,5 +292,4 @@ export class VSCode extends Application{
       .getByTitle('Resolution Details')
       .contentFrame();
   }
-
 }
