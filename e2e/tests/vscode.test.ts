@@ -60,7 +60,7 @@ test.describe('VSCode Tests', () => {
     test.setTimeout(3600000);
     await vscodeApp.openAnalysisView();
     const analysisView = await vscodeApp.getAnalysisIframe();
-    await analysisView.locator('button#get-solution-button').first().click();
+    await analysisView.locator('button#get-solution-button').first().click({ timeout: 60000 });
     const resolutionView = await vscodeApp.getResolutionIframe();
     const fixLocator = resolutionView.locator('button[aria-label="Apply fix"]');
 
