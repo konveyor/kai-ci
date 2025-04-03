@@ -1,4 +1,4 @@
-name: (Linux) Run Playwright tests nightly on main branch
+name: (Linux) Run Playwright tests nightly
 
 on:
   schedule:
@@ -75,6 +75,9 @@ jobs:
       run: npx playwright test --reporter=list
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     - name: Upload test artifacts
       uses: actions/upload-artifact@v4
       with:

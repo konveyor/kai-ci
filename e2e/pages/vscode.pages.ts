@@ -15,19 +15,9 @@ import {
 import * as path from 'path';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
+import { Application } from './application.pages';
 
-export class VSCode {
-  // TODO (@abrugaro) find a better place for constants
-  public static SCREENSHOTS_FOLDER = 'tests-output/screenshots';
-
-  private readonly vscodeApp?: ElectronApplication;
-  private readonly window?: Page;
-
-  private constructor(vscodeApp: ElectronApplication, window: Page) {
-    this.vscodeApp = vscodeApp;
-    this.window = window;
-  }
-
+export class VSCode extends Application {
   public static async open(workspaceDir: string) {
     const vscodeExecutablePath = getVscodeExecutablePath();
     const vscodeApp = await electron.launch({
@@ -113,23 +103,13 @@ export class VSCode {
    */
   public async closeVSCode(): Promise<void> {
     try {
-      if (this.vscodeApp) {
-        await this.vscodeApp.close();
+      if (this.app) {
+        await this.app.close();
         console.log('VSCode closed successfully.');
       }
     } catch (error) {
       console.error('Error closing VSCode:', error);
     }
-  }
-
-  /**
-   * Returns the main window for further interactions.
-   */
-  public getWindow(): Page {
-    if (!this.window) {
-      throw new Error('VSCode window is not initialized.');
-    }
-    return this.window;
   }
 
   /**
@@ -177,12 +157,8 @@ export class VSCode {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
     await this.waitDefault();
-    await window.screenshot({
-      path: `${VSCode.SCREENSHOTS_FOLDER}/debug-target.png`,
-    });
     const targetInput = window.getByPlaceholder('Choose one or more target');
-    await this.waitDefault();
-    await expect(targetInput).toBeVisible();
+    await expect(targetInput).toBeVisible({ timeout: 30000 });
     for (const target of targets) {
       await targetInput.fill(target);
       await this.waitDefault();
@@ -192,7 +168,6 @@ export class VSCode {
         .click();
       await this.waitDefault();
     }
-
     await this.waitDefault();
     await targetInput.press('Enter');
     await this.waitDefault();
@@ -231,7 +206,7 @@ export class VSCode {
     const window = this.getWindow();
 
     const navLi = window.locator(`a[aria-label^="${name}"]`).locator('..');
-
+    await expect(navLi).toBeVisible();
     if ((await navLi.getAttribute('aria-expanded')) === 'false') {
       await navLi.click();
     }
@@ -250,10 +225,10 @@ export class VSCode {
   public async startServer(): Promise<void> {
     await this.openAnalysisView();
     const analysisView = await this.getAnalysisIframe();
-    await this.waitDefault();
     if (
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
+      await analysisView.getByRole('button', { name: 'Start' }).isVisible();
       await analysisView.getByRole('button', { name: 'Start' }).click();
       await analysisView.getByRole('button', { name: 'Stop' }).isVisible();
     }
@@ -313,21 +288,5 @@ export class VSCode {
       .contentFrame()
       .getByTitle('Resolution Details')
       .contentFrame();
-  }
-
-  // TODO create parent class and move generic functions there
-  public async pasteContent(content: string) {
-    await this.vscodeApp.evaluate(({ clipboard }, content) => {
-      clipboard.writeText(content);
-    }, content);
-    await this.window.keyboard.press('Control+v');
-  }
-
-  /**
-   * Even with Playwright default waiting for actionability, in Electron,
-   * Playwright tries to perform some actions before the elements are ready to handle those actions
-   */
-  public async waitDefault() {
-    await this.window.waitForTimeout(process.env.CI ? 5000 : 500);
   }
 }
