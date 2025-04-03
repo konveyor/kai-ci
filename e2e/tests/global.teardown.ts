@@ -1,8 +1,8 @@
 import { test, test as setup } from '@playwright/test';
 import * as fs from 'node:fs';
 import path from 'path';
-import { COOLSTORE_REPO_URL, TESTS_OUTPUT_FOLDER } from '../utilities/consts';
-import { cleanupRepo, getOSInfo } from '../utilities/utils';
+import { TESTS_OUTPUT_FOLDER } from '../utilities/consts';
+import { getOSInfo } from '../utilities/utils';
 import { execSync } from 'child_process';
 
 setup.describe('global teardown', async () => {
@@ -31,7 +31,7 @@ setup.describe('global teardown', async () => {
     });
 
     /**
-     * Checkout the repository get the original files, the modified one was
+     * Checkout the repository to get the original files, the modified ones were
      * already saved to the tests-output folder
     */
     execSync(`cd coolstore && git checkout .`);

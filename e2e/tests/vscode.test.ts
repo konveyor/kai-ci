@@ -15,9 +15,10 @@ test.describe('VSCode Tests', () => {
   });
 
   test.beforeEach(async () => {
-    // This is for debugging purposes until the Windows tests are stable
+    const testName = test.info().title.replace(' ', '-');
+    console.log(`Starting ${testName} at ${new Date()}`);
     await vscodeApp.getWindow().screenshot({
-      path: `${SCREENSHOTS_FOLDER}/before-${test.info().title.replace(' ', '-')}.png`,
+      path: `${SCREENSHOTS_FOLDER}/before-${testName}.png`,
     });
   });
 
@@ -73,9 +74,10 @@ test.describe('VSCode Tests', () => {
   });
 
   test.afterEach(async () => {
-    // This is for debugging purposes until the Windows tests are stable
+    const testName = test.info().title.replace(' ', '-');
+    console.log(`Finished ${testName} at ${new Date()}`);
     await vscodeApp.getWindow().screenshot({
-      path: `${SCREENSHOTS_FOLDER}/after-${test.info().title.replace(' ', '-')}.png`,
+      path: `${SCREENSHOTS_FOLDER}/after-${testName}.png`,
     });
   });
 

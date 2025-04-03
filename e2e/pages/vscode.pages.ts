@@ -156,7 +156,6 @@ export class VSCode extends Application {
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
-    await this.waitDefault();
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await this.waitDefault();
     await expect(targetInput).toBeVisible();
@@ -169,8 +168,6 @@ export class VSCode extends Application {
         .click();
       await this.waitDefault();
     }
-
-    await this.waitDefault();
     await targetInput.press('Enter');
     await this.waitDefault();
 
@@ -208,7 +205,7 @@ export class VSCode extends Application {
     const window = this.getWindow();
 
     const navLi = window.locator(`a[aria-label^="${name}"]`).locator('..');
-
+    await expect(navLi).toBeVisible();
     if ((await navLi.getAttribute('aria-expanded')) === 'false') {
       await navLi.click();
     }

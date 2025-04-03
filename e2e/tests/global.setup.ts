@@ -14,15 +14,15 @@ setup.describe(
     });
 
     test.beforeEach(async () => {
-      // This is for debugging purposes until the Windows tests are stable
+      const testName = test.info().title.replace(' ', '-');
+      console.log(`Starting ${testName} at ${new Date()}`);
       await vscodeApp.getWindow().screenshot({
-        path: `${SCREENSHOTS_FOLDER}/before-${test.info().title.replace(' ', '-')}.png`,
+        path: `${SCREENSHOTS_FOLDER}/before-${testName}.png`,
       });
     });
 
     test('Should open Extensions tab and verify installed extension', async () => {
       const window = vscodeApp.getWindow();
-      await window.waitForTimeout(5000);
       await vscodeApp.openLeftBarElement(LeftBarItems.Konveyor);
       const heading = window.getByRole('heading', {
         name: 'Konveyor',
@@ -51,7 +51,6 @@ setup.describe(
 
     test('Set Up Konveyor and Start analyzer', async () => {
       const window = vscodeApp.getWindow();
-      await vscodeApp.waitDefault();
       await vscodeApp.openSetUpKonveyor();
       await vscodeApp.waitDefault();
       await window
