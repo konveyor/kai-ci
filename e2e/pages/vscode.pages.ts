@@ -157,8 +157,7 @@ export class VSCode extends Application {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
     const targetInput = window.getByPlaceholder('Choose one or more target');
-    await this.waitDefault();
-    await expect(targetInput).toBeVisible();
+    await expect(targetInput).toBeVisible({ timeout: 30000 });
     for (const target of targets) {
       await targetInput.fill(target);
       await this.waitDefault();

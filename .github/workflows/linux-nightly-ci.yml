@@ -1,4 +1,4 @@
-name: (Linux) Run Playwright tests nightly on main branch
+name: (Linux) Run Playwright tests nightly
 
 on:
   schedule:
