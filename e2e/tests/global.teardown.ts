@@ -33,7 +33,7 @@ setup.describe('global teardown', async () => {
     /**
      * Checkout the repository to get the original files, the modified ones were
      * already saved to the tests-output folder
-    */
+     */
     execSync(`cd coolstore && git checkout .`);
 
     Object.keys(incidentsMap).forEach((fileUri) => {
