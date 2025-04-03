@@ -156,6 +156,7 @@ export class VSCode extends Application {
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
+    await this.waitDefault();
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await expect(targetInput).toBeVisible({ timeout: 30000 });
     for (const target of targets) {
@@ -167,6 +168,7 @@ export class VSCode extends Application {
         .click();
       await this.waitDefault();
     }
+    await this.waitDefault();
     await targetInput.press('Enter');
     await this.waitDefault();
 
