@@ -11,7 +11,7 @@ jobs:
     uses: ./.github/workflows/provision-runner.yml
     with:
       ec2-image-id: ami-0cf05b9bbda99aed3
-      ec2-instance-type: m5.2xlarge
+      ec2-instance-type: m5.4xlarge
       security-group-id: sg-0a3e6b53e86d0e69d
       subnet-id: subnet-06113672589e7e836
       ec2-os-type: windows
@@ -56,12 +56,19 @@ jobs:
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin" >> execute-tests.bat
         
         echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
+        echo "set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> execute-tests.bat
+        echo "set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> execute-tests.bat
+        echo "set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> execute-tests.bat
+        
         echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
         echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat 
+        echo "echo AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env" >> execute-tests.bat 
+        echo "echo AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env" >> execute-tests.bat 
+        echo "echo AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> .env" >> execute-tests.bat 
         echo "echo CI=true >> .env" >> execute-tests.bat 
         echo "npx playwright test" >> execute-tests.bat
         echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
