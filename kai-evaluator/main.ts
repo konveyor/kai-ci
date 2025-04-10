@@ -30,7 +30,7 @@ async function main(fileInputPath: string, fileOutputPath: string) {
     totalFiles: dataLength,
     model: 'meta.llama3-70b-instruct-v1:0',
     evaluationModel: 'meta.llama3-70b-instruct-v1:0', // TODO take from env
-    errors: []
+    errors: [],
   };
 
   const start = new Date();
@@ -46,7 +46,9 @@ async function main(fileInputPath: string, fileOutputPath: string) {
       evaluationResult.averageEffectiveness += res.effectiveness;
       evaluationResult.averageScore += res.averageScore;
     } catch (e) {
-      evaluationResult.errors.push(`Error while evaluating file ${file}\n Reason: ${e}`);
+      evaluationResult.errors.push(
+        `Error while evaluating file ${file}\n Reason: ${e}`
+      );
     }
 
   const end = new Date();
@@ -63,5 +65,4 @@ async function main(fileInputPath: string, fileOutputPath: string) {
     'utf-8'
   );
   console.log('Execution finished...');
-
 }

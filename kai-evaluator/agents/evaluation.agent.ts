@@ -2,7 +2,10 @@ import { createEvaluationChain } from '../chains/evaluation.chain';
 import { FileEvaluationResult } from '../model/evaluation-result.model';
 import { FileEvaluationInput } from '../model/evaluation-input.model';
 
-export async function evaluateFile(file: string, input: FileEvaluationInput): Promise<FileEvaluationResult> {
+export async function evaluateFile(
+  file: string,
+  input: FileEvaluationInput
+): Promise<FileEvaluationResult> {
   const chain = await createEvaluationChain();
 
   const incidentDescriptions = input.incidents
