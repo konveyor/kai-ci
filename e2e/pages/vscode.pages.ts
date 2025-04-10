@@ -158,6 +158,7 @@ export class VSCode extends Application {
     await this.executeQuickCommand('sources and targets');
     await this.waitDefault();
     const targetInput = window.getByPlaceholder('Choose one or more target');
+    await this.waitDefault();
     await expect(targetInput).toBeVisible({ timeout: 30000 });
     for (const target of targets) {
       await targetInput.fill(target);
@@ -225,6 +226,7 @@ export class VSCode extends Application {
   public async startServer(): Promise<void> {
     await this.openAnalysisView();
     const analysisView = await this.getAnalysisIframe();
+    await this.waitDefault();
     if (
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
