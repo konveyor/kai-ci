@@ -16,6 +16,7 @@ import * as path from 'path';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 import { Application } from './application.pages';
+import { SCREENSHOTS_FOLDER } from '../utilities/consts';
 
 export class VSCode extends Application {
   public static async open(workspaceDir: string) {
@@ -158,6 +159,9 @@ export class VSCode extends Application {
     await this.waitDefault();
     await this.executeQuickCommand('sources and targets');
     await this.waitDefault();
+    await window.screenshot({
+      path: `${SCREENSHOTS_FOLDER}/debug-target.png`,
+    });
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await this.waitDefault();
     await expect(targetInput).toBeVisible({ timeout: 30000 });
