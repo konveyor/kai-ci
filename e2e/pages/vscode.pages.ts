@@ -156,8 +156,8 @@ export class VSCode extends Application {
 
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
     // Opening analysis view due to https://github.com/konveyor/editor-extensions/issues/479
-    await this.openLeftBarElement(LeftBarItems.Konveyor);
-
+    await this.openAnalysisView();
+    await this.waitDefault();
     const window = this.window;
     await this.executeQuickCommand('sources and targets');
     const targetInput = window.getByPlaceholder('Choose one or more target');
