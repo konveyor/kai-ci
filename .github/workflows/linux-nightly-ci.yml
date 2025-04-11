@@ -68,7 +68,7 @@ jobs:
       run: |
         pkill -f code || true  # Kills all VSCode processes if they are running
     - name: Install dependencies
-      run: npm ci && cd kai-evaluator && npm ci
+      run: npm ci
     - name: Copy .env.example to .env
       run: cp .env.example .env  
     - name: Run Playwright tests
