@@ -155,16 +155,11 @@ export class VSCode extends Application {
   }
 
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
-    // Waiting due to https://github.com/konveyor/editor-extensions/issues/479
-    await this.window.waitForTimeout(15000);
+    // Opening analysis view due to https://github.com/konveyor/editor-extensions/issues/479
+    await this.openAnalysisView();
 
     const window = this.window;
-    await this.waitDefault();
     await this.executeQuickCommand('sources and targets');
-    await this.waitDefault();
-    await window.screenshot({
-      path: `${SCREENSHOTS_FOLDER}/debug-target.png`,
-    });
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await this.waitDefault();
     await expect(targetInput).toBeVisible({ timeout: 30000 });
@@ -176,7 +171,6 @@ export class VSCode extends Application {
         .nth(1)
         .click();
     }
-    await this.waitDefault();
     await targetInput.press('Enter');
     await this.waitDefault();
 
