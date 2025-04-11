@@ -79,7 +79,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     - name: Evaluate results
-      run: cd kai-evaluator && ts-node main.ts ../tests-output/incidents-map.json ../tests-output
+      run: cd kai-evaluator && npx ts-node main.ts ../tests-output/incidents-map.json ../tests-output
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
