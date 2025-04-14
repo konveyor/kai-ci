@@ -4,7 +4,10 @@ import path from 'path';
 import { TESTS_OUTPUT_FOLDER } from '../utilities/consts';
 import { getOSInfo } from '../utilities/utils';
 import { execSync } from 'child_process';
-import { AnalysisResult, Violation } from '../../kai-evaluator/model/analysis-result.model';
+import {
+  AnalysisResult,
+  Violation,
+} from '../../kai-evaluator/model/analysis-result.model';
 
 setup.describe('global teardown', async () => {
   test('save coolstore folder as test output and map incidents and files', async () => {
