@@ -4,6 +4,7 @@ import path from 'path';
 import { TESTS_OUTPUT_FOLDER } from '../utilities/consts';
 import { getOSInfo } from '../utilities/utils';
 import { execSync } from 'child_process';
+import { AnalysisResult, Violation } from '../../kai-evaluator/model/analysis-result.model';
 
 setup.describe('global teardown', async () => {
   test('save coolstore folder as test output and map incidents and files', async () => {
@@ -12,8 +13,8 @@ setup.describe('global teardown', async () => {
     });
     const analysisData = await getFirstAnalysisFileContent();
     const incidentsMap = {};
-    analysisData.forEach((analysis) => {
-      Object.values(analysis.violations).forEach((violation: any) => {
+    analysisData.forEach((analysis: AnalysisResult) => {
+      Object.values(analysis.violations).forEach((violation: Violation) => {
         violation.incidents.forEach((incident) => {
           if (!incidentsMap[incident.uri]) {
             incidentsMap[incident.uri] = { incidents: [] };

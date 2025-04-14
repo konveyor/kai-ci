@@ -1,8 +1,4 @@
-export interface Incident {
-  message: string;
-  codeSnip: string;
-  lineNumber: number;
-}
+import { Incident } from './analysis-result.model';
 
 export interface FileEvaluationInput {
   originalContent: string;
