@@ -1,7 +1,7 @@
-import { test, test as setup } from '@playwright/test';
+import { test } from '@playwright/test';
 import * as fs from 'node:fs';
 import path from 'path';
-import { TESTS_OUTPUT_FOLDER } from '../utilities/consts';
+import { TEST_OUTPUT_FOLDER } from '../utilities/consts';
 import { getOSInfo } from '../utilities/utils';
 import { execSync } from 'child_process';
 import {
@@ -9,9 +9,9 @@ import {
   Violation,
 } from '../../kai-evaluator/model/analysis-result.model';
 
-setup.describe('global teardown', async () => {
+test.describe('global teardown', () => {
   test('save coolstore folder as test output and map incidents and files', async () => {
-    fs.cpSync('coolstore', `${TESTS_OUTPUT_FOLDER}/coolstore`, {
+    fs.cpSync('coolstore', `${TEST_OUTPUT_FOLDER}/coolstore`, {
       recursive: true,
     });
     const analysisData = await getFirstAnalysisFileContent();
@@ -36,7 +36,7 @@ setup.describe('global teardown', async () => {
 
     /**
      * Checkout the repository to get the original files, the modified ones were
-     * already saved to the tests-output folder
+     * already saved to the test-output folder
      */
     execSync(`cd coolstore && git checkout .`);
 
@@ -48,7 +48,7 @@ setup.describe('global teardown', async () => {
     });
 
     fs.writeFileSync(
-      path.join(TESTS_OUTPUT_FOLDER, 'incidents-map.json'),
+      path.join(TEST_OUTPUT_FOLDER, 'incidents-map.json'),
       JSON.stringify(incidentsMap, null, 2),
       'utf-8'
     );

@@ -1,9 +1,4 @@
-import {
-  _electron as electron,
-  ElectronApplication,
-  FrameLocator,
-  Page,
-} from 'playwright';
+import { _electron as electron, FrameLocator } from 'playwright';
 import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import {
@@ -16,7 +11,6 @@ import * as path from 'path';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 import { Application } from './application.pages';
-import { SCREENSHOTS_FOLDER } from '../utilities/consts';
 
 export class VSCode extends Application {
   public static async open(workspaceDir: string) {
