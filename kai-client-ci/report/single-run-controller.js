@@ -1,31 +1,32 @@
-function createSingleRunDetails(singleNightRuns) {
+function createSingleRunDetails(singleNightRun) {
   // TODO support multiple runs a day
   // TODO include version
-  const data = singleNightRuns[0];
-  console.log(data);
+  console.log(singleNightRun);
+  clearAllSingleRunDetails();
   const insightsGrid = document.getElementById('insights-grid');
-  insightsGrid.appendChild(createCard('Model', data.model));
+  insightsGrid.appendChild(createCard('Model', singleNightRun.model));
   insightsGrid.appendChild(
-    createCard('Average Competency', data.averageCompetency.toFixed(2))
+    createCard('Average Competency', singleNightRun.averageCompetency.toFixed(2))
   );
   insightsGrid.appendChild(
-    createCard('Average Effectiveness', data.averageEffectiveness.toFixed(2))
+    createCard('Average Effectiveness', singleNightRun.averageEffectiveness.toFixed(2))
   );
   insightsGrid.appendChild(
-    createCard('Average Specificity', data.averageSpecificity.toFixed(2))
+    createCard('Average Specificity', singleNightRun.averageSpecificity.toFixed(2))
   );
   insightsGrid.appendChild(
-    createCard('Average Score', data.averageScore.toFixed(2))
+    createCard('Average Score', singleNightRun.averageScore.toFixed(2))
   );
-  insightsGrid.appendChild(createCard('Total Files', data.totalFiles));
-  createFileEvaluationsTable(data.fileEvaluationResults);
-  createErrorsList(data.errors);
+  insightsGrid.appendChild(createCard('Total Files', singleNightRun.totalFiles));
+  createFileEvaluationsTable(singleNightRun.fileEvaluationResults);
+  createErrorsList(singleNightRun.errors);
   const container = document.getElementById('single-run-overview');
   container.style.display = 'block';
 }
 
 function createFileEvaluationsTable(fileEvaluations) {
   const tbody = document.getElementById('file-evaluations-table-body');
+  tbody.innerHTML = '';
   fileEvaluations.forEach((fileEvaluation) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -62,6 +63,19 @@ function createErrorsList(errors) {
   });
 }
 
+function createSingleRunsSelectors(singleRuns) {
+  const singleRunsContainer = document.getElementById('single-runs-selectors-container');
+  const singleRunsList = document.getElementById('single-runs-selectors-list');
+  singleRuns.forEach(run => {
+    const li = document.createElement('li');
+    li.innerText = `${new Date(run.date).toLocaleTimeString()} | ${run.model}`;
+    li.onclick = () => createSingleRunDetails(run);
+    singleRunsList.appendChild(li);
+  })
+
+  singleRunsContainer.style.display = 'block';
+}
+
 function createCard(title, value) {
   const container = document.createElement('div');
   const span = document.createElement('span');
@@ -71,4 +85,13 @@ function createCard(title, value) {
   h2.innerText = value;
   container.appendChild(h2);
   return container;
+}
+
+function clearAllSingleRunDetails() {
+  const insightsGrid = document.getElementById('insights-grid');
+  const tbody = document.getElementById('file-evaluations-table-body');
+  const list = document.getElementById('file-evaluations-errors-list');
+  insightsGrid.innerHTML = '';
+  tbody.innerHTML = '';
+  list.innerHTML = '';
 }

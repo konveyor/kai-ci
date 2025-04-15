@@ -40,7 +40,11 @@
       <input type="date" id="date-picker" />
     </div>
 
-    <div id="single-performace-charts">
+    <div id="single-performance-container">
+      <div id="single-runs-selectors-container" style="display: none">
+        <h3>There were more than one run for the selected day, choose the one you want to inspect</h3>
+        <ul id="single-runs-selectors-list"></ul>
+      </div>
       <div id="single-run-overview" style="display: none">
         <div class="insights-grid" id="insights-grid"></div>
         <table id="file-evaluations-table">
@@ -55,6 +59,7 @@
               <th>Unnecessary Changes</th>
               <th>LLM notes</th>
             </tr>
+          </thead>
           </thead>
           <tbody id="file-evaluations-table-body">
 

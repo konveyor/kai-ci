@@ -64,6 +64,13 @@ function createDatePicker() {
 
   datePicker.addEventListener('change', (event) => {
     const selectedDate = new Date(event.target.value);
+    const singleRunsSelectorContainer = document.getElementById('single-runs-selectors-container');
+    const container = document.getElementById('single-run-overview');
+    const singleRunsList = document.getElementById('single-runs-selectors-list');
+    singleRunsList.innerHTML = '';
+    singleRunsSelectorContainer.style.display = 'none';
+    container.style.display = 'none';
+    clearAllSingleRunDetails();
 
     console.log(dates);
     console.log(selectedDate);
@@ -79,7 +86,12 @@ function createDatePicker() {
       return;
     }
 
-    createSingleRunDetails(filteredData);
+    if (filteredData.length > 1) {
+      createSingleRunsSelectors(filteredData);
+      return;
+    }
+
+    createSingleRunDetails(filteredData[0]);
   });
 }
 

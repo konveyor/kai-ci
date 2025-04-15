@@ -85,11 +85,8 @@ body {
     z-index: 5;
 }
 
-#single-performace-charts {
-    display: flex;
-    flex-direction: row;
+#single-performance-container {
     min-width: 30%;
-
     justify-content: center;
 }
 
@@ -103,6 +100,10 @@ input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1em;
+}
+
+#single-runs-selectors-container {
+    border-bottom: solid #cbcaca 1px;
 }
 
 #date-range-input {
@@ -227,4 +228,48 @@ input[type="text"] {
     font-size: 13px;
     color: #222;
     border: 1px solid #ddd;
+}
+
+#single-runs-selectors-container {
+    margin: 20px 0;
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#single-runs-selectors-container h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+#single-runs-selectors-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#single-runs-selectors-list li {
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+#single-runs-selectors-list li:hover {
+    background-color: #eef6ff;
+}
+
+#single-runs-selectors-list li br {
+    display: none;
+}
+
+#single-runs-selectors-list li::before {
+    content: "⏱️ ";
+    margin-right: 5px;
 }
