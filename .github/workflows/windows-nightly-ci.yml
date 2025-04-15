@@ -5,7 +5,6 @@ on:
     - cron: "5 3 * * *"
   workflow_dispatch:
   push:
-  pull_request:
 
 jobs:
   start-ec2-instance:
