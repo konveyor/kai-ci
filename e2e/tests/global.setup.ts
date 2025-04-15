@@ -38,18 +38,10 @@ setup.describe(
       });
     });
 
-    test('Set Sources and targets', async () => {
+    test('Set Sources and targets', async ({ testRepoData }) => {
       await vscodeApp.waitDefault();
-      await vscodeApp.selectSourcesAndTargets(
-        [],
-        [
-          'cloud-readiness',
-          'jakarta-ee',
-          'jakarta-ee8',
-          'jakarta-ee9',
-          'quarkus',
-        ]
-      );
+      const repoInfo = testRepoData['coolstore'];
+      await vscodeApp.selectSourcesAndTargets(repoInfo.source, repoInfo.target);
     });
 
     test('Set Up Konveyor and Start analyzer', async () => {
