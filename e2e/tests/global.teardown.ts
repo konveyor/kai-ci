@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, test as teardown } from '@playwright/test';
 import * as fs from 'node:fs';
 import path from 'path';
 import { TEST_OUTPUT_FOLDER } from '../utilities/consts';
@@ -9,7 +9,7 @@ import {
   Violation,
 } from '../../kai-evaluator/model/analysis-result.model';
 
-test.describe('global teardown', () => {
+teardown.describe('global teardown', () => {
   test('save coolstore folder as test output and map incidents and files', async () => {
     fs.cpSync('coolstore', `${TEST_OUTPUT_FOLDER}/coolstore`, {
       recursive: true,
