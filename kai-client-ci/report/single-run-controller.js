@@ -6,18 +6,29 @@ function createSingleRunDetails(singleNightRun) {
   const insightsGrid = document.getElementById('insights-grid');
   insightsGrid.appendChild(createCard('Model', singleNightRun.model));
   insightsGrid.appendChild(
-    createCard('Average Competency', singleNightRun.averageCompetency.toFixed(2))
+    createCard(
+      'Average Competency',
+      singleNightRun.averageCompetency.toFixed(2)
+    )
   );
   insightsGrid.appendChild(
-    createCard('Average Effectiveness', singleNightRun.averageEffectiveness.toFixed(2))
+    createCard(
+      'Average Effectiveness',
+      singleNightRun.averageEffectiveness.toFixed(2)
+    )
   );
   insightsGrid.appendChild(
-    createCard('Average Specificity', singleNightRun.averageSpecificity.toFixed(2))
+    createCard(
+      'Average Specificity',
+      singleNightRun.averageSpecificity.toFixed(2)
+    )
   );
   insightsGrid.appendChild(
     createCard('Average Score', singleNightRun.averageScore.toFixed(2))
   );
-  insightsGrid.appendChild(createCard('Total Files', singleNightRun.totalFiles));
+  insightsGrid.appendChild(
+    createCard('Total Files', singleNightRun.totalFiles)
+  );
   createFileEvaluationsTable(singleNightRun.fileEvaluationResults);
   createErrorsList(singleNightRun.errors);
   const container = document.getElementById('single-run-overview');
@@ -64,14 +75,16 @@ function createErrorsList(errors) {
 }
 
 function createSingleRunsSelectors(singleRuns) {
-  const singleRunsContainer = document.getElementById('single-runs-selectors-container');
+  const singleRunsContainer = document.getElementById(
+    'single-runs-selectors-container'
+  );
   const singleRunsList = document.getElementById('single-runs-selectors-list');
-  singleRuns.forEach(run => {
+  singleRuns.forEach((run) => {
     const li = document.createElement('li');
     li.innerText = `${new Date(run.date).toLocaleTimeString()} | ${run.model}`;
     li.onclick = () => createSingleRunDetails(run);
     singleRunsList.appendChild(li);
-  })
+  });
 
   singleRunsContainer.style.display = 'block';
 }
