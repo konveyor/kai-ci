@@ -3,6 +3,7 @@ import * as path from 'path';
 import { evaluateFile } from './agents/evaluation.agent';
 import { EvaluationResult } from './model/evaluation-result.model';
 import { FileEvaluationInput } from './model/evaluation-input.model';
+import { downloadObject, uploadObject } from './utils/s3';
 
 const [, , inputFilePath, outputPath] = process.argv;
 
@@ -64,5 +65,19 @@ async function main(fileInputPath: string, fileOutputPath: string) {
     JSON.stringify(evaluationResult, null, 2),
     'utf-8'
   );
+  console.log('Uploading results to aws...');
+  const awsReport = await downloadObject('report.json');
+  if (awsReport.Body) {
+    const awsReportBody = JSON.parse(
+      await awsReport.Body.transformToString()
+    ) as any[];
+    awsReportBody.push(evaluationResult);
+    fs.writeFileSync(
+      path.join(fileOutputPath, 'report.json'),
+      JSON.stringify(awsReportBody, null, 2),
+      'utf-8'
+    );
+    await uploadObject(JSON.stringify(awsReportBody), 'report.json');
+  }
   console.log('Execution finished...');
 }
