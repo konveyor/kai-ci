@@ -64,9 +64,13 @@ function createDatePicker() {
 
   datePicker.addEventListener('change', (event) => {
     const selectedDate = new Date(event.target.value);
-    const singleRunsSelectorContainer = document.getElementById('single-runs-selectors-container');
+    const singleRunsSelectorContainer = document.getElementById(
+      'single-runs-selectors-container'
+    );
     const container = document.getElementById('single-run-overview');
-    const singleRunsList = document.getElementById('single-runs-selectors-list');
+    const singleRunsList = document.getElementById(
+      'single-runs-selectors-list'
+    );
     singleRunsList.innerHTML = '';
     singleRunsSelectorContainer.style.display = 'none';
     container.style.display = 'none';
@@ -209,6 +213,32 @@ function createChart(chartID, type, data, options) {
 function initializeComponents() {
   addRangePicker();
   createDatePicker();
+  const helpBtn = document.getElementById('help-button');
+  helpBtn.onclick = () => {
+    Swal.fire({
+      title: 'Kai Evaluation Metrics',
+      html: `
+       <div style="text-align: left; font-size: 15px;">
+          <p><strong>Effectiveness:</strong><br>
+          A grade from 0 to 10 of how effectively the changes migrate the file from the source technology to the target technology.</p>
+          
+          <p><strong>Specificity:</strong><br>
+          A grade from 0 to 10 of how targeted the changes are at specifically addressing the incidents identified by Konveyor.</p>
+          
+          <p><strong>Competency:</strong>  <br>
+          A grade from 0 to 10 of how competently the changes reflect industry best practice for the language and target technology.</p>
+          
+          <p><strong>Valid Code (boolean):</strong><br>
+          Indicates the changed file is valid, syntactically correct code that can be successfully compiled or interpreted.</p>
+          
+          <p><strong>Unnecessary Changes (boolean):</strong> <br>
+          Indicates whether unnecessary changes were made that do not advance the goal of migration.</p>
+        </div>
+      `,
+      confirmButtonText: 'Close',
+      width: 600,
+    });
+  };
 }
 
 function initializeCharts() {

@@ -32,15 +32,31 @@ body {
     top: 0;
     background-color: #333;
     color: #fff;
-    text-align: left;
     z-index: 1000;
     width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
 }
 
-#navbar>h1 {
-    margin: 10px;
+#navbar > h1 {
+    margin: 10px 0;
     color: white;
     font-weight: lighter;
+}
+
+.help-button {
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.help-button:hover {
+    color: #ccc;
 }
 
 #dashboard {
