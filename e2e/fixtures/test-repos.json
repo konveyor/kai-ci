@@ -3,8 +3,8 @@
     "repoUrl": "https://github.com/konveyor-ecosystem/coolstore",
     "repoName": "coolstore",
     "branch": "main",
-    "source": [],
-    "target": [
+    "sources": [],
+    "targets": [
       "cloud-readiness",
       "jakarta-ee",
       "jakarta-ee8",
@@ -16,7 +16,7 @@
     "repoUrl": "https://github.com/konveyor-ecosystem/migrationex",
     "repoName": "migrationex",
     "branch": "main",
-    "source": [""],
-    "target": ["openjdk17"]
+    "sources": [""],
+    "targets": ["openjdk17"]
   }
 }

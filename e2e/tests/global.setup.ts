@@ -41,7 +41,10 @@ setup.describe(
     test('Set Sources and targets', async ({ testRepoData }) => {
       await vscodeApp.waitDefault();
       const repoInfo = testRepoData['coolstore'];
-      await vscodeApp.selectSourcesAndTargets(repoInfo.source, repoInfo.target);
+      await vscodeApp.selectSourcesAndTargets(
+        repoInfo.sources,
+        repoInfo.targets
+      );
     });
 
     test('Set Up Konveyor and Start analyzer', async () => {

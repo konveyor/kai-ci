@@ -6,10 +6,10 @@ type RepoData = Record<
   string,
   {
     repoUrl: string;
-    localFolder: string;
+    repoName: string;
     branch: string;
-    source: string[];
-    target: string[];
+    sources: string[];
+    targets: string[];
   }
 >;
 
