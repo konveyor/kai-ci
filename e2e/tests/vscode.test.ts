@@ -44,28 +44,7 @@ test.describe('Install KAI plugin and start server', () => {
     const window = vscodeApp.getWindow();
     await vscodeApp.openSetUpKonveyor();
     await vscodeApp.waitDefault();
-    await window
-      .getByRole('button', { name: 'Configure Generative AI' })
-      .click();
-    await vscodeApp.waitDefault();
-    await window
-      .getByRole('button', { name: 'Configure GenAI model settings file' })
-      .click();
-    await vscodeApp.waitDefault();
-
-    await window.keyboard.press('Control+a+Delete');
-    await vscodeApp.pasteContent(
-      [
-        'models:',
-        '  AmazonBedrock: &active',
-        '    provider: "ChatBedrock"',
-        '    args:',
-        '      model_id: "meta.llama3-70b-instruct-v1:0"',
-        'active: *active',
-      ].join('\n')
-    );
-    await window.keyboard.press('Control+s');
-
+    await vscodeApp.configureGenerativeAI();
     await vscodeApp.waitDefault();
     await vscodeApp.openSetUpKonveyor();
     await window.locator('h3.step-title:text("Open Analysis Panel")').click();

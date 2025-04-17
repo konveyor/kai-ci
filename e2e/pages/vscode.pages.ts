@@ -16,7 +16,7 @@ export class VSCode extends Application {
   public static async open(repoUrl?: string, repoDir?: string) {
     try {
       if (repoUrl) {
-        await cleanupRepo(repoDir);
+        if (repoDir) await cleanupRepo(repoDir);
         console.log(`Cloning repository from ${repoUrl}`);
         execSync(`git clone ${repoUrl}`);
       }

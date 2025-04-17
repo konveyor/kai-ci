@@ -16,7 +16,7 @@
     "repoUrl": "https://github.com/konveyor-ecosystem/migrationex",
     "repoName": "migrationex",
     "branch": "main",
-    "sources": [""],
+    "sources": [],
     "targets": ["openjdk17"]
   }
 }

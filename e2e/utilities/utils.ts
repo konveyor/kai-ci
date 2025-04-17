@@ -24,7 +24,7 @@ export function getKAIPluginName(): string {
   return process.env.VSIX_FILE_NAME || 'konveyor-v0.1.0.vsix';
 }
 
-export async function cleanupRepo(repoDir?: string) {
+export async function cleanupRepo(repoDir: string) {
   if (!repoDir) {
     console.debug(`Directory ${repoDir} does not exist, skipping cleanup.`);
     return;
