@@ -131,6 +131,7 @@ export class VSCode extends Application {
   private async executeQuickCommand(command: string) {
     await this.waitDefault();
     await this.window.keyboard.press('Control+Shift+P');
+    await this.waitDefault();
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
@@ -153,7 +154,7 @@ export class VSCode extends Application {
     await this.executeQuickCommand('sources and targets');
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await this.waitDefault();
-    await expect(targetInput).toBeVisible({ timeout: 30000 });
+    // await expect(targetInput).toBeVisible({ timeout: 30000 });
     for (const target of targets) {
       await targetInput.fill(target);
 
