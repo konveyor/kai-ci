@@ -2,7 +2,7 @@ import { VSCode } from './e2e/pages/vscode.pages';
 
 async function globalSetup() {
   console.log('Running global setup...');
-  const TIMEOUT = 1600000; 
+  const TIMEOUT = 1600000;
 
   const timeoutPromise = new Promise((_, reject) =>
     setTimeout(() => reject(new Error('Global setup timed out')), TIMEOUT)
@@ -23,3 +23,5 @@ async function globalSetup() {
     process.exit(1);
   }
 }
+
+export default globalSetup;
