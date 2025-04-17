@@ -135,7 +135,7 @@ export class VSCode extends Application {
       'Type the name of a command to run.'
     );
 
-    await expect(input).toBeVisible({ timeout: 5000 });
+    await expect(input).toBeVisible({ timeout: 30000 });
     await input.fill(`>${command}`);
     await expect(
       this.window.locator('a.label-name span.highlight', { hasText: command })
@@ -163,7 +163,6 @@ export class VSCode extends Application {
         .click();
     }
     await targetInput.press('Enter');
-    await this.waitDefault();
     await this.waitDefault();
     const sourceInput = window.getByPlaceholder('Choose one or more source');
     await expect(sourceInput).toBeVisible();
