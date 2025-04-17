@@ -13,11 +13,25 @@ import { expect } from '@playwright/test';
 import { Application } from './application.pages';
 
 export class VSCode extends Application {
-  public static async open(workspaceDir: string) {
+  public static async open(repoUrl?: string, repoDir?: string) {
+    try {
+      if (repoUrl) {
+        await cleanupRepo(repoDir);
+        console.log(`Cloning repository from ${repoUrl}`);
+        execSync(`git clone ${repoUrl}`);
+      }
+    } catch (error) {
+      throw new Error('Failed to clone the repository');
+    }
+
     const vscodeExecutablePath = getVscodeExecutablePath();
+    const args = repoDir
+      ? [path.resolve(repoDir), '--disable-workspace-trust']
+      : ['--disable-workspace-trust'];
+
     const vscodeApp = await electron.launch({
       executablePath: vscodeExecutablePath,
-      args: [path.resolve(workspaceDir), '--disable-workspace-trust'],
+      args,
     });
 
     const window = await vscodeApp.firstWindow();
@@ -27,35 +41,12 @@ export class VSCode extends Application {
 
   /**
    * launches VSCode with KAI plugin installed and repoUrl app opened.
-   * @param repoUrl app to be cloned
-   * @param cloneDir path to repo
+   * @param repoDir path to repo
    */
-  public static async init(repoUrl: string, cloneDir: string): Promise<VSCode> {
+  public static async init(repoDir?: string): Promise<VSCode> {
     try {
-      await cleanupRepo();
-      console.log(`Cloning repository from ${repoUrl}`);
-      execSync(`git clone ${repoUrl}`);
-    } catch (error) {
-      throw new Error('Failed to clone the repository');
-    }
-
-    try {
-      let vsixFilePath = getKAIPluginName();
-      if (vsixFilePath) {
-        if (getOSInfo() == 'windows') {
-          const basePath = process.cwd();
-          vsixFilePath = path.resolve(basePath, vsixFilePath);
-        }
-
-        console.log(`Installing extension from VSIX file: ${vsixFilePath}`);
-        await VSCode.installExtensionFromVSIX(vsixFilePath);
-      } else {
-        console.warn(
-          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
-        );
-      }
-
-      return VSCode.open(cloneDir);
+      await VSCode.installExtensionFromVSIX();
+      return repoDir ? VSCode.open(repoDir) : VSCode.open();
     } catch (error) {
       console.error('Error launching VSCode:', error);
       throw error;
@@ -66,21 +57,26 @@ export class VSCode extends Application {
    * Installs an extension from a VSIX file using the VSCode CLI.
    * This method is static because it is independent of the instance.
    */
-  private static async installExtensionFromVSIX(
-    vsixFilePath: string
-  ): Promise<void> {
+  private static async installExtensionFromVSIX(): Promise<void> {
     try {
+      let vsixFilePath = getKAIPluginName();
+      if (!vsixFilePath) {
+        console.warn(
+          'VSIX_FILE_PATH environment variable is not set. Skipping extension installation.'
+        );
+        return;
+      }
+      if (getOSInfo() === 'windows') {
+        const basePath = process.cwd();
+        vsixFilePath = path.resolve(basePath, vsixFilePath);
+      }
       const installedExtensions = execSync('code --list-extensions', {
         encoding: 'utf-8',
       });
       if (installedExtensions.includes('konveyor.konveyor-ai')) {
+        console.log(`KAI plugin already installed`);
         return;
       }
-    } catch (error) {
-      console.error('Error checking installed extensions:', error);
-    }
-
-    try {
       console.log(`Installing extension from ${vsixFilePath}...`);
       await downloadLatestKAIPlugin();
       execSync(`code --install-extension "${vsixFilePath}"`, {
@@ -133,6 +129,7 @@ export class VSCode extends Application {
   }
 
   private async executeQuickCommand(command: string) {
+    await this.waitDefault();
     await this.window.keyboard.press('Control+Shift+P');
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
@@ -285,5 +282,31 @@ export class VSCode extends Application {
       .contentFrame()
       .getByTitle('Resolution Details')
       .contentFrame();
+  }
+
+  public async configureGenerativeAI() {
+    await this.openSetUpKonveyor();
+    await this.waitDefault();
+    await this.window
+      .getByRole('button', { name: 'Configure Generative AI' })
+      .click();
+    await this.waitDefault();
+    await this.window
+      .getByRole('button', { name: 'Configure GenAI model settings file' })
+      .click();
+    await this.waitDefault();
+
+    await this.window.keyboard.press('Control+a+Delete');
+    await this.pasteContent(
+      [
+        'models:',
+        '  AmazonBedrock: &active',
+        '    provider: "ChatBedrock"',
+        '    args:',
+        '      model_id: "meta.llama3-70b-instruct-v1:0"',
+        'active: *active',
+      ].join('\n')
+    );
+    await this.window.keyboard.press('Control+s');
   }
 }

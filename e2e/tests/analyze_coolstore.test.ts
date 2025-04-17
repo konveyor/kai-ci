@@ -1,16 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '../fixtures/test-repo-fixture';
 import { VSCode } from '../pages/vscode.pages';
 import { SCREENSHOTS_FOLDER } from '../utilities/consts';
-
-// TODO (abrugaro) : Get from data
-const projectFolder = 'coolstore';
+import { getRepoName } from '../utilities/utils';
 
 test.describe('VSCode Tests', () => {
   let vscodeApp: VSCode;
 
-  test.beforeAll(async () => {
+  test.beforeAll(async ({ testRepoData }, testInfo) => {
     test.setTimeout(1600000);
-    vscodeApp = await VSCode.open(projectFolder);
+    const repoName = getRepoName(testInfo);
+    const repoInfo = testRepoData[repoName];
+    vscodeApp = await VSCode.open(repoInfo.repoUrl, repoInfo.repoName);
+    await vscodeApp.selectSourcesAndTargets(repoInfo.sources, repoInfo.targets);
     await vscodeApp.startServer();
   });
 
