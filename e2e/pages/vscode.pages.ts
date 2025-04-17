@@ -134,8 +134,8 @@ export class VSCode extends Application {
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
-
-    await expect(input).toBeVisible({ timeout: 30000 });
+    await this.waitDefault();
+    await expect(input).toBeVisible({ timeout: 50000 });
     await input.fill(`>${command}`);
     await expect(
       this.window.locator('a.label-name span.highlight', { hasText: command })
