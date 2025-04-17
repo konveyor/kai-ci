@@ -1,5 +1,4 @@
 let kaiData = [];
-let jsonDates = [];
 
 const CHART_COLORS = {
   // Cool and Vivid Colors
@@ -25,7 +24,7 @@ const CHART_COLORS = {
   lightPurpleTransparent: 'rgb(199, 171, 255, 0.5)',
 };
 
-const CHART_OPTIONS = {
+const OVERALL_PERFORMANCE_CHART_OPTIONS = {
   responsive: true,
   scales: {
     x: {
@@ -33,7 +32,7 @@ const CHART_OPTIONS = {
     },
     y: {
       beginAtZero: true,
-      suggestedMax: 12,
+      suggestedMax: 10,
     },
   },
   plugins: {
@@ -51,10 +50,6 @@ const CHART_OPTIONS = {
       padding: 12,
     },
   },
-  interaction: {
-    mode: 'index',
-    intersect: false,
-  },
 };
 
 const kaiPerformanceJSON =
@@ -63,23 +58,44 @@ const kaiPerformanceJSON =
 function createDatePicker() {
   const datePicker = document.getElementById('date-picker');
 
-  const minDate = jsonDates[0];
-  const maxDate = jsonDates[jsonDates.length - 1];
-  datePicker.min = minDate;
-  datePicker.max = maxDate;
+  const dates = kaiData.map((obj) => new Date(obj.date));
+  datePicker.min = dates[0];
+  datePicker.max = dates[dates.length - 1];
 
   datePicker.addEventListener('change', (event) => {
-    const selectedDate = event.target.value;
-
-    if (!jsonDates.includes(selectedDate)) return;
-
-    resetCanvasElements(
-      ['pies-chart', 'average-ranges-chart'],
-      'single-performace-charts'
+    const selectedDate = new Date(event.target.value);
+    const singleRunsSelectorContainer = document.getElementById(
+      'single-runs-selectors-container'
     );
+    const container = document.getElementById('single-run-overview');
+    const singleRunsList = document.getElementById(
+      'single-runs-selectors-list'
+    );
+    singleRunsList.innerHTML = '';
+    singleRunsSelectorContainer.style.display = 'none';
+    container.style.display = 'none';
+    clearAllSingleRunDetails();
 
-    pieCharts(selectedDate);
-    averageRangesChart(selectedDate);
+    console.log(dates);
+    console.log(selectedDate);
+
+    const filteredData = kaiData.filter((item) => {
+      const itemDate = new Date(item.date);
+      return (
+        itemDate.toLocaleDateString() === selectedDate.toLocaleDateString()
+      );
+    });
+
+    if (!filteredData.length) {
+      return;
+    }
+
+    if (filteredData.length > 1) {
+      createSingleRunsSelectors(filteredData);
+      return;
+    }
+
+    createSingleRunDetails(filteredData[0]);
   });
 }
 
@@ -92,13 +108,6 @@ function resetCanvasElements(chartIds, containerId) {
     const newCanvas = document.createElement('canvas');
     newCanvas.id = chartId;
     document.getElementById(containerId).appendChild(newCanvas);
-  });
-}
-
-function formatDatesToLabels(dates) {
-  return dates.map((dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   });
 }
 
@@ -136,8 +145,6 @@ async function fetchJson() {
       return;
     }
     kaiData = await response.json();
-    jsonDates = kaiData.map((obj) => obj.date.split(' ')[0]);
-    jsonDates.sort();
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);
   }
@@ -146,299 +153,52 @@ async function fetchJson() {
 function kaiPerformanceChart(filteredData) {
   filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  formattedDates = formatDatesToLabels(filteredData.map((item) => item.date));
+  const formattedDates = filteredData.map((item) => {
+    const date = new Date(item.date).toLocaleString();
+    return `${date} | ${item.model}`;
+  });
 
   const chartData = {
     labels: formattedDates,
+    grouped: true,
     datasets: [
       {
-        label: 'Diff stat',
-        data: filteredData.map((item) => item.diffStat),
-        borderColor: CHART_COLORS.red,
-        backgroundColor: CHART_COLORS.red,
-        borderWidth: 4,
-        tension: 0.4,
-        order: 0,
+        label: 'Average Score',
+        data: filteredData.map((item) => item.averageScore),
+        borderColor: CHART_COLORS.blue,
+        backgroundColor: CHART_COLORS.lightBlue,
+        borderWidth: 1,
       },
       {
-        label: 'Average Score',
-        data: filteredData.map((item) => item.kaiEvalData?.averageScore),
-        borderColor: CHART_COLORS.blue,
-        backgroundColor: CHART_COLORS.blue,
-        borderWidth: 4,
-        tension: 0.4,
-        order: 0,
+        label: 'Average Competency',
+        data: filteredData.map((item) => item.averageCompetency),
+        borderColor: CHART_COLORS.purple,
+        backgroundColor: CHART_COLORS.lightPurple,
+        borderWidth: 1,
       },
       {
         label: 'Average Effectiveness',
-        data: filteredData.map(
-          (item) => item.kaiEvalData?.averageEffectiveness
-        ),
+        data: filteredData.map((item) => item.averageEffectiveness),
         borderColor: CHART_COLORS.green,
         backgroundColor: CHART_COLORS.green,
-        borderWidth: 2,
-        tension: 0.4,
+        borderWidth: 1,
       },
       {
         label: 'Average Specificity',
-        data: filteredData.map((item) => item.kaiEvalData?.averageSpecificity),
+        data: filteredData.map((item) => item.averageSpecificity),
         borderColor: CHART_COLORS.cyan,
         backgroundColor: CHART_COLORS.cyan,
-        borderWidth: 2,
-        tension: 0.4,
-        order: 0,
-      },
-      {
-        label: 'Valid Code True',
-        data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
-            return data.validCode === true ? count + 1 : count;
-          }, 0);
-          return totalCount;
-        }),
-        backgroundColor: CHART_COLORS.redTransparent,
-        borderColor: CHART_COLORS.red,
-        type: 'bar',
-        order: 1,
-        stack: 'stack1',
-        barPercentage: 0.2,
-        borderWidth: 1,
-      },
-      {
-        label: 'Valid Code False',
-        data: filteredData.map((obj) => {
-          const totalCount = obj.kaiEvalData?.data.reduce((count, data) => {
-            return data.validCode === false ? count + 1 : count;
-          }, 0);
-          return totalCount;
-        }),
-        backgroundColor: CHART_COLORS.lightBlueTransparent,
-        borderColor: CHART_COLORS.blue,
-        type: 'bar',
-        order: 1,
-        stack: 'stack1',
-        barPercentage: 0.2,
-        borderWidth: 1,
-      },
-      {
-        label: 'Unnecessary Changes',
-        data: filteredData.map(
-          (report) =>
-            report.kaiEvalData?.data.filter((item) => item.unnecessaryChanges)
-              .length
-        ),
-        backgroundColor: CHART_COLORS.orangeTransparent,
-        borderColor: CHART_COLORS.orange,
-        type: 'bar',
-        order: 1,
-        stack: 'stack2',
-        barPercentage: 0.2,
         borderWidth: 1,
       },
     ],
   };
 
-  createChart('kai-performance-chart', 'line', chartData, CHART_OPTIONS);
-}
-
-function pieCharts(selectedDate) {
-  const selectedkaiData = kaiData.find((item) =>
-    item.date.includes(selectedDate)
+  createChart(
+    'kai-performance-chart',
+    'bar',
+    chartData,
+    OVERALL_PERFORMANCE_CHART_OPTIONS
   );
-  if (!selectedkaiData.kaiEvalData) {
-    return;
-  }
-
-  const [
-    validCodeTrueCount,
-    validCodeFalseCount,
-    unnecessaryChangesCount,
-    necessaryChangesCount,
-  ] = selectedkaiData.kaiEvalData.data.reduce(
-    (
-      [codeTrueCount, codeFalseCount, changesTrueCount, changesFalseCount],
-      item
-    ) => [
-      codeTrueCount + (item['validCode'] === true ? 1 : 0),
-      codeFalseCount + (item['validCode'] === false ? 1 : 0),
-      changesTrueCount + (item['unnecessaryChanges'] === true ? 1 : 0),
-      changesFalseCount + (item['unnecessaryChanges'] === false ? 1 : 0),
-    ],
-    [0, 0, 0, 0]
-  );
-
-  const chartData = {
-    labels: [
-      'Valid Code',
-      'Invalid Code',
-      'Unnecessary Changes',
-      'Necessary Changes',
-    ],
-    datasets: [
-      {
-        data: [validCodeTrueCount, validCodeFalseCount],
-        backgroundColor: [CHART_COLORS.lightOrange, CHART_COLORS.orange],
-      },
-      {
-        data: [unnecessaryChangesCount, necessaryChangesCount],
-        backgroundColor: [CHART_COLORS.blue, CHART_COLORS.lightBlue],
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        labels: {
-          generateLabels: function (chart) {
-            const datasets = chart.data.datasets;
-            let resultLabels = [];
-
-            datasets.forEach((dataset, datasetIndex) => {
-              dataset.data.forEach((dataPoint, dataIndex) => {
-                resultLabels.push({
-                  text: `${chart.data.labels[dataIndex + datasetIndex * 2]}`,
-                  fillStyle: dataset.backgroundColor[dataIndex],
-                  hidden:
-                    chart.getDatasetMeta(datasetIndex).data[dataIndex].hidden ||
-                    false,
-                  datasetIndex: datasetIndex,
-                  index: dataIndex,
-                });
-              });
-            });
-
-            return resultLabels;
-          },
-        },
-        onClick: function (mouseEvent, legendItem, legend) {
-          const datasetIndex = legendItem.datasetIndex;
-          const dataIndex = legendItem.index;
-          const meta = legend.chart.getDatasetMeta(datasetIndex);
-          meta.data[dataIndex].hidden = !meta.data[dataIndex].hidden;
-          legend.chart.update();
-        },
-      },
-      tooltip: {
-        callbacks: {
-          title: () => null,
-          label: function (context) {
-            const label =
-              context.chart.data.labels[
-                context.dataIndex + context.datasetIndex * 2
-              ] || '';
-            return `${label}: ${context.formattedValue}`;
-          },
-        },
-        bodyFont: {
-          size: 16,
-        },
-        titleFont: {
-          size: 18,
-        },
-        padding: 12,
-      },
-    },
-  };
-  createChart('pies-chart', 'doughnut', chartData, chartOptions);
-}
-
-function getMinAndMaxValues(data, key) {
-  const values = data.map((item) => item[key]);
-  return [Math.min(...values), Math.max(...values)];
-}
-
-function getRangeData(selectedkaiData, keys) {
-  return keys.map((key) =>
-    getMinAndMaxValues(selectedkaiData.kaiEvalData.data, key)
-  );
-}
-
-function averageRangesChart(selectedDate) {
-  selectedkaiData = kaiData.find((item) => item.date.includes(selectedDate));
-  if (!selectedkaiData.kaiEvalData) {
-    return;
-  }
-
-  const keys = ['effectiveness', 'specificity', 'competency'];
-  const ranges = getRangeData(selectedkaiData, keys);
-
-  const chartData = {
-    labels: ['Effectiveness', 'Specificity', 'Competency'],
-    datasets: [
-      {
-        label: 'Range',
-        data: ranges,
-        backgroundColor: [
-          CHART_COLORS.blueTransparent,
-          CHART_COLORS.redTransparent,
-          CHART_COLORS.purpleTransparent,
-          CHART_COLORS.yellowTransparent,
-        ],
-        borderColor: [
-          CHART_COLORS.blue,
-          CHART_COLORS.red,
-          CHART_COLORS.purple,
-          CHART_COLORS.yellow,
-        ],
-        borderWidth: 1,
-        barThickness: 25,
-        type: 'bar',
-        base: ranges.map((range) => range[0]),
-        order: 0,
-      },
-      {
-        label: 'Average Value',
-        data: [
-          selectedkaiData.kaiEvalData['averageEffectiveness'],
-          selectedkaiData.kaiEvalData['averageSpecificity'],
-          selectedkaiData.kaiEvalData['averageCompetency'],
-        ],
-        borderColor: 'rgba(0, 0, 0, 1)',
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        type: 'line',
-        fill: false,
-        borderWidth: 2,
-        pointRadius: 5,
-        pointBackgroundColor: 'rgba(0, 0, 0, 1)',
-        order: 1,
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    scales: {
-      x: {
-        beginAtZero: false,
-      },
-      y: {
-        beginAtZero: true,
-        suggestedMax: 12,
-      },
-    },
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      tooltip: {
-        bodyFont: {
-          size: 16,
-        },
-        titleFont: {
-          size: 18,
-        },
-        padding: 12,
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
-      },
-    },
-  };
-
-  createChart('average-ranges-chart', 'bar', chartData, chartOptions);
 }
 
 function createChart(chartID, type, data, options) {
@@ -453,12 +213,36 @@ function createChart(chartID, type, data, options) {
 function initializeComponents() {
   addRangePicker();
   createDatePicker();
+  const helpBtn = document.getElementById('help-button');
+  helpBtn.onclick = () => {
+    Swal.fire({
+      title: 'Kai Evaluation Metrics',
+      html: `
+       <div style="text-align: left; font-size: 15px;">
+          <p><strong>Effectiveness:</strong><br>
+          A grade from 0 to 10 of how effectively the changes migrate the file from the source technology to the target technology.</p>
+          
+          <p><strong>Specificity:</strong><br>
+          A grade from 0 to 10 of how targeted the changes are at specifically addressing the incidents identified by Konveyor.</p>
+          
+          <p><strong>Competency:</strong>  <br>
+          A grade from 0 to 10 of how competently the changes reflect industry best practice for the language and target technology.</p>
+          
+          <p><strong>Valid Code (boolean):</strong><br>
+          Indicates the changed file is valid, syntactically correct code that can be successfully compiled or interpreted.</p>
+          
+          <p><strong>Unnecessary Changes (boolean):</strong> <br>
+          Indicates whether unnecessary changes were made that do not advance the goal of migration.</p>
+        </div>
+      `,
+      confirmButtonText: 'Close',
+      width: 600,
+    });
+  };
 }
 
 function initializeCharts() {
   kaiPerformanceChart(kaiData);
-  pieCharts(kaiData[0].date);
-  averageRangesChart(kaiData[0].date);
 }
 
 async function init() {
