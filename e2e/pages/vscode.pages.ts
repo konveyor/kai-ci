@@ -164,7 +164,7 @@ export class VSCode extends Application {
     }
     await targetInput.press('Enter');
     await this.waitDefault();
-
+    await this.waitDefault();
     const sourceInput = window.getByPlaceholder('Choose one or more source');
     await expect(sourceInput).toBeVisible();
     for (const source of sources) {
