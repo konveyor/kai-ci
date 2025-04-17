@@ -131,7 +131,6 @@ export class VSCode extends Application {
   private async executeQuickCommand(command: string) {
     await this.waitDefault();
     await this.window.keyboard.press('Control+Shift+P');
-    await this.waitDefault();
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
@@ -188,6 +187,7 @@ export class VSCode extends Application {
    */
   public async openSetUpKonveyor() {
     const window = this.getWindow();
+    await this.waitDefault();
     await this.executeQuickCommand('welcome: open walkthrough');
 
     await window.keyboard.type('set up konveyor');
