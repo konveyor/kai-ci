@@ -135,7 +135,6 @@ export class VSCode extends Application {
       'Type the name of a command to run.'
     );
     await this.waitDefault();
-    // await expect(input).toBeVisible({ timeout: 50000 });
     await input.fill(`>${command}`);
     await expect(
       this.window.locator('a.label-name span.highlight', { hasText: command })
@@ -153,7 +152,6 @@ export class VSCode extends Application {
     await this.executeQuickCommand('sources and targets');
     const targetInput = window.getByPlaceholder('Choose one or more target');
     await this.waitDefault();
-    // await expect(targetInput).toBeVisible({ timeout: 30000 });
     for (const target of targets) {
       await targetInput.fill(target);
 
