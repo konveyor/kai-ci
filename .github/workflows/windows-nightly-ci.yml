@@ -1,10 +1,7 @@
 name: (Windows)(nonadmin) Run Playwright tests
 
-on:
-  schedule:
-    - cron: "5 3 * * *"
-  workflow_dispatch:
-  push:
+on: push
+
 
 jobs:
   start-ec2-instance:
