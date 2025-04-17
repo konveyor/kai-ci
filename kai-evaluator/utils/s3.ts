@@ -9,7 +9,7 @@ export async function uploadObject(
   path: string,
   contentType = 'application/json'
 ) {
-  const client = new S3Client({ region: process.env.AWS_REGION });
+  const client = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
   return client.send(
     new PutObjectCommand({
       Key: path,
@@ -21,7 +21,7 @@ export async function uploadObject(
 }
 
 export async function downloadObject(path: string) {
-  const client = new S3Client({ region: process.env.AWS_REGION });
+  const client = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
   return client.send(
     new GetObjectCommand({
       Key: path,
