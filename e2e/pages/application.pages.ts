@@ -1,24 +1,8 @@
-import {
-  _electron as electron,
-  ElectronApplication,
-  FrameLocator,
-  Page,
-} from 'playwright';
-import { execSync } from 'child_process';
-import { downloadLatestKAIPlugin } from '../utilities/download.utils';
-import {
-  cleanupRepo,
-  getKAIPluginName,
-  getOSInfo,
-  getVscodeExecutablePath,
-} from '../utilities/utils';
-import * as path from 'path';
-import { LeftBarItems } from '../enums/left-bar-items.enum';
-import { expect } from '@playwright/test';
+import { ElectronApplication, Page } from 'playwright';
 
 export class Application {
-  protected readonly app?: ElectronApplication;
-  protected readonly window?: Page;
+  protected readonly app: ElectronApplication;
+  protected readonly window: Page;
 
   protected constructor(app: ElectronApplication, window: Page) {
     this.app = app;

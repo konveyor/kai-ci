@@ -1,17 +1,15 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '../fixtures/test-repo-fixture';
 import { VSCode } from '../pages/vscode.pages';
+import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { SCREENSHOTS_FOLDER } from '../utilities/consts';
 
-// TODO (abrugaro) : Get from data
-const projectFolder = 'coolstore';
-
-test.describe('VSCode Tests', () => {
+test.describe('Install KAI plugin and start server', () => {
   let vscodeApp: VSCode;
 
-  test.beforeAll(async () => {
+  test.beforeAll(async ({ testRepoData }) => {
     test.setTimeout(1600000);
-    vscodeApp = await VSCode.open(projectFolder);
-    await vscodeApp.startServer();
+    const repoInfo = testRepoData['coolstore'];
+    vscodeApp = await VSCode.open(repoInfo.repoUrl, repoInfo.repoName);
   });
 
   test.beforeEach(async () => {
@@ -22,58 +20,41 @@ test.describe('VSCode Tests', () => {
     });
   });
 
-  test('Analyze coolstore app', async () => {
-    test.setTimeout(3600000);
-    await vscodeApp.runAnalysis();
-    console.log(new Date().toLocaleTimeString(), 'Analysis started');
+  test('Should open Extensions tab and verify installed extension', async () => {
+    const window = vscodeApp.getWindow();
+    await vscodeApp.openLeftBarElement(LeftBarItems.Konveyor);
+    const heading = window.getByRole('heading', {
+      name: 'Konveyor',
+      exact: true,
+    });
+    await expect(heading).toBeVisible();
+    await vscodeApp.getWindow().waitForTimeout(10000);
+    await window.screenshot({
+      path: `${SCREENSHOTS_FOLDER}/kai-installed-screenshot.png`,
+    });
+  });
+
+  test('Set Sources and targets', async ({ testRepoData }) => {
     await vscodeApp.waitDefault();
-    await vscodeApp.getWindow().screenshot({
-      path: `${SCREENSHOTS_FOLDER}/analysis-running.png`,
-    });
-    await expect(
-      vscodeApp.getWindow().getByText('Analysis completed').first()
-    ).toBeVisible({ timeout: 1800000 });
-
-    await vscodeApp.getWindow().screenshot({
-      path: `${SCREENSHOTS_FOLDER}/analysis-finished.png`,
-    });
+    const repoInfo = testRepoData['coolstore'];
+    await vscodeApp.selectSourcesAndTargets(repoInfo.sources, repoInfo.targets);
   });
 
-  test('Fix Issue with default (Low) effort', async () => {
-    test.setTimeout(3600000);
-    await vscodeApp.openAnalysisView();
-    const analysisView = await vscodeApp.getAnalysisIframe();
-    await vscodeApp.searchViolation('InventoryEntity');
-    await analysisView
-      .locator('div.pf-v6-c-card__header-toggle')
-      .nth(0)
+  test('Set Up Konveyor and Start analyzer', async () => {
+    const window = vscodeApp.getWindow();
+    await vscodeApp.openSetUpKonveyor();
+    await vscodeApp.waitDefault();
+    await vscodeApp.configureGenerativeAI();
+    await vscodeApp.waitDefault();
+    await vscodeApp.openSetUpKonveyor();
+    await window.locator('h3.step-title:text("Open Analysis Panel")').click();
+    await window
+      .getByRole('button', { name: 'Open Analysis Panel', exact: true })
       .click();
-    await analysisView.locator('button#get-solution-button').nth(3).click();
-    const resolutionView = await vscodeApp.getResolutionIframe();
-    const fixLocator = resolutionView
-      .locator('button[aria-label="Apply fix"]')
-      .first();
-    await expect(fixLocator).toBeVisible({ timeout: 60000 });
-    await fixLocator.click({ force: true });
-  });
-
-  test('Fix all issues with default (Low) effort', async () => {
-    test.setTimeout(3600000);
-    await vscodeApp.openAnalysisView();
-    const analysisView = await vscodeApp.getAnalysisIframe();
-    await analysisView
-      .locator('button#get-solution-button')
-      .first()
-      .click({ timeout: 300000 });
-    const resolutionView = await vscodeApp.getResolutionIframe();
-    const fixLocator = resolutionView.locator('button[aria-label="Apply fix"]');
-
-    await expect(fixLocator.first()).toBeVisible({ timeout: 3600000 });
-    const fixesNumber = await fixLocator.count();
-    for (let i = 0; i < fixesNumber; i++) {
-      await fixLocator.first().isVisible();
-      await fixLocator.first().click({ force: true });
-    }
+    await vscodeApp.startServer();
+    await vscodeApp.getWindow().screenshot({
+      path: `${SCREENSHOTS_FOLDER}/server-started.png`,
+    });
   });
 
   test.afterEach(async () => {

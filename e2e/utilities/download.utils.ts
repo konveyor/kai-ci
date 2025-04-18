@@ -10,7 +10,6 @@ import { getKAIPluginName } from './utils';
  */
 export async function downloadFile(): Promise<void> {
   const outputLocationPath = getKAIPluginName();
-  // const fileUrl = buildDownloadUrl();
   const defaultUrl = process.env.DEFAULT_VSIX_DOWNLOAD_URL || '';
 
   const writer = fs.createWriteStream(outputLocationPath);

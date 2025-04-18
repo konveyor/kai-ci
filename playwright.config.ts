@@ -6,10 +6,12 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
   testDir: './e2e/tests',
-  outputDir: 'tests-output',
+  outputDir: 'test-output',
+  globalSetup: require.resolve('./global.setup.ts'),
+  globalTeardown: require.resolve('./global.teardown.ts'),
   forbidOnly: !!process.env.CI,
   retries: 0,
-  workers: process.env.CI ? 2 : undefined,
+  workers: 1,
   timeout: 120000,
   reporter: 'line',
   expect: {
@@ -25,17 +27,13 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'setup',
-      testMatch: /global\.setup\.ts/,
-      teardown: 'teardown',
+      name: 'vscode-setup',
+      testMatch: /.*vscode\.test\.ts/,
     },
     {
-      name: 'teardown',
-      testMatch: /global\.teardown\.ts/,
-    },
-    {
-      name: 'tests',
-      dependencies: ['setup'],
+      name: 'main-tests',
+      testMatch: /^(?!.*vscode\.test\.ts$).*\.test\.ts$/,
+      dependencies: ['vscode-setup'],
     },
   ],
 });
