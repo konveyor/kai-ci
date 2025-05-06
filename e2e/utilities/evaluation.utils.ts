@@ -41,7 +41,7 @@ export async function prepareEvaluationData(model: string) {
   }
 
   console.log('Resetting coolstore repo...');
-  execSync(`cd coolstore && git checkout .`);
+  execSync(`cd coolstore && git checkout . && cd ..`);
 
   for (const fileUri of Object.keys(incidentsMap)) {
     const filePath = fileUri.replace(

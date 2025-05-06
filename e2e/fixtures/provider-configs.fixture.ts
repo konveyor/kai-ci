@@ -34,6 +34,6 @@ export const OPENAI_PROVIDER: ProviderConfig = {
 };
 
 export const providerConfigs: ProviderConfig[] = [
-  OPENAI_PROVIDER,
   DEFAULT_PROVIDER,
+  OPENAI_PROVIDER,
 ];
