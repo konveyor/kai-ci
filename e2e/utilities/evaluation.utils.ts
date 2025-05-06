@@ -1,15 +1,22 @@
 import fs from 'fs';
 import { TEST_OUTPUT_FOLDER } from './consts';
-import { AnalysisResult, Violation } from '../../kai-evaluator/model/analysis-result.model';
+import {
+  AnalysisResult,
+  Violation,
+} from '../../kai-evaluator/model/analysis-result.model';
 import { getOSInfo } from './utils';
 import { execSync } from 'child_process';
 import path from 'path';
 
 export async function prepareEvaluationData(model: string) {
   console.log('Saving coolstore directory to output...');
-  fs.cpSync('coolstore', `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, "-")}`, {
-    recursive: true,
-  });
+  fs.cpSync(
+    'coolstore',
+    `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, '-')}`,
+    {
+      recursive: true,
+    }
+  );
 
   const analysisData = await getFirstAnalysisFileContent();
   const incidentsMap: Record<string, any> = {};
@@ -79,4 +86,3 @@ async function getFirstAnalysisFileContent() {
 
   return JSON.parse(fileContent);
 }
-

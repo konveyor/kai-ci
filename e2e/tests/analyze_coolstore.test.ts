@@ -102,15 +102,14 @@ providerConfigs.forEach((config) => {
 
     test.afterAll(async () => {
       await vscodeApp.closeVSCode();
-      if (getOSInfo() === "linux" && allOk) {
+      if (getOSInfo() === 'linux' && allOk) {
         await prepareEvaluationData(config.model);
         await runEvaluation(
           path.join(TEST_OUTPUT_FOLDER, 'incidents-map.json'),
           TEST_OUTPUT_FOLDER,
           config.model
-        )
+        );
       }
-
     });
   });
 });

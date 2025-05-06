@@ -37,5 +37,3 @@ export const providerConfigs: ProviderConfig[] = [
   OPENAI_PROVIDER,
   DEFAULT_PROVIDER,
 ];
-
-

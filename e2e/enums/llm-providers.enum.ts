@@ -1,5 +1,5 @@
 export enum LLMProviders {
-  awsBedrock = "ChatBedrock",
-  openAI = "ChatOpenAI",
-  deepSeek = "ChatDeepSeek"
+  awsBedrock = 'ChatBedrock',
+  openAI = 'ChatOpenAI',
+  deepSeek = 'ChatDeepSeek',
 }
