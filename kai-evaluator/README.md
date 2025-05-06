@@ -1,3 +1,8 @@
+## Usage
+
+```bash
+  npx ts-node main.ts ../test-output/incidents-map.json ../test-output
+```
 ## Expected file input format
 
 

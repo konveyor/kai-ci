@@ -11,6 +11,7 @@ import * as path from 'path';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 import { Application } from './application.pages';
+import { DEFAULT_PROVIDER } from '../fixtures/provider-configs.fixture';
 
 export class VSCode extends Application {
   public static async open(repoUrl?: string, repoDir?: string) {
@@ -282,7 +283,9 @@ export class VSCode extends Application {
       .contentFrame();
   }
 
-  public async configureGenerativeAI() {
+  public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
+    // Opening analysis view due to https://github.com/konveyor/editor-extensions/issues/479
+    await this.openAnalysisView();
     await this.openSetUpKonveyor();
     await this.waitDefault();
     await this.window
@@ -295,16 +298,7 @@ export class VSCode extends Application {
     await this.waitDefault();
 
     await this.window.keyboard.press('Control+a+Delete');
-    await this.pasteContent(
-      [
-        'models:',
-        '  AmazonBedrock: &active',
-        '    provider: "ChatBedrock"',
-        '    args:',
-        '      model_id: "meta.llama3-70b-instruct-v1:0"',
-        'active: *active',
-      ].join('\n')
-    );
+    await this.pasteContent(config);
     await this.window.keyboard.press('Control+s');
   }
 }
