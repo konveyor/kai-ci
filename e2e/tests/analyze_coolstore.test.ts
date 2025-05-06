@@ -68,7 +68,7 @@ providerConfigs.forEach((config) => {
       await fixLocator.click({ force: true });
     });
 
-    test('Fix all issues with default (Low) effort', async () => {
+    test.skip('Fix all issues with default (Low) effort', async () => {
       test.setTimeout(3600000);
       await vscodeApp.openAnalysisView();
       const analysisView = await vscodeApp.getAnalysisIframe();

@@ -38,7 +38,12 @@ export async function cleanupRepo(repoDir: string) {
   }
 
   try {
-    fs.rmSync(repoPath, { recursive: true, force: true });
+    fs.rmSync(repoPath, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 5000,
+    });
     console.debug(`cleanupRepo: Successfully deleted directory ${repoPath}`);
   } catch (error) {
     console.error('Error while cleaning up cloned repository:', error);
