@@ -17,8 +17,7 @@ export class VSCode extends Application {
   public static async open(repoUrl?: string, repoDir?: string) {
     try {
       if (repoUrl) {
-        if (repoDir){
-          console.log(`Folder already exists, removing it...`);
+        if (repoDir) {
           await cleanupRepo(repoDir);
         }
         console.log(`Cloning repository from ${repoUrl}`);
