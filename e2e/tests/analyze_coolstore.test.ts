@@ -102,6 +102,7 @@ providerConfigs.forEach((config) => {
 
     test.afterAll(async () => {
       await vscodeApp.closeVSCode();
+      // Evaluation should be performed just on Linux
       if (getOSInfo() === 'linux' && allOk) {
         await prepareEvaluationData(config.model);
         await runEvaluation(
