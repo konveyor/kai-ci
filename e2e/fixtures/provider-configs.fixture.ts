@@ -45,7 +45,7 @@ export const PARASOL_PROVIDER: ProviderConfig = {
     '    provider: "ChatOpenAI"',
     '    args:',
     '      model: "granite-8b-code-instruct-128k"',
-    '      base_url: "https://granite-8b-code-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443"',
+    '      base_url: "https://granite-8b-code-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1"',
     'active: *active',
   ].join('\n'),
 };
