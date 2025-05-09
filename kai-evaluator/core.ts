@@ -3,7 +3,7 @@ import { EvaluationResult } from './model/evaluation-result.model';
 import { evaluateFile } from './agents/evaluation.agent';
 import { FileEvaluationInput } from './model/evaluation-input.model';
 import path from 'path';
-import { downloadObject, uploadObject } from './utils/s3';
+import { downloadObject, uploadObject } from './utils/s3.utils';
 
 export async function runEvaluation(
   fileInputPath: string,
