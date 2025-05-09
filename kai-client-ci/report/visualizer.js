@@ -112,19 +112,18 @@ function resetCanvasElements(chartIds, containerId) {
 }
 
 function addRangePicker(options = {}) {
+  const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const defaultOptions = {
     mode: 'range',
     dateFormat: 'Y-m-d',
+    defaultDate: [new Date(), lastWeek],
     onClose: function (selectedDates) {
       if (selectedDates.length !== 2) return;
 
       const startDate = selectedDates[0];
       const endDate = selectedDates[1];
 
-      const filteredData = kaiData.filter((item) => {
-        const itemDate = new Date(item.date);
-        return itemDate >= startDate && itemDate <= endDate;
-      });
+      const filteredData = filterDataByRangeDate(startDate, endDate);
 
       resetCanvasElements(['kai-performance-chart'], 'history-performance');
 
@@ -241,14 +240,19 @@ function initializeComponents() {
   };
 }
 
-function initializeCharts() {
-  kaiPerformanceChart(kaiData);
+function filterDataByRangeDate(startDate, endDate) {
+  return kaiData.filter((item) => {
+    const itemDate = new Date(item.date);
+    return itemDate >= startDate && itemDate <= endDate;
+  });
 }
 
 async function init() {
   await fetchJson();
   initializeComponents();
-  initializeCharts();
+  const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  kaiPerformanceChart(filterDataByRangeDate(lastWeek, new Date()));
 }
 
 init();

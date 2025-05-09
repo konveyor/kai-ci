@@ -14,7 +14,7 @@ export async function uploadObject(
     new PutObjectCommand({
       Key: path,
       Body: file,
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: process.env.KAI_QE_S3_BUCKET_NAME,
       ContentType: contentType,
     })
   );
@@ -25,7 +25,7 @@ export async function downloadObject(path: string) {
   return client.send(
     new GetObjectCommand({
       Key: path,
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: process.env.KAI_QE_S3_BUCKET_NAME,
     })
   );
 }

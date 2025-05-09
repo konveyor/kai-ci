@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { execSync } from 'child_process';
 import * as path from 'path';
 import type { TestInfo } from '@playwright/test';
+import { rm } from 'node:fs/promises';
 
 // Function to get OS information
 export function getOSInfo(): string {
@@ -38,7 +39,12 @@ export async function cleanupRepo(repoDir: string) {
   }
 
   try {
-    fs.rmSync(repoPath, { recursive: true, force: true });
+    await rm(repoPath, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 5000,
+    });
     console.debug(`cleanupRepo: Successfully deleted directory ${repoPath}`);
   } catch (error) {
     console.error('Error while cleaning up cloned repository:', error);

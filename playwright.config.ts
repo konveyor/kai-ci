@@ -8,7 +8,6 @@ export default defineConfig({
   testDir: './e2e/tests',
   outputDir: 'test-output',
   globalSetup: require.resolve('./global.setup.ts'),
-  globalTeardown: require.resolve('./global.teardown.ts'),
   forbidOnly: !!process.env.CI,
   retries: 0,
   workers: 1,

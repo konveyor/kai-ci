@@ -1,0 +1,57 @@
+import { LLMProviders } from '../enums/llm-providers.enum';
+
+export interface ProviderConfig {
+  model: string;
+  provider: LLMProviders;
+  config: string;
+}
+
+export const DEFAULT_PROVIDER: ProviderConfig = {
+  provider: LLMProviders.awsBedrock,
+  model: 'meta.llama3-70b-instruct-v1:0',
+  config: [
+    'models:',
+    '  AmazonBedrock: &active',
+    '    provider: "ChatBedrock"',
+    '    args:',
+    '      model_id: "meta.llama3-70b-instruct-v1:0"',
+    'active: *active',
+  ].join('\n'),
+};
+
+export const OPENAI_PROVIDER: ProviderConfig = {
+  provider: LLMProviders.openAI,
+  model: 'gpt-4o-mini',
+  config: [
+    'models:',
+    '  OpenAI: &active',
+    '    environment:',
+    `      OPENAI_API_KEY: "${process.env.OPENAI_API_KEY}"`,
+    '    provider: "ChatOpenAI"',
+    '    args:',
+    '      model: "gpt-4o-mini"',
+    'active: *active',
+  ].join('\n'),
+};
+
+export const PARASOL_PROVIDER: ProviderConfig = {
+  provider: LLMProviders.openAI,
+  model: 'granite-8b-code-instruct-128k',
+  config: [
+    'models:',
+    '  parasols-maas-granite: &active',
+    '    environment:',
+    `      OPENAI_API_KEY: "${process.env.PARASOL_API_KEY}"`,
+    '    provider: "ChatOpenAI"',
+    '    args:',
+    '      model: "granite-8b-code-instruct-128k"',
+    '      base_url: "https://granite-8b-code-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1"',
+    'active: *active',
+  ].join('\n'),
+};
+
+export const providerConfigs: ProviderConfig[] = [
+  PARASOL_PROVIDER,
+  DEFAULT_PROVIDER,
+  OPENAI_PROVIDER,
+];

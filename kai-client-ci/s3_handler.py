@@ -10,7 +10,7 @@ logger = get_logger(__name__)
 
 
 def upload(file: str, path: str, content_type: str = "binary/octet-stream") -> str:
-    bucket_name = os.getenv("S3_BUCKET_NAME")
+    bucket_name = os.getenv("KAI_QE_S3_BUCKET_NAME")
     s3 = boto3.resource('s3')
     s3.Bucket(bucket_name).upload_file(file, Key=path, ExtraArgs={'ContentType': content_type})
     logger.debug(f"Uploaded file {file} to {path}")
@@ -19,9 +19,9 @@ def upload(file: str, path: str, content_type: str = "binary/octet-stream") -> s
 
 def download(file: str, path: str):
     s3 = boto3.client('s3')
-    s3.download_file(os.getenv("S3_BUCKET_NAME"), file, path)
+    s3.download_file(os.getenv("KAI_QE_S3_BUCKET_NAME"), file, path)
 
 
 def delete(file: str):
     s3 = boto3.client('s3')
-    s3.delete_object(Bucket=os.getenv("S3_BUCKET_NAME"), Key=file)
+    s3.delete_object(Bucket=os.getenv("KAI_QE_S3_BUCKET_NAME"), Key=file)

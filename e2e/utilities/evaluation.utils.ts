@@ -1,18 +1,22 @@
-import * as fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
-import { TEST_OUTPUT_FOLDER } from './e2e/utilities/consts';
-import { getOSInfo } from './e2e/utilities/utils';
+import fs from 'fs';
+import { TEST_OUTPUT_FOLDER } from './consts';
 import {
   AnalysisResult,
   Violation,
-} from './kai-evaluator/model/analysis-result.model';
+} from '../../kai-evaluator/model/analysis-result.model';
+import { getOSInfo } from './utils';
+import { execSync } from 'child_process';
+import path from 'path';
 
-async function globalTeardown() {
-  console.log('[globalTeardown] Copying coolstore directory...');
-  fs.cpSync('coolstore', `${TEST_OUTPUT_FOLDER}/coolstore`, {
-    recursive: true,
-  });
+export async function prepareEvaluationData(model: string) {
+  console.log('Saving coolstore directory to output...');
+  fs.cpSync(
+    'coolstore',
+    `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, '-')}`,
+    {
+      recursive: true,
+    }
+  );
 
   const analysisData = await getFirstAnalysisFileContent();
   const incidentsMap: Record<string, any> = {};
@@ -36,8 +40,8 @@ async function globalTeardown() {
     incidentsMap[fileUri].updatedContent = fs.readFileSync(filePath, 'utf-8');
   }
 
-  console.log('[globalTeardown] Resetting coolstore repo...');
-  execSync(`cd coolstore && git checkout .`);
+  console.log('Resetting coolstore repo...');
+  execSync(`cd coolstore && git checkout . && cd ..`);
 
   for (const fileUri of Object.keys(incidentsMap)) {
     const filePath = fileUri.replace(
@@ -53,7 +57,7 @@ async function globalTeardown() {
     'utf-8'
   );
 
-  console.log('[globalTeardown] Finished.');
+  console.log('Incidents mapping finished.');
 }
 
 async function getFirstAnalysisFileContent() {
@@ -82,5 +86,3 @@ async function getFirstAnalysisFileContent() {
 
   return JSON.parse(fileContent);
 }
-
-export default globalTeardown;
