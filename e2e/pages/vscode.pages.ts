@@ -288,12 +288,7 @@ export class VSCode extends Application {
   }
 
   public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
-    await this.waitDefault();
     await this.openSetUpKonveyor();
-    await this.waitDefault();
-    await this.getWindow().screenshot({
-      path: `${SCREENSHOTS_FOLDER}/dedebug.png`,
-    });
     await this.window
       .getByRole('button', { name: 'Configure Generative AI' })
       .click();

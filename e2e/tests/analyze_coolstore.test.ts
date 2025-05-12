@@ -84,7 +84,7 @@ providerConfigs.forEach((config) => {
       await expect(fixLocator.first()).toBeVisible({ timeout: 3600000 });
       const fixesNumber = await fixLocator.count();
       for (let i = 0; i < fixesNumber; i++) {
-        await expect(fixLocator.first()).toBeVisible();
+        await expect(fixLocator.first()).toBeVisible({timeout: 30000});
         await fixLocator.first().click({ force: true });
       }
     });
