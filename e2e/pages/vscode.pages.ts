@@ -29,9 +29,10 @@ export class VSCode extends Application {
     }
 
     const vscodeExecutablePath = getVscodeExecutablePath();
-    const args = repoDir
-      ? [path.resolve(repoDir), '--disable-workspace-trust']
-      : ['--disable-workspace-trust'];
+    const args = ['--disable-workspace-trust', "--skip-welcome"];
+    if (repoDir) {
+      args.push(path.resolve(repoDir))
+    }
 
     const vscodeApp = await electron.launch({
       executablePath: vscodeExecutablePath,
