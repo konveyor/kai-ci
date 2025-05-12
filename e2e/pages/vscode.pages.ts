@@ -12,6 +12,7 @@ import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 import { Application } from './application.pages';
 import { DEFAULT_PROVIDER } from '../fixtures/provider-configs.fixture';
+import { SCREENSHOTS_FOLDER } from '../utilities/consts';
 
 export class VSCode extends Application {
   public static async open(repoUrl?: string, repoDir?: string) {
@@ -28,9 +29,10 @@ export class VSCode extends Application {
     }
 
     const vscodeExecutablePath = getVscodeExecutablePath();
-    const args = repoDir
-      ? [path.resolve(repoDir), '--disable-workspace-trust']
-      : ['--disable-workspace-trust'];
+    const args = ['--disable-workspace-trust', '--skip-welcome'];
+    if (repoDir) {
+      args.push(path.resolve(repoDir));
+    }
 
     const vscodeApp = await electron.launch({
       executablePath: vscodeExecutablePath,
@@ -287,7 +289,6 @@ export class VSCode extends Application {
 
   public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
     await this.openSetUpKonveyor();
-    await this.waitDefault();
     await this.window
       .getByRole('button', { name: 'Configure Generative AI' })
       .click();

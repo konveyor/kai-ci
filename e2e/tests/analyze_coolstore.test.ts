@@ -29,7 +29,7 @@ providerConfigs.forEach((config) => {
       const testName = test.info().title.replace(' ', '-');
       console.log(`Starting ${testName} at ${new Date()}`);
       await vscodeApp.getWindow().screenshot({
-        path: `${SCREENSHOTS_FOLDER}/before-${testName}.png`,
+        path: `${SCREENSHOTS_FOLDER}/before-${testName}-${config.model.replace(/[.:]/g, '-')}.png`,
       });
     });
 
@@ -80,11 +80,11 @@ providerConfigs.forEach((config) => {
       const fixLocator = resolutionView.locator(
         'button[aria-label="Apply fix"]'
       );
-
+      await vscodeApp.waitDefault();
       await expect(fixLocator.first()).toBeVisible({ timeout: 3600000 });
       const fixesNumber = await fixLocator.count();
       for (let i = 0; i < fixesNumber; i++) {
-        await expect(fixLocator.first()).toBeVisible();
+        await expect(fixLocator.first()).toBeVisible({ timeout: 30000 });
         await fixLocator.first().click({ force: true });
       }
     });
@@ -96,7 +96,7 @@ providerConfigs.forEach((config) => {
       const testName = test.info().title.replace(' ', '-');
       console.log(`Finished ${testName} at ${new Date()}`);
       await vscodeApp.getWindow().screenshot({
-        path: `${SCREENSHOTS_FOLDER}/after-${testName}.png`,
+        path: `${SCREENSHOTS_FOLDER}/after-${testName}-${config.model.replace(/[.:]/g, '-')}.png`,
       });
     });
 
