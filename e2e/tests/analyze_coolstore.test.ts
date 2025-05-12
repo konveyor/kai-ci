@@ -108,7 +108,8 @@ providerConfigs.forEach((config) => {
         await runEvaluation(
           path.join(TEST_OUTPUT_FOLDER, 'incidents-map.json'),
           TEST_OUTPUT_FOLDER,
-          config.model
+          config.model,
+          `${TEST_OUTPUT_FOLDER}/coolstore-${config.model.replace(/[.:]/g, '-')}`
         );
       }
     });

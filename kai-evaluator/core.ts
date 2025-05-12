@@ -4,11 +4,13 @@ import { evaluateFile } from './agents/evaluation.agent';
 import { FileEvaluationInput } from './model/evaluation-input.model';
 import path from 'path';
 import { downloadObject, uploadObject } from './utils/s3.utils';
+import { isBuildable } from './utils/build.utils';
 
 export async function runEvaluation(
   fileInputPath: string,
   fileOutputPath: string,
-  model = 'meta.llama3-70b-instruct-v1:0'
+  model = 'meta.llama3-70b-instruct-v1:0',
+  repositoryPath?: string
 ) {
   const data = JSON.parse(fs.readFileSync(fileInputPath, 'utf-8'));
   console.log('Evaluating results...');
@@ -26,6 +28,12 @@ export async function runEvaluation(
     evaluationModel: 'meta.llama3-70b-instruct-v1:0', // TODO take from env
     errors: [],
   };
+
+  if (repositoryPath) {
+    evaluationResult.buildable = await isBuildable(
+      path.resolve(repositoryPath)
+    );
+  }
 
   const start = new Date();
   for (const file of Object.keys(data))

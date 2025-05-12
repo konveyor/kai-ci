@@ -10,6 +10,7 @@ export interface EvaluationResult {
   model: string;
   evaluationModel: string;
   errors: string[];
+  buildable?: boolean;
 }
 
 export interface FileEvaluationResult {
