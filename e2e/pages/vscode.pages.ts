@@ -287,8 +287,7 @@ export class VSCode extends Application {
   }
 
   public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
-    // Opening analysis view due to https://github.com/konveyor/editor-extensions/issues/479
-    await this.openAnalysisView();
+    await this.waitDefault();
     await this.openSetUpKonveyor();
     await this.waitDefault();
     await this.getWindow().screenshot({
