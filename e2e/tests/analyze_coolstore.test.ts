@@ -64,8 +64,13 @@ providerConfigs.forEach((config) => {
       const fixLocator = resolutionView
         .locator('button[aria-label="Apply fix"]')
         .first();
+      await vscodeApp.waitDefault();
       await expect(fixLocator).toBeVisible({ timeout: 60000 });
+      expect(await fixLocator.count()).toEqual(1);
       await fixLocator.click({ force: true });
+      await expect(
+        vscodeApp.getWindow().getByText('All resolutions have been applied').first()
+      ).toBeVisible({ timeout: 60000 });
     });
 
     test('Fix all issues with default (Low) effort', async () => {
@@ -103,7 +108,7 @@ providerConfigs.forEach((config) => {
     test.afterAll(async () => {
       await vscodeApp.closeVSCode();
       // Evaluation should be performed just on Linux, on CI by default and only if all tests passed
-      if (getOSInfo() === 'linux' && allOk && process.env.CI) {
+      if (getOSInfo() === 'linux' && allOk) {
         await prepareEvaluationData(config.model);
         await runEvaluation(
           path.join(TEST_OUTPUT_FOLDER, 'incidents-map.json'),

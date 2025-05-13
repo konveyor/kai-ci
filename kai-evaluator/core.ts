@@ -78,7 +78,9 @@ export async function runEvaluation(
       JSON.stringify(awsReportBody, null, 2),
       'utf-8'
     );
-    await uploadObject(JSON.stringify(awsReportBody), 'report.json');
+    if (process.env.CI) {
+      await uploadObject(JSON.stringify(awsReportBody), 'report.json');
+    }
   }
   console.log('Execution finished...');
 }
