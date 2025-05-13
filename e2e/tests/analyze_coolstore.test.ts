@@ -67,7 +67,8 @@ providerConfigs.forEach((config) => {
       await vscodeApp.waitDefault();
       await expect(fixLocator).toBeVisible({ timeout: 60000 });
       expect(await fixLocator.count()).toEqual(1);
-      await fixLocator.click({ timeout: 10000 });
+      // Ensures the button is clicked even if there are notifications overlaying it due to screen size
+      await fixLocator.dispatchEvent('click');
       await expect(
         resolutionView.getByText('All resolutions have been applied').first()
       ).toBeVisible({ timeout: 60000 });
@@ -90,7 +91,8 @@ providerConfigs.forEach((config) => {
       const fixesNumber = await fixLocator.count();
       for (let i = 0; i < fixesNumber; i++) {
         await expect(fixLocator.first()).toBeVisible({ timeout: 30000 });
-        await fixLocator.first().click({ timeout: 10000 });
+        // Ensures the button is clicked even if there are notifications overlaying it due to screen size
+        await fixLocator.dispatchEvent('click');
       }
     });
 
