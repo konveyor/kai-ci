@@ -69,7 +69,7 @@ providerConfigs.forEach((config) => {
       expect(await fixLocator.count()).toEqual(1);
       await fixLocator.click({ force: true });
       await expect(
-        vscodeApp.getWindow().getByText('All resolutions have been applied').first()
+        resolutionView.getByText('All resolutions have been applied').first()
       ).toBeVisible({ timeout: 60000 });
     });
 
