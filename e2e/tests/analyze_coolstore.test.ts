@@ -92,7 +92,7 @@ providerConfigs.forEach((config) => {
       for (let i = 0; i < fixesNumber; i++) {
         await expect(fixLocator.first()).toBeVisible({ timeout: 30000 });
         // Ensures the button is clicked even if there are notifications overlaying it due to screen size
-        await fixLocator.dispatchEvent('click');
+        await fixLocator.first().dispatchEvent('click');
       }
     });
 
