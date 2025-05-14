@@ -60,7 +60,39 @@ export async function prepareEvaluationData(model: string) {
   console.log('Incidents mapping finished.');
 }
 
+
 async function getFirstAnalysisFileContent() {
+  const konveyorFolder = 'coolstore/.vscode/konveyor';
+  const files = await fs.promises.readdir(konveyorFolder);
+
+  const analysisFiles = files.filter((file) =>
+    file.startsWith('analysis')
+  );
+
+  if (!analysisFiles.length) {
+    console.error('No analysis file found.');
+    return [];
+  }
+
+  const filesWithStats = await Promise.all(
+    analysisFiles.map(async (file) => {
+      const fullPath = path.join(konveyorFolder, file);
+      const stats = await fs.promises.stat(fullPath);
+      return { file, mtime: stats.mtime };
+    })
+  );
+
+  filesWithStats.sort((a, b) => a.mtime.getTime() - b.mtime.getTime());
+
+  const fileContent = await fs.promises.readFile(
+    path.join(konveyorFolder, filesWithStats[0].file),
+    'utf-8'
+  );
+
+  return JSON.parse(fileContent);
+}
+
+async function by_name_getFirstAnalysisFileContent() {
   const konveyorFolder = 'coolstore/.vscode/konveyor';
   const files = await fs.promises.readdir(konveyorFolder);
 
