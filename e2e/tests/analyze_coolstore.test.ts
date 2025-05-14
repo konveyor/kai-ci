@@ -94,6 +94,7 @@ providerConfigs.forEach((config) => {
         await expect(fixLocator.first()).toBeVisible({ timeout: 30000 });
         // Ensures the button is clicked even if there are notifications overlaying it due to screen size
         await fixLocator.first().dispatchEvent('click');
+        await vscodeApp.waitDefault();
         expect(await fixLocator.count()).toEqual(--fixesCounter);
       }
     });
