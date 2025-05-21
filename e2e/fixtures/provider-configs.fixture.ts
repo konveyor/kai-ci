@@ -51,7 +51,7 @@ export const PARASOL_PROVIDER: ProviderConfig = {
 };
 
 export const providerConfigs: ProviderConfig[] = [
-  //PARASOL_PROVIDER,
+  PARASOL_PROVIDER,
   DEFAULT_PROVIDER,
-  //OPENAI_PROVIDER,
+  OPENAI_PROVIDER,
 ];
