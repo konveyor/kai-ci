@@ -13,9 +13,12 @@ export async function prepareEvaluationData(model: string) {
   fs.cpSync(
     'coolstore',
     `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, '-')}`,
-    {
-      recursive: true,
-    }
+    { recursive: true }
+  );
+  fs.cpSync(
+    'coolstore/.vscode',
+    `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, '-')}/.vscode`,
+    { recursive: true }
   );
 
   const analysisData = await getFirstAnalysisFileContent();
@@ -60,14 +63,11 @@ export async function prepareEvaluationData(model: string) {
   console.log('Incidents mapping finished.');
 }
 
-
 async function getFirstAnalysisFileContent() {
   const konveyorFolder = 'coolstore/.vscode/konveyor';
   const files = await fs.promises.readdir(konveyorFolder);
 
-  const analysisFiles = files.filter((file) =>
-    file.startsWith('analysis')
-  );
+  const analysisFiles = files.filter((file) => file.startsWith('analysis'));
 
   if (!analysisFiles.length) {
     console.error('No analysis file found.');
@@ -86,33 +86,6 @@ async function getFirstAnalysisFileContent() {
 
   const fileContent = await fs.promises.readFile(
     path.join(konveyorFolder, filesWithStats[0].file),
-    'utf-8'
-  );
-
-  return JSON.parse(fileContent);
-}
-
-async function by_name_getFirstAnalysisFileContent() {
-  const konveyorFolder = 'coolstore/.vscode/konveyor';
-  const files = await fs.promises.readdir(konveyorFolder);
-
-  const analysisFiles = files.filter((file) =>
-    /^analysis_\d{8}T\d{6}\.json$/.test(file)
-  );
-
-  if (!analysisFiles.length) {
-    console.error('No analysis file found.');
-    return [];
-  }
-
-  analysisFiles.sort((a, b) => {
-    const dateA = a.match(/\d{8}T\d{6}/)?.[0] ?? '';
-    const dateB = b.match(/\d{8}T\d{6}/)?.[0] ?? '';
-    return dateA.localeCompare(dateB);
-  });
-
-  const fileContent = await fs.promises.readFile(
-    path.join(konveyorFolder, analysisFiles[0]),
     'utf-8'
   );
 
