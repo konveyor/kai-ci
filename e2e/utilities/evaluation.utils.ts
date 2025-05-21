@@ -16,10 +16,12 @@ export async function prepareEvaluationData(model: string) {
     { recursive: true }
   );
 
-  const analysisData = JSON.parse(await fs.promises.readFile(
-    path.join(TEST_OUTPUT_FOLDER, ORIGINAL_ANALYSIS_FILENAME),
-    'utf-8'
-  ));
+  const analysisData = JSON.parse(
+    await fs.promises.readFile(
+      path.join(TEST_OUTPUT_FOLDER, ORIGINAL_ANALYSIS_FILENAME),
+      'utf-8'
+    )
+  );
   const incidentsMap: Record<string, any> = {};
 
   for (const analysis of analysisData as AnalysisResult[]) {

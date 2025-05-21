@@ -5,7 +5,10 @@ import { getOSInfo, getRepoName } from '../utilities/utils';
 import { providerConfigs } from '../fixtures/provider-configs.fixture';
 import path from 'path';
 import { runEvaluation } from '../../kai-evaluator/core';
-import { prepareEvaluationData, saveOriginalAnalysisFile } from '../utilities/evaluation.utils';
+import {
+  prepareEvaluationData,
+  saveOriginalAnalysisFile,
+} from '../utilities/evaluation.utils';
 
 providerConfigs.forEach((config) => {
   test.describe(`Coolstore app tests | ${config.model}`, () => {
