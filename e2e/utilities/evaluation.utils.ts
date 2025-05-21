@@ -15,11 +15,6 @@ export async function prepareEvaluationData(model: string) {
     `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, '-')}`,
     { recursive: true }
   );
-  fs.cpSync(
-    'coolstore/.vscode',
-    `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, '-')}/.vscode`,
-    { recursive: true }
-  );
 
   const analysisData = await getFirstAnalysisFileContent();
   const incidentsMap: Record<string, any> = {};
@@ -66,6 +61,8 @@ export async function prepareEvaluationData(model: string) {
 async function getFirstAnalysisFileContent() {
   const konveyorFolder = 'coolstore/.vscode/konveyor';
   const files = await fs.promises.readdir(konveyorFolder);
+  console.log(`FILES INSIDE ${konveyorFolder}`);
+  console.log(files);
 
   const analysisFiles = files.filter((file) => file.startsWith('analysis'));
 
@@ -88,6 +85,9 @@ async function getFirstAnalysisFileContent() {
     path.join(konveyorFolder, filesWithStats[0].file),
     'utf-8'
   );
+  console.log(`OLDEST FILE IS ${filesWithStats[0].file}`);
+  console.log(`CONTENT IS:`);
+  console.log(fileContent);
 
   return JSON.parse(fileContent);
 }
