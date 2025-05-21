@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { TEST_OUTPUT_FOLDER } from './consts';
+import { ORIGINAL_ANALYSIS_FILENAME, TEST_OUTPUT_FOLDER } from './consts';
 import {
   AnalysisResult,
   Violation,
@@ -16,7 +16,10 @@ export async function prepareEvaluationData(model: string) {
     { recursive: true }
   );
 
-  const analysisData = await getFirstAnalysisFileContent();
+  const analysisData = JSON.parse(await fs.promises.readFile(
+    path.join(TEST_OUTPUT_FOLDER, ORIGINAL_ANALYSIS_FILENAME),
+    'utf-8'
+  ));
   const incidentsMap: Record<string, any> = {};
 
   for (const analysis of analysisData as AnalysisResult[]) {
@@ -58,17 +61,22 @@ export async function prepareEvaluationData(model: string) {
   console.log('Incidents mapping finished.');
 }
 
-async function getFirstAnalysisFileContent() {
+export async function saveOriginalAnalysisFile() {
+  fs.cpSync(
+    await getFirstAnalysisFile(),
+    path.join(TEST_OUTPUT_FOLDER, ORIGINAL_ANALYSIS_FILENAME),
+    { force: true }
+  );
+}
+
+async function getFirstAnalysisFile() {
   const konveyorFolder = 'coolstore/.vscode/konveyor';
   const files = await fs.promises.readdir(konveyorFolder);
-  console.log(`FILES INSIDE ${konveyorFolder}`);
-  console.log(files);
 
   const analysisFiles = files.filter((file) => file.startsWith('analysis'));
 
   if (!analysisFiles.length) {
-    console.error('No analysis file found.');
-    return [];
+    throw new Error('Could not find analysis file');
   }
 
   const filesWithStats = await Promise.all(
@@ -80,14 +88,5 @@ async function getFirstAnalysisFileContent() {
   );
 
   filesWithStats.sort((a, b) => a.mtime.getTime() - b.mtime.getTime());
-
-  const fileContent = await fs.promises.readFile(
-    path.join(konveyorFolder, filesWithStats[0].file),
-    'utf-8'
-  );
-  console.log(`OLDEST FILE IS ${filesWithStats[0].file}`);
-  console.log(`CONTENT IS:`);
-  console.log(fileContent);
-
-  return JSON.parse(fileContent);
+  return path.join(konveyorFolder, filesWithStats[0].file);
 }

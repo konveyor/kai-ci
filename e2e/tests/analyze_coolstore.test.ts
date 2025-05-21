@@ -5,7 +5,7 @@ import { getOSInfo, getRepoName } from '../utilities/utils';
 import { providerConfigs } from '../fixtures/provider-configs.fixture';
 import path from 'path';
 import { runEvaluation } from '../../kai-evaluator/core';
-import { prepareEvaluationData } from '../utilities/evaluation.utils';
+import { prepareEvaluationData, saveOriginalAnalysisFile } from '../utilities/evaluation.utils';
 
 providerConfigs.forEach((config) => {
   test.describe(`Coolstore app tests | ${config.model}`, () => {
@@ -44,7 +44,11 @@ providerConfigs.forEach((config) => {
       await expect(
         vscodeApp.getWindow().getByText('Analysis completed').first()
       ).toBeVisible({ timeout: 1800000 });
-
+      /*
+       * There is a limit in the number of analysis and solution files that kai stores
+       * This method ensures the original analysis is stored to be used later in the evaluation
+       */
+      await saveOriginalAnalysisFile();
       await vscodeApp.getWindow().screenshot({
         path: `${SCREENSHOTS_FOLDER}/analysis-finished.png`,
       });

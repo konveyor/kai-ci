@@ -219,19 +219,28 @@ function initializeComponents() {
       html: `
        <div style="text-align: left; font-size: 15px;">
           <p><strong>Effectiveness:</strong><br>
-          A grade from 0 to 10 of how effectively the changes migrate the file from the source technology to the target technology.</p>
+            A grade from 0 to 10 of how effectively the changes migrate the file from the source technology to the target technology.
+          </p>
           
           <p><strong>Specificity:</strong><br>
-          A grade from 0 to 10 of how targeted the changes are at specifically addressing the incidents identified by Konveyor.</p>
+            A grade from 0 to 10 of how targeted the changes are at specifically addressing the incidents identified by Konveyor.
+          </p>
           
           <p><strong>Competency:</strong>  <br>
-          A grade from 0 to 10 of how competently the changes reflect industry best practice for the language and target technology.</p>
+            A grade from 0 to 10 of how competently the changes reflect industry best practice for the language and target technology.
+          </p>
           
           <p><strong>Valid Code (boolean):</strong><br>
-          Indicates the changed file is valid, syntactically correct code that can be successfully compiled or interpreted.</p>
+            Indicates the changed file is valid, syntactically correct code that can be successfully compiled or interpreted.
+          </p>
           
           <p><strong>Unnecessary Changes (boolean):</strong> <br>
-          Indicates whether unnecessary changes were made that do not advance the goal of migration.</p>
+            Indicates whether unnecessary changes were made that do not advance the goal of migration.
+          </p>
+          
+          <p><strong>Buildable (boolean):</strong> <br>
+            Indicates whether the project can be built with maven after applying all the proposed fixes
+          </p>
         </div>
       `,
       confirmButtonText: 'Close',

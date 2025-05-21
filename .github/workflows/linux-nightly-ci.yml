@@ -86,12 +86,12 @@ jobs:
         name: test-output
         path: ./test-output
       if: ${{ !cancelled() }}
-    - name: Upload kai logs
+    - name: Upload .vscode content
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: kai-logs
-        path: ./coolstore/.vscode/konveyor-logs
+        name: vscode-folder
+        path: ./coolstore/.vscode
     - name: Upload extension output
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
