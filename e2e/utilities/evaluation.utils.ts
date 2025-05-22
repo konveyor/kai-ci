@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { TEST_OUTPUT_FOLDER } from './consts';
+import { ORIGINAL_ANALYSIS_FILENAME, TEST_OUTPUT_FOLDER } from './consts';
 import {
   AnalysisResult,
   Violation,
@@ -13,12 +13,15 @@ export async function prepareEvaluationData(model: string) {
   fs.cpSync(
     'coolstore',
     `${TEST_OUTPUT_FOLDER}/coolstore-${model.replace(/[.:]/g, '-')}`,
-    {
-      recursive: true,
-    }
+    { recursive: true }
   );
 
-  const analysisData = await getFirstAnalysisFileContent();
+  const analysisData = JSON.parse(
+    await fs.promises.readFile(
+      path.join(TEST_OUTPUT_FOLDER, ORIGINAL_ANALYSIS_FILENAME),
+      'utf-8'
+    )
+  );
   const incidentsMap: Record<string, any> = {};
 
   for (const analysis of analysisData as AnalysisResult[]) {
@@ -60,29 +63,32 @@ export async function prepareEvaluationData(model: string) {
   console.log('Incidents mapping finished.');
 }
 
-async function getFirstAnalysisFileContent() {
+export async function saveOriginalAnalysisFile() {
+  fs.cpSync(
+    await getFirstAnalysisFile(),
+    path.join(TEST_OUTPUT_FOLDER, ORIGINAL_ANALYSIS_FILENAME),
+    { force: true }
+  );
+}
+
+async function getFirstAnalysisFile() {
   const konveyorFolder = 'coolstore/.vscode/konveyor';
   const files = await fs.promises.readdir(konveyorFolder);
 
-  const analysisFiles = files.filter((file) =>
-    /^analysis_\d{8}T\d{6}\.json$/.test(file)
-  );
+  const analysisFiles = files.filter((file) => file.startsWith('analysis'));
 
   if (!analysisFiles.length) {
-    console.error('No analysis file found.');
-    return [];
+    throw new Error('Could not find analysis file');
   }
 
-  analysisFiles.sort((a, b) => {
-    const dateA = a.match(/\d{8}T\d{6}/)?.[0] ?? '';
-    const dateB = b.match(/\d{8}T\d{6}/)?.[0] ?? '';
-    return dateA.localeCompare(dateB);
-  });
-
-  const fileContent = await fs.promises.readFile(
-    path.join(konveyorFolder, analysisFiles[0]),
-    'utf-8'
+  const filesWithStats = await Promise.all(
+    analysisFiles.map(async (file) => {
+      const fullPath = path.join(konveyorFolder, file);
+      const stats = await fs.promises.stat(fullPath);
+      return { file, mtime: stats.mtime };
+    })
   );
 
-  return JSON.parse(fileContent);
+  filesWithStats.sort((a, b) => a.mtime.getTime() - b.mtime.getTime());
+  return path.join(konveyorFolder, filesWithStats[0].file);
 }

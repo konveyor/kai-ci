@@ -27,6 +27,6 @@ export class Application {
   }
 
   public async waitDefault() {
-    await this.window.waitForTimeout(process.env.CI ? 5000 : 500);
+    await this.window.waitForTimeout(process.env.CI ? 5000 : 1000);
   }
 }

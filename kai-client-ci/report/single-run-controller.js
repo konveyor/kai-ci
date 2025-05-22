@@ -6,6 +6,14 @@ function createSingleRunDetails(singleNightRun) {
   const insightsGrid = document.getElementById('insights-grid');
   insightsGrid.appendChild(createCard('Model', singleNightRun.model));
   insightsGrid.appendChild(
+    createCard('Total Files', singleNightRun.totalFiles)
+  );
+  if (singleNightRun.buildable !== undefined) {
+    insightsGrid.appendChild(
+      createCard('Buildable', singleNightRun.buildable ? '✅' : '❌')
+    );
+  }
+  insightsGrid.appendChild(
     createCard(
       'Average Competency',
       singleNightRun.averageCompetency.toFixed(2)
@@ -22,12 +30,6 @@ function createSingleRunDetails(singleNightRun) {
       'Average Specificity',
       singleNightRun.averageSpecificity.toFixed(2)
     )
-  );
-  insightsGrid.appendChild(
-    createCard('Average Score', singleNightRun.averageScore.toFixed(2))
-  );
-  insightsGrid.appendChild(
-    createCard('Total Files', singleNightRun.totalFiles)
   );
   createFileEvaluationsTable(singleNightRun.fileEvaluationResults);
   createErrorsList(singleNightRun.errors);

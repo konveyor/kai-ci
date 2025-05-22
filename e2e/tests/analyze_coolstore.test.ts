@@ -5,7 +5,10 @@ import { getOSInfo, getRepoName } from '../utilities/utils';
 import { providerConfigs } from '../fixtures/provider-configs.fixture';
 import path from 'path';
 import { runEvaluation } from '../../kai-evaluator/core';
-import { prepareEvaluationData } from '../utilities/evaluation.utils';
+import {
+  prepareEvaluationData,
+  saveOriginalAnalysisFile,
+} from '../utilities/evaluation.utils';
 
 providerConfigs.forEach((config) => {
   test.describe(`Coolstore app tests | ${config.model}`, () => {
@@ -44,7 +47,11 @@ providerConfigs.forEach((config) => {
       await expect(
         vscodeApp.getWindow().getByText('Analysis completed').first()
       ).toBeVisible({ timeout: 1800000 });
-
+      /*
+       * There is a limit in the number of analysis and solution files that kai stores
+       * This method ensures the original analysis is stored to be used later in the evaluation
+       */
+      await saveOriginalAnalysisFile();
       await vscodeApp.getWindow().screenshot({
         path: `${SCREENSHOTS_FOLDER}/analysis-finished.png`,
       });
@@ -64,8 +71,14 @@ providerConfigs.forEach((config) => {
       const fixLocator = resolutionView
         .locator('button[aria-label="Apply fix"]')
         .first();
+      await vscodeApp.waitDefault();
       await expect(fixLocator).toBeVisible({ timeout: 60000 });
-      await fixLocator.click({ force: true });
+      expect(await fixLocator.count()).toEqual(1);
+      // Ensures the button is clicked even if there are notifications overlaying it due to screen size
+      await fixLocator.dispatchEvent('click');
+      await expect(
+        resolutionView.getByText('All resolutions have been applied').first()
+      ).toBeVisible({ timeout: 60000 });
     });
 
     test('Fix all issues with default (Low) effort', async () => {
@@ -83,9 +96,13 @@ providerConfigs.forEach((config) => {
       await vscodeApp.waitDefault();
       await expect(fixLocator.first()).toBeVisible({ timeout: 3600000 });
       const fixesNumber = await fixLocator.count();
+      let fixesCounter = await fixLocator.count();
       for (let i = 0; i < fixesNumber; i++) {
         await expect(fixLocator.first()).toBeVisible({ timeout: 30000 });
-        await fixLocator.first().click({ force: true });
+        // Ensures the button is clicked even if there are notifications overlaying it due to screen size
+        await fixLocator.first().dispatchEvent('click');
+        await vscodeApp.waitDefault();
+        expect(await fixLocator.count()).toEqual(--fixesCounter);
       }
     });
 
@@ -102,13 +119,14 @@ providerConfigs.forEach((config) => {
 
     test.afterAll(async () => {
       await vscodeApp.closeVSCode();
-      // Evaluation should be performed just on Linux
-      if (getOSInfo() === 'linux' && allOk) {
+      // Evaluation should be performed just on Linux, on CI by default and only if all tests passed
+      if (getOSInfo() === 'linux' && allOk && process.env.CI) {
         await prepareEvaluationData(config.model);
         await runEvaluation(
           path.join(TEST_OUTPUT_FOLDER, 'incidents-map.json'),
           TEST_OUTPUT_FOLDER,
-          config.model
+          config.model,
+          `${TEST_OUTPUT_FOLDER}/coolstore-${config.model.replace(/[.:]/g, '-')}`
         );
       }
     });
