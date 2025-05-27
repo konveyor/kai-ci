@@ -1,4 +1,7 @@
 import { exec } from 'node:child_process';
+import fs from 'fs';
+import Parser from 'tree-sitter';
+import Java from 'tree-sitter-java';
 
 export function isBuildable(path: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
@@ -14,4 +17,18 @@ export function isBuildable(path: string): Promise<boolean> {
       }
     });
   });
+}
+
+export async function isSyntaxValid(filePath: string): Promise<boolean> {
+  try {
+    const parser = new Parser();
+    parser.setLanguage(Java);
+
+    const tree = parser.parse(fs.readFileSync(filePath, 'utf-8'));
+
+    return !tree.rootNode.hasError;
+  } catch (err) {
+    console.error(`Error while validating syntax of ${filePath}`, err);
+    return false;
+  }
 }

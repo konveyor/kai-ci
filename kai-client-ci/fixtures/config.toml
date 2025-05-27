@@ -1,9 +1,0 @@
-log_dir = "../logs/"
-demo_mode = false
-log_level = "debug"
-trace_enabled = true
-file_log_level = "debug"
-[models]
-provider = "ChatBedrock"
-[models.args]
-model_id = "us.meta.llama3-1-70b-instruct-v1:0"
