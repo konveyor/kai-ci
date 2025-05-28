@@ -1,6 +1,7 @@
 import { createEvaluationChain } from '../chains/evaluation.chain';
 import { FileEvaluationResult } from '../model/evaluation-result.model';
 import { FileEvaluationInput } from '../model/evaluation-input.model';
+import { isSyntaxValid } from '../utils/build.utils';
 
 export async function evaluateFile(
   file: string,
@@ -32,5 +33,8 @@ export async function evaluateFile(
         evalResult.specificity +
         evalResult.competency) /
       3,
+    validCode: file.toLowerCase().endsWith('java')
+      ? await isSyntaxValid(input.updatedContent)
+      : true,
   };
 }

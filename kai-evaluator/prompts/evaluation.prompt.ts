@@ -27,10 +27,9 @@ Here is an example response with made up numbers:
 
 \`\`\`
 {{
-  "specificity": 7,
-  "competency": 7,
-  "effectiveness": 7,
-  "validCode": true,
+  "specificity": 5,
+  "competency": 1,
+  "effectiveness": 6,
   "unnecessaryChanges": false,
   "detailedNotes": "evaluation of the work goes here."
 }}

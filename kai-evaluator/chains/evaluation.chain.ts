@@ -8,7 +8,6 @@ const outputSchema = z.object({
   specificity: z.number().min(0).max(10),
   competency: z.number().min(0).max(10),
   effectiveness: z.number().min(0).max(10),
-  validCode: z.boolean(),
   unnecessaryChanges: z.boolean(),
   detailedNotes: z.string(),
 });
