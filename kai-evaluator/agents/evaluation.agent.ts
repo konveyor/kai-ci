@@ -33,6 +33,8 @@ export async function evaluateFile(
         evalResult.specificity +
         evalResult.competency) /
       3,
-    validCode: file.toLowerCase().endsWith("java") ? await isSyntaxValid(input.updatedContent) : true
+    validCode: file.toLowerCase().endsWith('java')
+      ? await isSyntaxValid(input.updatedContent)
+      : true,
   };
 }
