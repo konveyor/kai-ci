@@ -46,12 +46,13 @@ export class VSCode extends Application {
 
   /**
    * launches VSCode with KAI plugin installed and repoUrl app opened.
+   * @param repoUrl
    * @param repoDir path to repo
    */
-  public static async init(repoDir?: string): Promise<VSCode> {
+  public static async init(repoUrl?: string, repoDir?: string): Promise<VSCode> {
     try {
       await VSCode.installExtensionFromVSIX();
-      return repoDir ? VSCode.open(repoDir) : VSCode.open();
+      return repoDir ? VSCode.open(repoUrl, repoDir) : VSCode.open();
     } catch (error) {
       console.error('Error launching VSCode:', error);
       throw error;
@@ -150,52 +151,39 @@ export class VSCode extends Application {
   }
 
   public async selectSourcesAndTargets(sources: string[], targets: string[]) {
-    // Opening analysis view due to https://github.com/konveyor/editor-extensions/issues/479
-    await this.openAnalysisView();
+    await this.executeQuickCommand("Manage Analysis Profiles");
+    const profilesView = await this.getManageProfilesIframe();
+
+    await profilesView.getByText('+ New Profile').click(); // TODO: ask for/add id
     await this.waitDefault();
-    const window = this.window;
-    await this.executeQuickCommand('sources and targets');
-    const targetInput = window.getByPlaceholder('Choose one or more target');
+
+    const targetInput = profilesView.getByPlaceholder('Select or create item').first();
+    await targetInput.click();
     await this.waitDefault();
     for (const target of targets) {
       await targetInput.fill(target);
 
-      await window
-        .getByRole('checkbox', { name: `${target}` })
-        .nth(1)
+      await profilesView
+        .locator(`button#targets-option-${target}`)
         .click();
     }
-    await targetInput.press('Enter');
+    // Clicks outsite of the input to close the dropdown
+    await profilesView.locator("body").click();
     await this.waitDefault();
-    const sourceInput = window.getByPlaceholder('Choose one or more source');
-    await expect(sourceInput).toBeVisible();
+
+    const sourceInput = profilesView.getByPlaceholder('Select or create item').nth(1);
+    await sourceInput.click();
+    await this.waitDefault();
     for (const source of sources) {
       await sourceInput.fill(source);
 
-      await window
-        .getByRole('checkbox', { name: `${source}` })
-        .nth(1)
+      await profilesView
+        .locator(`button#sources-option-${source}`)
         .click();
-      await window.waitForTimeout(1000);
     }
-
-    await sourceInput.press('Enter');
+    // Clicks outsite of the input to close the dropdown
+    await profilesView.locator("body").click();
     await this.waitDefault();
-    await window.keyboard.press('Enter');
-  }
-
-  /**
-   * Opens command palette by doing ctrl+shift+P
-   * and then typing "Welcome" and then "Set Up".
-   */
-  public async openSetUpKonveyor() {
-    const window = this.getWindow();
-    await this.waitDefault();
-    await this.executeQuickCommand('welcome: open walkthrough');
-
-    await window.keyboard.type('set up konveyor');
-    await this.waitDefault();
-    await window.keyboard.press('Enter');
   }
 
   public async openLeftBarElement(name: LeftBarItems) {
@@ -278,26 +266,39 @@ export class VSCode extends Application {
    * Returns the iframe that contains the main Konveyor view
    * @return Promise<FrameLocator>
    */
-  public async getResolutionIframe(): Promise<FrameLocator> {
+  public async getManageProfilesIframe(): Promise<FrameLocator> {
     return this.window
       .locator('iframe')
       .nth(1)
+      .contentFrame()
+      .getByTitle('Manage Profiles')
+      .contentFrame();
+  }
+
+  /**
+   * Returns the iframe that contains the main Konveyor view
+   * @return Promise<FrameLocator>
+   */
+  public async getResolutionIframe(): Promise<FrameLocator> {
+    return this.window
+      .locator('iframe')
+      .nth(2)
       .contentFrame()
       .getByTitle('Resolution Details')
       .contentFrame();
   }
 
-  public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
-    await this.openSetUpKonveyor();
-    await this.window
-      .getByRole('button', { name: 'Configure Generative AI' })
-      .click();
-    await this.waitDefault();
-    await this.window
-      .getByRole('button', { name: 'Configure GenAI model settings file' })
-      .click();
-    await this.waitDefault();
+  public async openSettings() {
+    // TODO ask for/add a data-testid for that button
+    const settingsBtn = this.window.locator('button[aria-label="Configuration"]');
+    if (await settingsBtn.isVisible()) {
+      await settingsBtn.click();
+    }
+  }
 
+  public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
+    await this.executeQuickCommand("Open the GenAI model provider configuration file");
+    await this.waitDefault();
     await this.window.keyboard.press('Control+a+Delete');
     await this.pasteContent(config);
     await this.window.keyboard.press('Control+s');

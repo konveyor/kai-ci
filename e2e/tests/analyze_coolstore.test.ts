@@ -20,6 +20,7 @@ providerConfigs.forEach((config) => {
       const repoName = getRepoName(testInfo);
       const repoInfo = testRepoData[repoName];
       vscodeApp = await VSCode.open(repoInfo.repoUrl, repoInfo.repoName);
+      await vscodeApp.waitDefault();
       await vscodeApp.selectSourcesAndTargets(
         repoInfo.sources,
         repoInfo.targets

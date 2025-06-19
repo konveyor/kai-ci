@@ -42,15 +42,8 @@ test.describe('Install KAI plugin and start server', () => {
 
   test('Set Up Konveyor and Start analyzer', async () => {
     const window = vscodeApp.getWindow();
-    await vscodeApp.openSetUpKonveyor();
-    await vscodeApp.waitDefault();
     await vscodeApp.configureGenerativeAI();
     await vscodeApp.waitDefault();
-    await vscodeApp.openSetUpKonveyor();
-    await window.locator('h3.step-title:text("Open Analysis Panel")').click();
-    await window
-      .getByRole('button', { name: 'Open Analysis Panel', exact: true })
-      .click();
     await vscodeApp.startServer();
     await vscodeApp.getWindow().screenshot({
       path: `${SCREENSHOTS_FOLDER}/server-started.png`,
