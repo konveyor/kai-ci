@@ -34,10 +34,10 @@ test.describe('Install KAI plugin and start server', () => {
     });
   });
 
-  test('Set Sources and targets', async ({ testRepoData }) => {
+  test('Create Profile and Set Sources and targets', async ({testRepoData,}) => {
     await vscodeApp.waitDefault();
     const repoInfo = testRepoData['coolstore'];
-    await vscodeApp.selectSourcesAndTargets(repoInfo.sources, repoInfo.targets);
+    await vscodeApp.manageAnalysisProfile(repoInfo.sources, repoInfo.targets);
   });
 
   test('Set Up Konveyor and Start analyzer', async () => {

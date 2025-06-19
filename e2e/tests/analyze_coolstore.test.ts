@@ -20,9 +20,10 @@ providerConfigs.forEach((config) => {
       const repoName = getRepoName(testInfo);
       const repoInfo = testRepoData[repoName];
       vscodeApp = await VSCode.open(repoInfo.repoUrl, repoInfo.repoName);
-      await vscodeApp.selectSourcesAndTargets(
+      await vscodeApp.manageAnalysisProfile(
         repoInfo.sources,
-        repoInfo.targets
+        repoInfo.targets,
+        repoInfo.repoName
       );
       await vscodeApp.configureGenerativeAI(config.config);
       await vscodeApp.startServer();
