@@ -3,6 +3,7 @@ import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import {
   cleanupRepo,
+  generateRandomString,
   getKAIPluginName,
   getOSInfo,
   getVscodeExecutablePath,
@@ -302,4 +303,61 @@ export class VSCode extends Application {
     await this.pasteContent(config);
     await this.window.keyboard.press('Control+s');
   }
+
+  public async getManageProfileIframe(): Promise<FrameLocator> {
+    const iframes = this.window.locator('iframe');
+    const count = await iframes.count();
+
+    for (let i = 0; i < count; i++) {
+      const outerFrameLocator = this.window.frameLocator('iframe').nth(i);
+      const innerFrameLocator = outerFrameLocator.frameLocator(
+        'iframe[title="Manage Profiles"]'
+      );
+
+      try {
+        await innerFrameLocator
+          .getByRole('button', { name: '+ New Profile' })
+          .waitFor({ timeout: 2000 });
+        return innerFrameLocator;
+      } catch {}
+    }
+
+    throw new Error('Manage Profiles iframe not found');
+  }
+
+  public async manageAnalysisProfile(
+    sources: string[],
+    targets: string[],
+    profileName?: string
+  ) {
+    await this.executeQuickCommand('Manage Analysis Profiles');
+
+    const manageProfileView = await this.getManageProfileIframe();
+    await manageProfileView.getByRole('button', { name: '+ New Profile' }).click();
+
+    const randomName = generateRandomString();
+    const nameToUse = profileName ? `${profileName}-${randomName}` : randomName;
+    await manageProfileView.getByRole('textbox', { name: 'Profile Name' }).fill(nameToUse);
+
+    // Select Targets
+    manageProfileView.getByRole('combobox', { name: 'Type to filter' }).first().click();
+    for (const target of targets) {
+      await manageProfileView.getByRole('option', { name: target, exact: true }).click();
+    }
+    await manageProfileView
+      .locator('form div')
+      .filter({ hasText: 'Target Technologies * cloud-' })
+      .getByLabel('Menu toggle')
+      .click();
+
+    // Select Source
+    manageProfileView.getByRole('combobox', { name: 'Type to filter' }).nth(1).click();
+    for (const source of sources) {
+      await manageProfileView.getByRole('option', { name: source, exact: true }).click();
+    }
+    await manageProfileView.getByRole('button', { name: 'Menu toggle' }).nth(1).click();
+
+  }
 }
+
+
