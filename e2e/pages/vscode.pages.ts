@@ -359,5 +359,3 @@ export class VSCode extends Application {
 
   }
 }
-
-
