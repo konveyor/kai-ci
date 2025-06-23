@@ -314,18 +314,16 @@ export class VSCode extends Application {
         'iframe[title="Manage Profiles"]'
       );
 
-      try {
-        await innerFrameLocator
-          .getByRole('button', { name: '+ New Profile' })
-          .waitFor({ timeout: 2000 });
+      const createProfileBtn = innerFrameLocator.getByRole('button', { name: '+ New Profile' });
+      if (await createProfileBtn.isVisible({timeout: 2000})) {
         return innerFrameLocator;
-      } catch {}
+      }
     }
 
     throw new Error('Manage Profiles iframe not found');
   }
 
-  public async manageAnalysisProfile(
+  public async createProfile(
     sources: string[],
     targets: string[],
     profileName?: string
@@ -333,29 +331,39 @@ export class VSCode extends Application {
     await this.executeQuickCommand('Manage Analysis Profiles');
 
     const manageProfileView = await this.getManageProfileIframe();
-    await manageProfileView.getByRole('button', { name: '+ New Profile' }).click();
+    // TODO ask for/add id for this buttong
+    await manageProfileView
+      .getByRole('button', { name: '+ New Profile' })
+      .click();
 
     const randomName = generateRandomString();
     const nameToUse = profileName ? `${profileName}-${randomName}` : randomName;
-    await manageProfileView.getByRole('textbox', { name: 'Profile Name' }).fill(nameToUse);
+    await manageProfileView
+      .getByRole('textbox', { name: 'Profile Name' })
+      .fill(nameToUse);
 
     // Select Targets
-    manageProfileView.getByRole('combobox', { name: 'Type to filter' }).first().click();
-    for (const target of targets) {
-      await manageProfileView.getByRole('option', { name: target, exact: true }).click();
-    }
     await manageProfileView
-      .locator('form div')
-      .filter({ hasText: 'Target Technologies * cloud-' })
-      .getByLabel('Menu toggle')
+      .getByRole('combobox', { name: 'Type to filter' })
+      .first()
       .click();
+    for (const target of targets) {
+      await manageProfileView
+        .getByRole('option', { name: target, exact: true })
+        .click();
+    }
+    await manageProfileView.locator("body").click();
 
     // Select Source
-    manageProfileView.getByRole('combobox', { name: 'Type to filter' }).nth(1).click();
+    await manageProfileView
+      .getByRole('combobox', { name: 'Type to filter' })
+      .nth(1)
+      .click();
     for (const source of sources) {
-      await manageProfileView.getByRole('option', { name: source, exact: true }).click();
+      await manageProfileView
+        .getByRole('option', { name: source, exact: true })
+        .click();
     }
-    await manageProfileView.getByRole('button', { name: 'Menu toggle' }).nth(1).click();
-
+    await manageProfileView.locator("body").click();
   }
 }
