@@ -314,8 +314,10 @@ export class VSCode extends Application {
         'iframe[title="Manage Profiles"]'
       );
 
-      const createProfileBtn = innerFrameLocator.getByRole('button', { name: '+ New Profile' });
-      if (await createProfileBtn.isVisible({timeout: 2000})) {
+      const createProfileBtn = innerFrameLocator.getByRole('button', {
+        name: '+ New Profile',
+      });
+      if (await createProfileBtn.isVisible({ timeout: 2000 })) {
         return innerFrameLocator;
       }
     }
@@ -352,7 +354,7 @@ export class VSCode extends Application {
         .getByRole('option', { name: target, exact: true })
         .click();
     }
-    await manageProfileView.locator("body").click();
+    await manageProfileView.locator('body').click();
 
     // Select Source
     await manageProfileView
@@ -364,6 +366,6 @@ export class VSCode extends Application {
         .getByRole('option', { name: source, exact: true })
         .click();
     }
-    await manageProfileView.locator("body").click();
+    await manageProfileView.locator('body').click();
   }
 }
