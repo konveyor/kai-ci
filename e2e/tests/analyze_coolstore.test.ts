@@ -20,7 +20,7 @@ providerConfigs.forEach((config) => {
       const repoName = getRepoName(testInfo);
       const repoInfo = testRepoData[repoName];
       vscodeApp = await VSCode.open(repoInfo.repoUrl, repoInfo.repoName);
-      await vscodeApp.manageAnalysisProfile(
+      await vscodeApp.createProfile(
         repoInfo.sources,
         repoInfo.targets,
         repoInfo.repoName
