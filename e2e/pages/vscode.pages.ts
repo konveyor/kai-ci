@@ -288,11 +288,10 @@ export class VSCode extends Application {
       .contentFrame();
   }
 
-
   public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
-    await this.waitDefault();
-    //opens the config ai window
-    await this.executeQuickCommand('Konveyor: Open the GenAI model provider configuration file');
+    await this.executeQuickCommand(
+      'Konveyor: Open the GenAI model provider configuration file'
+    );
     await this.window.keyboard.press('Control+a+Delete');
     await this.pasteContent(config);
     await this.window.keyboard.press('Control+s');
