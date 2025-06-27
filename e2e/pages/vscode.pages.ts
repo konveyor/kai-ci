@@ -289,16 +289,9 @@ export class VSCode extends Application {
   }
 
   public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
-    await this.openSetUpKonveyor();
-    await this.window
-      .getByRole('button', { name: 'Configure Generative AI' })
-      .click();
-    await this.waitDefault();
-    await this.window
-      .getByRole('button', { name: 'Configure GenAI model settings file' })
-      .click();
-    await this.waitDefault();
-
+    await this.executeQuickCommand(
+      'Konveyor: Open the GenAI model provider configuration file'
+    );
     await this.window.keyboard.press('Control+a+Delete');
     await this.pasteContent(config);
     await this.window.keyboard.press('Control+s');
