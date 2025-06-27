@@ -42,17 +42,12 @@ test.describe('Install KAI plugin and start server', () => {
     await vscodeApp.createProfile(repoInfo.sources, repoInfo.targets);
   });
 
-  test('Set Up Konveyor and Start analyzer', async () => {
-    const window = vscodeApp.getWindow();
-    await vscodeApp.openSetUpKonveyor();
-    await vscodeApp.waitDefault();
+  test('Set Up Konveyor and Start analyzer', async ({ testRepoData }) => {
+    const repoInfo = testRepoData['coolstore'];
     await vscodeApp.configureGenerativeAI();
+    await vscodeApp.createProfile(repoInfo.sources, repoInfo.targets);
     await vscodeApp.waitDefault();
-    await vscodeApp.openSetUpKonveyor();
-    await window.locator('h3.step-title:text("Open Analysis Panel")').click();
-    await window
-      .getByRole('button', { name: 'Open Analysis Panel', exact: true })
-      .click();
+    await vscodeApp.openAnalysisView();
     await vscodeApp.startServer();
     await vscodeApp.getWindow().screenshot({
       path: `${SCREENSHOTS_FOLDER}/server-started.png`,
