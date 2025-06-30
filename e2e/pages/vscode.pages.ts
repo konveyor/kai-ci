@@ -307,12 +307,12 @@ export class VSCode extends Application {
         'iframe[title="Manage Profiles"]'
       );
 
-      const createProfileBtn = innerFrameLocator.getByRole('button', {
-        name: '+ New Profile',
-      });
-      if (await createProfileBtn.isVisible({ timeout: 2000 })) {
+      try {
+        await innerFrameLocator
+          .getByRole('button', { name: '+ New Profile' })
+          .waitFor({ timeout: 2000 });
         return innerFrameLocator;
-      }
+      } catch {}
     }
 
     throw new Error('Manage Profiles iframe not found');
