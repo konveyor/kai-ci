@@ -36,7 +36,7 @@ export const OPENAI_PROVIDER: ProviderConfig = {
 
 export const PARASOL_PROVIDER: ProviderConfig = {
   provider: LLMProviders.openAI,
-  model: 'granite-8b-code-instruct-128k',
+  model: 'granite-3-3-8b-instruct',
   config: [
     'models:',
     '  parasols-maas-granite: &active',
@@ -44,8 +44,8 @@ export const PARASOL_PROVIDER: ProviderConfig = {
     `      OPENAI_API_KEY: "${process.env.PARASOL_API_KEY}"`,
     '    provider: "ChatOpenAI"',
     '    args:',
-    '      model: "granite-8b-code-instruct-128k"',
-    '      base_url: "https://granite-8b-code-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1"',
+    '      model: "granite-3-3-8b-instruct"',
+    '      base_url: "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1"',
     'active: *active',
   ].join('\n'),
 };
