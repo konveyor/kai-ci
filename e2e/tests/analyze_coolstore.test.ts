@@ -9,6 +9,7 @@ import {
   prepareEvaluationData,
   saveOriginalAnalysisFile,
 } from '../utilities/evaluation.utils';
+import { KAIViews } from '../enums/views.enum';
 
 providerConfigs.forEach((config) => {
   test.describe(`Coolstore app tests | ${config.model}`, () => {
@@ -61,14 +62,16 @@ providerConfigs.forEach((config) => {
     test('Fix Issue with default (Low) effort', async () => {
       test.setTimeout(3600000);
       await vscodeApp.openAnalysisView();
-      const analysisView = await vscodeApp.getAnalysisIframe();
+      const analysisView = await vscodeApp.getView(KAIViews.analysisView);
       await vscodeApp.searchViolation('InventoryEntity');
       await analysisView
         .locator('div.pf-v6-c-card__header-toggle')
         .nth(0)
         .click();
       await analysisView.locator('button#get-solution-button').nth(3).click();
-      const resolutionView = await vscodeApp.getResolutionIframe();
+      const resolutionView = await vscodeApp.getView(
+        KAIViews.resolutionDetails
+      );
       const fixLocator = resolutionView
         .locator('button[aria-label="Apply fix"]')
         .first();
@@ -85,12 +88,12 @@ providerConfigs.forEach((config) => {
     test('Fix all issues with default (Low) effort', async () => {
       test.setTimeout(3600000);
       await vscodeApp.openAnalysisView();
-      const analysisView = await vscodeApp.getAnalysisIframe();
+      const analysisView = await vscodeApp.getView(KAIViews.analysisView);
       await analysisView
         .locator('button#get-solution-button')
         .first()
         .click({ timeout: 300000 });
-      const resolutionView = await vscodeApp.getResolutionIframe();
+      const resolutionView = await vscodeApp.getView(KAIViews.resolutionDetails);
       const fixLocator = resolutionView.locator(
         'button[aria-label="Apply fix"]'
       );
@@ -120,7 +123,7 @@ providerConfigs.forEach((config) => {
 
     test.afterAll(async () => {
       await vscodeApp.closeVSCode();
-      // Evaluation should be performed just on Linux, on CI by default and only if all tests passed
+      // Evaluation should be performed just on Linux, on CI by default and only if all tests under this suite passed
       if (getOSInfo() === 'linux' && allOk && process.env.CI) {
         await prepareEvaluationData(config.model);
         await runEvaluation(
