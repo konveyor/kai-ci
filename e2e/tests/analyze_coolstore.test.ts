@@ -93,7 +93,9 @@ providerConfigs.forEach((config) => {
         .locator('button#get-solution-button')
         .first()
         .click({ timeout: 300000 });
-      const resolutionView = await vscodeApp.getView(KAIViews.resolutionDetails);
+      const resolutionView = await vscodeApp.getView(
+        KAIViews.resolutionDetails
+      );
       const fixLocator = resolutionView.locator(
         'button[aria-label="Apply fix"]'
       );
