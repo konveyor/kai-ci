@@ -27,7 +27,7 @@ export const OPENAI_PROVIDER: ProviderConfig = {
     '  OpenAI: &active',
     '    environment:',
     `      OPENAI_API_KEY: "${process.env.OPENAI_API_KEY}"`,
-    '    provider: "ChatOpenAI"',
+                                                              '    provider: "ChatOpenAI"',
     '    args:',
     '      model: "gpt-4o-mini"',
     'active: *active',
