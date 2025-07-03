@@ -1,15 +1,9 @@
 {
-  "devDependencies": {
-    "@playwright/test": "^1.51.1",
-    "@types/node": "^22.7.5",
-    "electron": "^32.2.0",
-    "playwright-electron": "^0.5.0",
-    "prettier": "^3.3.3"
-  },
   "scripts": {
     "check": "prettier --check './**/*.{ts,js,json}'",
     "format": "prettier --write './**/*.{ts,js,json}'",
-    "test": "playwright test"
+    "test": "playwright test",
+    "prepare": "node .husky/install.mjs"
   },
   "name": "kai-ci",
   "version": "1.0.0",
@@ -19,6 +13,11 @@
     "test": "tests"
   },
   "dependencies": {
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.7.5",
+    "electron": "^32.2.0",
+    "playwright-electron": "^0.5.0",
+    "prettier": "^3.3.3",
     "@aws-crypto/sha256-js": "^5.2.0",
     "@aws-sdk/client-s3": "^3.782.0",
     "@aws-sdk/credential-provider-node": "^3.777.0",
@@ -72,6 +71,7 @@
     "http-cache-semantics": "^4.1.1",
     "http2-wrapper": "^1.0.3",
     "https-proxy-agent": "^5.0.1",
+    "husky": "^9.1.7",
     "inflight": "^1.0.6",
     "inherits": "^2.0.4",
     "jpeg-js": "^0.4.4",
@@ -124,5 +124,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "lint-staged": {
+    "e2e/**/*.{ts,js,json}": "prettier --ignore-unknown --write",
+    "kai-evaluator/**/*.{ts,js,json}": "prettier --ignore-unknown --write"
+  }
 }
