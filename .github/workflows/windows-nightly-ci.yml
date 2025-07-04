@@ -1,4 +1,4 @@
-name: (Windows)(nonadmin) Run Playwright tests
+name: (Windows)(nonadmin) Run Playwright tests with latest dev build
 
 on:
   schedule:
@@ -72,6 +72,7 @@ jobs:
         echo "echo AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env" >> execute-tests.bat 
         echo "echo AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> .env" >> execute-tests.bat 
         echo "echo CI=true >> .env" >> execute-tests.bat 
+        echo "node scripts/set-latest-vsix-env.mjs" >> execute-tests.bat
         echo "npx playwright test" >> execute-tests.bat
         echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
       shell: bash
