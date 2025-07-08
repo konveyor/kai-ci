@@ -23,7 +23,7 @@ export class Application {
     await this.app.evaluate(({ clipboard }, content) => {
       clipboard.writeText(content);
     }, content);
-    await this.window.keyboard.press('Control+v');
+    await this.window.keyboard.press('Control+v', { delay: 500 });
   }
 
   public async waitDefault() {

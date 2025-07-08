@@ -45,7 +45,6 @@ test.describe('Install KAI plugin and start server', () => {
   test('Set Up Konveyor and Start analyzer', async () => {
     await vscodeApp.configureGenerativeAI();
     await vscodeApp.waitDefault();
-    await vscodeApp.openAnalysisView();
     await vscodeApp.startServer();
     await vscodeApp.getWindow().screenshot({
       path: `${SCREENSHOTS_FOLDER}/server-started.png`,

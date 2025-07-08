@@ -111,18 +111,16 @@ export class VSCode extends Application {
 
   private async executeQuickCommand(command: string) {
     await this.waitDefault();
-    await this.window.keyboard.press('Control+Shift+P');
+    await this.window.keyboard.press('Control+Shift+P', { delay: 500 });
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
-    await this.waitDefault();
     await input.fill(`>${command}`);
     await expect(
       this.window.locator('a.label-name span.highlight', { hasText: command })
     ).toBeVisible();
 
-    await input.press('Enter');
-    await this.waitDefault();
+    await input.press('Enter', { delay: 500 });
   }
 
   public async openLeftBarElement(name: LeftBarItems) {
@@ -148,7 +146,6 @@ export class VSCode extends Application {
   public async startServer(): Promise<void> {
     await this.openAnalysisView();
     const analysisView = await this.getView(KAIViews.analysisView);
-    await this.waitDefault();
     if (
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
@@ -189,6 +186,9 @@ export class VSCode extends Application {
   }
 
   public async getView(view: KAIViews): Promise<FrameLocator> {
+    await this.window.locator(`div.tab.active[aria-label="${view}"]`).waitFor();
+    await this.executeQuickCommand('View: Close Other Editors in Group');
+
     const iframes = this.window.locator('iframe');
     const count = await iframes.count();
 
@@ -210,7 +210,7 @@ export class VSCode extends Application {
     );
     await this.window.keyboard.press('Control+a+Delete');
     await this.pasteContent(config);
-    await this.window.keyboard.press('Control+s');
+    await this.window.keyboard.press('Control+s', { delay: 500 });
   }
 
   public async createProfile(
