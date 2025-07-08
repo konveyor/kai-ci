@@ -1,4 +1,4 @@
-name: (Windows)(nonadmin) Run Playwright tests
+name: (Windows)(nonadmin) Run Playwright tests with latest dev build
 
 on:
   schedule:
@@ -66,12 +66,14 @@ jobs:
         echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
         echo powershell -Command "\"npm install\"" >> execute-tests.bat        
         echo "copy .env.example .env" >> execute-tests.bat
+        echo "code --install-extension redhat.java" >> execute-tests.bat
         echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat 
         echo "echo PARASOL_API_KEY="${{ secrets.PARASOL_API_KEY }}" >> .env" >> execute-tests.bat 
         echo "echo AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env" >> execute-tests.bat 
         echo "echo AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env" >> execute-tests.bat 
         echo "echo AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> .env" >> execute-tests.bat 
         echo "echo CI=true >> .env" >> execute-tests.bat 
+        echo "node scripts/set-latest-vsix-env.mjs" >> execute-tests.bat
         echo "npx playwright test" >> execute-tests.bat
         echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
       shell: bash

@@ -1,4 +1,4 @@
-name: (Linux) Run Playwright tests nightly
+name: (Linux) Run Playwright tests with latest dev build
 
 on:
   schedule:
@@ -70,7 +70,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Copy .env.example to .env
-      run: cp .env.example .env  
+      run: cp .env.example .env
+    - name: Get last dev build and update env
+      run: node scripts/set-latest-vsix-env.mjs
     - name: Run Playwright tests
       run: npx playwright test --reporter=list
       env:

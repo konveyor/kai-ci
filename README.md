@@ -41,14 +41,12 @@ Install the required packages using npm:
 `npm install`
 
 
-## Usage
+## Configuration
 
-    Create .env file and copy the content of .env.example into it and provide appropriate values:
+Create .env by copying the content of .env.example into it and provide appropriate values
 
-    VSCODE_EXECUTABLE_PATH='/usr/share/code/code'
+You can automatically configure the vsix parameters by execution `node scripts/set-latest-vsix-env.mjs`
 
-    # URL to download the vsix file, update this if the URL is different.
-    DEFAULT_VSIX_DOWNLOAD_URL= 'https://github.com/konveyor/editor-extensions/releases/download/v0.0.1-dev%2B20241022/konveyor-linux-0.0.1.vsix'
 
 
 ## Running Tests
