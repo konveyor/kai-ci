@@ -37,16 +37,13 @@ jobs:
         run: choco install maven -y
         shell: powershell
 
-      - name: Add VSCode to PATH
+      - name: Install Red Hat Java extension
         run: |
           $vscodePath = "C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin"
           $env:PATH += ";$vscodePath"
           [Environment]::SetEnvironmentVariable("PATH", $env:PATH, [EnvironmentVariableTarget]::Process)
           code --version
-        shell: powershell
-
-      - name: Install Red Hat Java extension
-        run: code --install-extension redhat.java
+          code --install-extension redhat.java
         shell: powershell
 
   run-test-as-nonadmin:
