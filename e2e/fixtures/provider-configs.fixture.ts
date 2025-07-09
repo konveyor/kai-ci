@@ -51,7 +51,7 @@ export const PARASOL_PROVIDER: ProviderConfig = {
 };
 
 export const providerConfigs: ProviderConfig[] = [
-  PARASOL_PROVIDER,
+  //PARASOL_PROVIDER, Disabled as it is having connectivity issues
   DEFAULT_PROVIDER,
   OPENAI_PROVIDER,
 ];
