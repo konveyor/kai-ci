@@ -25,107 +25,111 @@ jobs:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
     steps:
-    - name: Install Node.js
-      run: choco install nodejs -y
-      shell: powershell
+      - name: Install Node.js
+        run: choco install nodejs -y
+        shell: powershell
 
-    - name: Install Java
-      run: choco install openjdk -y
-      shell: powershell
+      - name: Install Java
+        run: choco install openjdk -y
+        shell: powershell
 
-    - name: Install Maven
-      run: choco install maven -y
-      shell: powershell
+      - name: Install Maven
+        run: choco install maven -y
+        shell: powershell
 
-    - name: Install Red Hat Java extension
-      run: code --install-extension redhat.java
-      shell: powershell
+      - name: Add VSCode to path
+        run: set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin
+        shell: powershell
+
+      - name: Install Red Hat Java extension
+        run: code --install-extension redhat.java
+        shell: powershell
 
   run-test-as-nonadmin:
-    needs: [ start-ec2-instance, install-requirements-as-admin]
+    needs: [ start-ec2-instance, install-requirements-as-admin ]
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install sshpass
-      run: sudo apt-get install -y sshpass
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
 
-    - name: Create batch file locally to execute tests
-      run: |  
-        echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
-        echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
-        echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
-        echo "set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2" >> execute-tests.bat
-        echo "set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9" >> execute-tests.bat
-        echo "set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin" >> execute-tests.bat
-        echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
-        echo "set PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }}" >> execute-tests.bat
-        echo "set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> execute-tests.bat
-        echo "set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> execute-tests.bat
-        echo "set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> execute-tests.bat
-        
-        echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-        echo "git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-        echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-        echo powershell -Command "\"npm install\"" >> execute-tests.bat        
-        echo "copy .env.example .env" >> execute-tests.bat
-        echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat 
-        echo "echo PARASOL_API_KEY="${{ secrets.PARASOL_API_KEY }}" >> .env" >> execute-tests.bat 
-        echo "echo AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env" >> execute-tests.bat 
-        echo "echo AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env" >> execute-tests.bat 
-        echo "echo AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> .env" >> execute-tests.bat 
-        echo "echo CI=true >> .env" >> execute-tests.bat 
-        echo "node scripts/set-latest-vsix-env.mjs" >> execute-tests.bat
-        echo "npx playwright test" >> execute-tests.bat
-        echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
-      shell: bash
+      - name: Create batch file locally to execute tests
+        run: |
+          echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
+          echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
+          echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
+          echo "set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2" >> execute-tests.bat
+          echo "set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9" >> execute-tests.bat
+          echo "set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin" >> execute-tests.bat
+          echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
+          echo "set PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }}" >> execute-tests.bat
+          echo "set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> execute-tests.bat
+          echo "set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> execute-tests.bat
+          echo "set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> execute-tests.bat
+          
+          echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+          echo "git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+          echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
+          echo powershell -Command "\"npm install\"" >> execute-tests.bat        
+          echo "copy .env.example .env" >> execute-tests.bat
+          echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat 
+          echo "echo PARASOL_API_KEY="${{ secrets.PARASOL_API_KEY }}" >> .env" >> execute-tests.bat 
+          echo "echo AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env" >> execute-tests.bat 
+          echo "echo AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env" >> execute-tests.bat 
+          echo "echo AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> .env" >> execute-tests.bat 
+          echo "echo CI=true >> .env" >> execute-tests.bat 
+          echo "node scripts/set-latest-vsix-env.mjs" >> execute-tests.bat
+          echo "npx playwright test" >> execute-tests.bat
+          echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
+        shell: bash
 
-    - name: Copy batch file to Windows EC2 instance
-      run: |
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:\\Users\\nonadmin\\execute-tests.bat
-      env:
-        EC2_USER: nonadmin
-        EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+      - name: Copy batch file to Windows EC2 instance
+        run: |
+          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:\\Users\\nonadmin\\execute-tests.bat
+        env:
+          EC2_USER: nonadmin
+          EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
-    - name: Run Tests
-      run: |
-        sshpass -p ${EC2_PASSWORD} ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'cmd /c C:\\Users\\nonadmin\\execute-tests.bat'
-      env:
-        EC2_USER: nonadmin
-        EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+      - name: Run Tests
+        run: |
+          sshpass -p ${EC2_PASSWORD} ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'cmd /c C:\\Users\\nonadmin\\execute-tests.bat'
+        env:
+          EC2_USER: nonadmin
+          EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
-    - name: Fetch artifacts
-      if: ${{ !cancelled() }}
-      run: |
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output ./test-output
-        sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode ./kai-logs
-      env:
-        EC2_USER: nonadmin
-        EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+      - name: Fetch artifacts
+        if: ${{ !cancelled() }}
+        run: |
+          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
+          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output ./test-output
+          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode ./kai-logs
+        env:
+          EC2_USER: nonadmin
+          EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
-    - name: Upload test artifacts
-      uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: test-output
-        path: ./test-output
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: test-output
+          path: ./test-output
 
-    - name: Upload VSCode logs
-      uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: vscode-logs
-        path: ./vscode-logs
+      - name: Upload VSCode logs
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: vscode-logs
+          path: ./vscode-logs
 
-    - name: Upload KAI logs
-      uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: kai-logs
-        path: ./kai-logs
+      - name: Upload KAI logs
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: kai-logs
+          path: ./kai-logs
 
   stop-ec2-instance:
-    needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin]
+    needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin ]
     if: ${{ !cancelled() }}
     uses: ./.github/workflows/remove-runner.yml
     with:
