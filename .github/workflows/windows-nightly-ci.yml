@@ -37,6 +37,10 @@ jobs:
       run: choco install maven -y
       shell: powershell
 
+    - name: Install Red Hat Java extension
+      run: code --install-extension redhat.java
+      shell: powershell
+
   run-test-as-nonadmin:
     needs: [ start-ec2-instance, install-requirements-as-admin]
     runs-on: ubuntu-latest
@@ -45,19 +49,14 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
 
-    - name: Install vscode RedHat Java extension
-      run: sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'code --install-extension redhat.java'
-
     - name: Create batch file locally to execute tests
       run: |  
         echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
         echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
-    
         echo "set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2" >> execute-tests.bat
         echo "set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9" >> execute-tests.bat
         echo "set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin" >> execute-tests.bat
-        
         echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
         echo "set PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }}" >> execute-tests.bat
         echo "set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> execute-tests.bat
