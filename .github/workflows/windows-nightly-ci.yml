@@ -46,6 +46,18 @@ jobs:
           code --install-extension redhat.java
         shell: powershell
 
+      - name: Disable VSCode extension recommendations for non admin user
+        run: |
+          $settingsPath = "C:\Users\nonadmin\AppData\Roaming\Code\User\settings.json"
+          if (!(Test-Path $settingsPath)) {
+            New-Item -ItemType File -Path $settingsPath -Force | Out-Null
+            Set-Content -Path $settingsPath -Value "{}"
+          }
+          $json = Get-Content $settingsPath -Raw | ConvertFrom-Json
+          $json."extensions.ignoreRecommendations" = $true
+          $json | ConvertTo-Json -Depth 10 | Set-Content -Path $settingsPath
+        shell: powershell
+
   run-test-as-nonadmin:
     needs: [ start-ec2-instance, install-requirements-as-admin ]
     runs-on: ubuntu-latest
