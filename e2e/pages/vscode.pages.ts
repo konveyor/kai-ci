@@ -147,11 +147,14 @@ export class VSCode extends Application {
     await this.openAnalysisView();
     const analysisView = await this.getView(KAIViews.analysisView);
     if (
-      !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
+      !(await analysisView.getByRole('button', { name: 'Stop' }).isEnabled())
     ) {
-      await analysisView.getByRole('button', { name: 'Start' }).isVisible();
-      await analysisView.getByRole('button', { name: 'Start' }).click();
-      await analysisView.getByRole('button', { name: 'Stop' }).isVisible();
+      await analysisView
+        .getByRole('button', { name: 'Start' })
+        .click({ delay: 500 });
+      await analysisView
+        .getByRole('button', { name: 'Stop' })
+        .isEnabled({ timeout: 120000 });
     }
   }
 
