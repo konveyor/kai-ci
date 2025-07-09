@@ -46,7 +46,7 @@ jobs:
       run: sudo apt-get install -y sshpass
 
     - name: Install vscode RedHat Java extension
-      run: sshpass -p ${EC2_PASSWORD} ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'code --install-extension redhat.java'
+      run: sshpass -p ${EC2_PASSWORD} ssh -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'code --install-extension redhat.java'
 
     - name: Create batch file locally to execute tests
       run: |  
