@@ -236,7 +236,7 @@ export class VSCode extends Application {
     const targetsInput = manageProfileView
       .getByRole('combobox', { name: 'Type to filter' })
       .first();
-    await targetsInput.click();
+    await targetsInput.click({ delay: 500 });
 
     for (const target of targets) {
       await targetsInput.fill(target);
@@ -250,7 +250,7 @@ export class VSCode extends Application {
     const sourceInput = manageProfileView
       .getByRole('combobox', { name: 'Type to filter' })
       .nth(1);
-    await sourceInput.click();
+    await sourceInput.click({ delay: 500 });
 
     for (const source of sources) {
       await sourceInput.fill(source);
