@@ -147,7 +147,7 @@ export class VSCode extends Application {
     await this.openAnalysisView();
     const analysisView = await this.getView(KAIViews.analysisView);
     if (
-      !(await analysisView.getByRole('button', { name: 'Stop' }).isEnabled())
+      !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
       await analysisView
         .getByRole('button', { name: 'Start' })
