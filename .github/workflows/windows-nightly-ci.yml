@@ -46,15 +46,18 @@ jobs:
           code --install-extension redhat.java
         shell: powershell
 
-      - name: Disable VSCode extension recommendations for non admin user
+      - name: Disable VSCode extension recommendations for nonadmin
         run: |
           $settingsPath = "C:\Users\nonadmin\AppData\Roaming\Code\User\settings.json"
-          if (!(Test-Path $settingsPath)) {
-            New-Item -ItemType File -Path $settingsPath -Force | Out-Null
-            Set-Content -Path $settingsPath -Value "{}"
+          if (!(Test-Path $settingsPath) -or (Get-Content $settingsPath -Raw).Trim() -eq "") {
+              "{}" | Set-Content -Path $settingsPath
           }
-          $json = Get-Content $settingsPath -Raw | ConvertFrom-Json
-          $json."extensions.ignoreRecommendations" = $true
+          $rawJson = Get-Content $settingsPath -Raw
+          $json = $rawJson | ConvertFrom-Json
+          if (-not ($json -is [PSCustomObject])) {
+              $json = [PSCustomObject]@{}
+          }
+          Add-Member -InputObject $json -MemberType NoteProperty -Name "extensions.ignoreRecommendations" -Value $true -Force
           $json | ConvertTo-Json -Depth 10 | Set-Content -Path $settingsPath
         shell: powershell
 
