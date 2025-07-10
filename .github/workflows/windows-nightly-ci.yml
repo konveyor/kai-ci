@@ -127,7 +127,7 @@ jobs:
           WAITED=0
           
           while true; do
-            sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" 'query user | findstr /i "nonadmin"'
+            sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" 'query user 2>$null | findstr /i "nonadmin"' >/dev/null 2>&1
             
             if [ $? -eq 0 ]; then
               echo "User 'nonadmin' has an active session."
@@ -150,7 +150,7 @@ jobs:
       - name: Wait for Playwright tests to complete
         run: |
           
-          sleep 60
+          sleep 15
           echo "Waiting for Playwright tests to complete..."
 
           set +e
