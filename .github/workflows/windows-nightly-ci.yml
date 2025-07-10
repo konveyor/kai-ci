@@ -92,9 +92,10 @@ jobs:
             'echo CI=true >> .env',
             'node scripts/set-latest-vsix-env.mjs >> %LOG% 2>&1',
             'npx playwright test >> %LOG% 2>&1',
+            'set TEST_EXIT_CODE=%ERRORLEVEL%',
             'echo Done >> %LOG%',
             'del %LOCK%',
-            'EXIT /B %ERRORLEVEL%'
+            'EXIT /B %TEST_EXIT_CODE%'
           )
           Set-Content -Path C:\Users\nonadmin\execute-tests.bat -Value $lines -Encoding ASCII
         shell: powershell
