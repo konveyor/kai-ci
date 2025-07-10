@@ -119,21 +119,38 @@ jobs:
       - name: Wait for Playwright tests to complete
         run: |
           echo "Waiting for Playwright tests to complete..."
-          while true; do
-            sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" \
-              'if exist C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock (exit 0) else (exit 1)'
 
-            if [ $? -ne 0 ]; then
-              echo "Tests completed."
+          set +e
+          
+          MAX_MINUTES=180
+          MINUTES=0
+          
+          while true; do
+            sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71" \
+            'if exist C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock (exit 0) else (exit 1)'
+        
+            SSH_EXIT_CODE=$?
+        
+            if [ "$SSH_EXIT_CODE" -ne 0 ]; then
+              echo "Tests completed or SSH failed with code $SSH_EXIT_CODE"
               break
             fi
-
-            echo "Tests still running..."
+        
+            if [ "$MINUTES" -ge "$MAX_MINUTES" ]; then
+              echo "Timeout reached after $MAX_MINUTES minutes. Exiting."
+              exit 1
+            fi
+        
+            echo "Tests still running... (${MINUTES} min)"
             sleep 60
+            MINUTES=$((MINUTES + 1))
           done
-
-          sshpass -p "${EC2_PASSWORD}" scp -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt
-          cat ./ci-log.txt
+          
+          set -e
+          
+          echo "Downloading logs..."
+          sshpass -p "${EC2_PASSWORD}" scp -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
+          cat ./ci-log.txt || echo "Log file not found"
         env:
           EC2_USER: nonadmin
           EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
