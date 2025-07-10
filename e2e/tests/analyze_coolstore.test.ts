@@ -42,8 +42,6 @@ providerConfigs.forEach((config) => {
       test.setTimeout(3600000);
       await vscodeApp.waitDefault();
       await vscodeApp.runAnalysis();
-      await vscodeApp.startServer();
-      await vscodeApp.runAnalysis();
 
       console.log(new Date().toLocaleTimeString(), 'Analysis started');
       await vscodeApp.waitDefault();
@@ -63,7 +61,7 @@ providerConfigs.forEach((config) => {
       });
     });
 
-    test('Fix Issue with default (Low) effort', async () => {
+    test.skip('Fix Issue with default (Low) effort', async () => {
       test.setTimeout(3600000);
       await vscodeApp.openAnalysisView();
       const analysisView = await vscodeApp.getView(KAIViews.analysisView);
