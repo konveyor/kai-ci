@@ -115,7 +115,7 @@ jobs:
 
     steps:
       - name: Install sshpass & xfreedup
-        run: sudo apt-get install -y sshpass xfreedup
+        run: sudo apt-get install -y sshpass freerdp2-x11
 
       - name: Wait for Playwright tests to complete
         run: |
