@@ -101,12 +101,14 @@ jobs:
 
       - name: Create and run scheduled task to execute tests
         run: |
+          reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
+          reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d nonadmin /f
+          reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d ${{ secrets.NONADMIN_PASSWORD }} /f
           $Action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c C:\Users\nonadmin\execute-tests.bat"
-          $Trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1)
+          $Trigger = New-ScheduledTaskTrigger -AtLogOn
           $Principal = New-ScheduledTaskPrincipal -UserId "nonadmin" -LogonType Interactive -RunLevel Highest
           Register-ScheduledTask -TaskName "RunVSCodeTests" -Action $Action -Trigger $Trigger -Principal $Principal -Force
-          Start-ScheduledTask -TaskName "RunVSCodeTests"
-          Get-ScheduledTaskInfo -TaskName "RunVSCodeTests"
+          shutdown /r /t 5 /f
         shell: powershell
 
   run-test-as-nonadmin:
@@ -114,12 +116,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install sshpass & xfreedup
-        run: sudo apt-get install -y sshpass freerdp2-x11
+      - name: Install sshpass
+        run: sudo apt-get install
+
+      - name: Wait for Windows instance to reboot and be reachable
+        run: |
+          echo "Waiting for EC2 Windows instance to reboot..."
+
+          MAX_WAIT_SECONDS=600
+          WAITED=0
+
+          while ! sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR -o ConnectTimeout=10 "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" 'echo ok' 2>/dev/null; do
+            if [ "$WAITED" -ge "$MAX_WAIT_SECONDS" ]; then
+              echo "Timeout waiting for the instance to become reachable."
+              exit 1
+            fi
+            echo "Instance not reachable yet... (${WAITED}s elapsed)"
+            sleep 10
+            WAITED=$((WAITED + 10))
+          done
+
+          echo "Instance is now reachable."
+        env:
+          EC2_USER: nonadmin
+          EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
       - name: Wait for Playwright tests to complete
         run: |
-          xfreerdp /u:"nonadmin" /v:${{ needs.start-ec2-instance.outputs.ec2-host }} /p:${EC2_PASSWORD} /cert:ignore /size:1920x1000 &
+          
           sleep 60
           echo "Waiting for Playwright tests to complete..."
 
