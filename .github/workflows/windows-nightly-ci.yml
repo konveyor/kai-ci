@@ -107,8 +107,6 @@ jobs:
           Register-ScheduledTask -TaskName "RunVSCodeTests" -Action $Action -Trigger $Trigger -Principal $Principal -Force
           Start-ScheduledTask -TaskName "RunVSCodeTests"
           Get-ScheduledTaskInfo -TaskName "RunVSCodeTests"
-          sleep 65
-          Get-ScheduledTaskInfo -TaskName "RunVSCodeTests"
         shell: powershell
 
   run-test-as-nonadmin:
@@ -116,11 +114,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
+      - name: Install sshpass & xfreedup
+        run: sudo apt-get install -y sshpass xfreedup
 
       - name: Wait for Playwright tests to complete
         run: |
+          xfreerdp /u:"nonadmin" /v:${{ needs.start-ec2-instance.outputs.ec2-host }} /p:${EC2_PASSWORD} /cert:ignore /size:1920x1000 &
+          sleep 60
           echo "Waiting for Playwright tests to complete..."
 
           set +e
