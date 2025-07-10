@@ -126,7 +126,7 @@ jobs:
           MINUTES=0
           
           while true; do
-            sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71" \
+            sshpass -p "${EC2_PASSWORD}" ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71" \
             'if exist C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock (exit 0) else (exit 1)'
         
             SSH_EXIT_CODE=$?
@@ -149,7 +149,7 @@ jobs:
           set -e
           
           echo "Downloading logs..."
-          sshpass -p "${EC2_PASSWORD}" scp -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
+          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
           cat ./ci-log.txt || echo "Log file not found"
         env:
           EC2_USER: nonadmin
