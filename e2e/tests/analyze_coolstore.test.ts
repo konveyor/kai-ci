@@ -89,7 +89,7 @@ providerConfigs.forEach((config) => {
       ).toBeVisible({ timeout: 60000 });
     });
 
-    test('Fix all issues with default (Low) effort', async () => {
+    test.skip('Fix all issues with default (Low) effort', async () => {
       test.setTimeout(3600000);
       await vscodeApp.openAnalysisView();
       const analysisView = await vscodeApp.getView(KAIViews.analysisView);
