@@ -37,6 +37,12 @@ jobs:
         run: choco install maven -y
         shell: powershell
 
+      - name: Install Maven
+        run: |
+          Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "C:\PSTools.zip"
+          Expand-Archive -Path "C:\PSTools.zip" -DestinationPath "C:\PSTools"
+        shell: powershell
+
       - name: Install Red Hat Java extension
         run: |
           $vscodePath = "C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin"
