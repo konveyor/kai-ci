@@ -107,7 +107,7 @@ jobs:
           Register-ScheduledTask -TaskName "RunVSCodeTests" -Action $Action -Trigger $Trigger -Principal $Principal -Force
           Start-ScheduledTask -TaskName "RunVSCodeTests"
           Get-ScheduledTaskInfo -TaskName "RunVSCodeTests"
-          sleep 30
+          sleep 65
           Get-ScheduledTaskInfo -TaskName "RunVSCodeTests"
         shell: powershell
 
