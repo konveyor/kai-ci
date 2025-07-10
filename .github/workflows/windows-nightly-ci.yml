@@ -65,8 +65,8 @@ jobs:
       - name: Create test execution batch file directly in Windows
         run: |
           $lines = @(
-            'set LOG=C:\Users\nonadmin\kai-ci\test-output\ci-log.txt',
-            'set LOCK=C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock',
+            'set LOG=C:\Users\nonadmin\ci-log.txt',
+            'set LOCK=C:\Users\nonadmin\RUNNING.lock',
             'echo Running... > %LOCK%',
             'set nodePath=C:\Program Files\nodejs',
             'set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin',
@@ -160,7 +160,7 @@ jobs:
           
           while true; do
             sshpass -p "${EC2_PASSWORD}" ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" \
-            'if exist C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock (exit 0) else (exit 1)'
+            'if exist C:\Users\nonadmin\RUNNING.lock (exit 0) else (exit 1)'
         
             SSH_EXIT_CODE=$?
         
@@ -182,7 +182,7 @@ jobs:
           set -e
           
           echo "Downloading logs..."
-          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
+          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
           cat ./ci-log.txt || echo "Log file not found"
         env:
           EC2_USER: nonadmin
