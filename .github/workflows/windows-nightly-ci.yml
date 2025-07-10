@@ -21,6 +21,7 @@ jobs:
       github-token: ${{ secrets.GH_RUNNER_API_TOKEN }}
       nonadmin-password: ${{ secrets.NONADMIN_PASSWORD }}
 
+
   install-requirements-as-admin:
     needs: start-ec2-instance
     runs-on: ${{ needs.start-ec2-instance.outputs.instance_label }}
@@ -35,12 +36,6 @@ jobs:
 
       - name: Install Maven
         run: choco install maven -y
-        shell: powershell
-
-      - name: Install Maven
-        run: |
-          Invoke-WebRequest -Uri "https://download.sysinternals.com/files/PSTools.zip" -OutFile "C:\PSTools.zip"
-          Expand-Archive -Path "C:\PSTools.zip" -DestinationPath "C:\PSTools"
         shell: powershell
 
       - name: Install Red Hat Java extension
@@ -67,6 +62,52 @@ jobs:
           $json | ConvertTo-Json -Depth 10 | Set-Content -Path $settingsPath
         shell: powershell
 
+      - name: Create test execution batch file directly in Windows
+        run: |
+          $lines = @(
+            'set nodePath=C:\Program Files\nodejs',
+            'set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin',
+            'set PATH=%PATH%;%nodePath%;%vscodepath%',
+            'set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2',
+            'set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9',
+            'set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin',
+            'set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}',
+            'set PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }}',
+            'set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}',
+            'set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}',
+            'set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}',
+            'if exist C:\Users\nonadmin\kai-ci rmdir /s /q C:\Users\nonadmin\kai-ci',
+            'git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\Users\nonadmin\kai-ci',
+            'cd C:\Users\nonadmin\kai-ci',
+            'powershell -Command "npm install"',
+            'copy .env.example .env',
+            'echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} >> .env',
+            'echo PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }} >> .env',
+            'echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env',
+            'echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env',
+            'echo AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} >> .env',
+            'echo CI=true >> .env',
+            'set LOG=C:\Users\nonadmin\kai-ci\test-output\ci-log.txt',
+            'set LOCK=C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock',
+            'echo Running... > %LOCK%',
+            'node scripts/set-latest-vsix-env.mjs >> %LOG% 2>&1',
+            'npx playwright test >> %LOG% 2>&1',
+            'echo Done >> %LOG%',
+            'del %LOCK%',
+            'EXIT /B %ERRORLEVEL%'
+          )
+          Set-Content -Path C:\Users\nonadmin\execute-tests.bat -Value $lines -Encoding ASCII
+        shell: powershell
+
+      - name: Create and run scheduled task to execute tests
+        run: |
+          $Action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c C:\Users\nonadmin\execute-tests.bat"
+          $Trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1)
+          $Principal = New-ScheduledTaskPrincipal -UserId "nonadmin" -LogonType Interactive -RunLevel Highest
+          Register-ScheduledTask -TaskName "RunVSCodeTests" -Action $Action -Trigger $Trigger -Principal $Principal -Force
+          Start-ScheduledTask -TaskName "RunVSCodeTests"
+        shell: powershell
+
   run-test-as-nonadmin:
     needs: [ start-ec2-instance, install-requirements-as-admin ]
     runs-on: ubuntu-latest
@@ -75,80 +116,27 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
 
-      - name: Create batch file locally to execute tests
+      - name: Wait for Playwright tests to complete
         run: |
-          echo "set nodePath=C:\Program Files\nodejs" > execute-tests.bat
-          echo "set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin" >> execute-tests.bat
-          echo "set PATH=%PATH%;%nodePath%;%vscodepath%" >> execute-tests.bat
-          echo "set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2" >> execute-tests.bat
-          echo "set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9" >> execute-tests.bat
-          echo "set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin" >> execute-tests.bat
-          echo "set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> execute-tests.bat
-          echo "set PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }}" >> execute-tests.bat
-          echo "set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> execute-tests.bat
-          echo "set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> execute-tests.bat
-          echo "set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> execute-tests.bat
-          
-          echo "if exist C:\\Users\\nonadmin\\kai-ci rmdir /s /q C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-          echo "git clone -b ${{ github.head_ref || github.ref_name }} https://github.com/konveyor/kai-ci C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-          echo "cd C:\\Users\\nonadmin\\kai-ci" >> execute-tests.bat
-          echo powershell -Command "\"npm install\"" >> execute-tests.bat        
-          echo "copy .env.example .env" >> execute-tests.bat
-          echo "echo OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" >> .env" >> execute-tests.bat 
-          echo "echo PARASOL_API_KEY="${{ secrets.PARASOL_API_KEY }}" >> .env" >> execute-tests.bat 
-          echo "echo AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env" >> execute-tests.bat 
-          echo "echo AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env" >> execute-tests.bat 
-          echo "echo AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" >> .env" >> execute-tests.bat 
-          echo "echo CI=true >> .env" >> execute-tests.bat 
-          echo "node scripts/set-latest-vsix-env.mjs" >> execute-tests.bat
-          echo "npx playwright test" >> execute-tests.bat
-          echo "EXIT /B %ERRORLEVEL%" >> execute-tests.bat
-        shell: bash
+          echo "Waiting for Playwright tests to complete..."
+          while true; do
+            sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" ^
+              'if exist C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock (exit 0) else (exit 1)'
 
-      - name: Copy batch file to Windows EC2 instance
-        run: |
-          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no execute-tests.bat ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:\\Users\\nonadmin\\execute-tests.bat
+            if [ $? -ne 0 ]; then
+              echo "Tests completed."
+              break
+            fi
+
+            echo "Tests still running..."
+            sleep 60
+          done
+
+          sshpass -p "${EC2_PASSWORD}" scp -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt
+          cat ./ci-log.txt
         env:
           EC2_USER: nonadmin
           EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
-
-      - name: Run Tests
-        run: |
-          sshpass -p ${EC2_PASSWORD} ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }} 'cmd /c C:\\Users\\nonadmin\\execute-tests.bat'
-        env:
-          EC2_USER: nonadmin
-          EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
-
-      - name: Fetch artifacts
-        if: ${{ !cancelled() }}
-        run: |
-          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
-          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output ./test-output
-          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode ./kai-logs
-        env:
-          EC2_USER: nonadmin
-          EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
-
-      - name: Upload test artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: test-output
-          path: ./test-output
-
-      - name: Upload VSCode logs
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: vscode-logs
-          path: ./vscode-logs
-
-      - name: Upload KAI logs
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: kai-logs
-          path: ./kai-logs
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin ]
