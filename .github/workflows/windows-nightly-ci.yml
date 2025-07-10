@@ -121,22 +121,28 @@ jobs:
 
       - name: Wait for Windows instance to reboot and be reachable
         run: |
-          echo "Waiting for EC2 Windows instance to reboot..."
-
-          MAX_WAIT_SECONDS=600
+          echo "Waiting for 'nonadmin' to log in with GUI session..."
+  
+          MAX_LOGIN_WAIT=300
           WAITED=0
-
-          while ! sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR -o ConnectTimeout=10 "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" 'echo ok' 2>/dev/null; do
-            if [ "$WAITED" -ge "$MAX_WAIT_SECONDS" ]; then
-              echo "Timeout waiting for the instance to become reachable."
+          
+          while true; do
+            sshpass -p "${EC2_PASSWORD}" ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" 'query user | findstr /i "nonadmin"'
+            
+            if [ $? -eq 0 ]; then
+              echo "User 'nonadmin' has an active session."
+              break
+            fi
+          
+            if [ "$WAITED" -ge "$MAX_LOGIN_WAIT" ]; then
+              echo "Timeout waiting for nonadmin to log in."
               exit 1
             fi
-            echo "Instance not reachable yet... (${WAITED}s elapsed)"
+          
+            echo "Waiting for GUI login... (${WAITED}s elapsed)"
             sleep 10
             WAITED=$((WAITED + 10))
           done
-
-          echo "Instance is now reachable."
         env:
           EC2_USER: nonadmin
           EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
