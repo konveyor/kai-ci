@@ -65,6 +65,9 @@ jobs:
       - name: Create test execution batch file directly in Windows
         run: |
           $lines = @(
+            'set LOG=C:\Users\nonadmin\kai-ci\test-output\ci-log.txt',
+            'set LOCK=C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock',
+            'echo Running... > %LOCK%',
             'set nodePath=C:\Program Files\nodejs',
             'set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin',
             'set PATH=%PATH%;%nodePath%;%vscodepath%',
@@ -87,9 +90,6 @@ jobs:
             'echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env',
             'echo AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} >> .env',
             'echo CI=true >> .env',
-            'set LOG=C:\Users\nonadmin\kai-ci\test-output\ci-log.txt',
-            'set LOCK=C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock',
-            'echo Running... > %LOCK%',
             'node scripts/set-latest-vsix-env.mjs >> %LOG% 2>&1',
             'npx playwright test >> %LOG% 2>&1',
             'echo Done >> %LOG%',
@@ -106,7 +106,9 @@ jobs:
           $Principal = New-ScheduledTaskPrincipal -UserId "nonadmin" -LogonType Interactive -RunLevel Highest
           Register-ScheduledTask -TaskName "RunVSCodeTests" -Action $Action -Trigger $Trigger -Principal $Principal -Force
           Start-ScheduledTask -TaskName "RunVSCodeTests"
+          Get-ScheduledTaskInfo -TaskName "RunVSCodeTests"
           sleep 30
+          Get-ScheduledTaskInfo -TaskName "RunVSCodeTests"
         shell: powershell
 
   run-test-as-nonadmin:
@@ -150,7 +152,7 @@ jobs:
           set -e
           
           echo "Downloading logs..."
-          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@5${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
+          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
           cat ./ci-log.txt || echo "Log file not found"
         env:
           EC2_USER: nonadmin
