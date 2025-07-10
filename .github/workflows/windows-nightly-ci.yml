@@ -106,6 +106,7 @@ jobs:
           $Principal = New-ScheduledTaskPrincipal -UserId "nonadmin" -LogonType Interactive -RunLevel Highest
           Register-ScheduledTask -TaskName "RunVSCodeTests" -Action $Action -Trigger $Trigger -Principal $Principal -Force
           Start-ScheduledTask -TaskName "RunVSCodeTests"
+          sleep 30
         shell: powershell
 
   run-test-as-nonadmin:
@@ -126,7 +127,7 @@ jobs:
           MINUTES=0
           
           while true; do
-            sshpass -p "${EC2_PASSWORD}" ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71" \
+            sshpass -p "${EC2_PASSWORD}" ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}" \
             'if exist C:\Users\nonadmin\kai-ci\test-output\RUNNING.lock (exit 0) else (exit 1)'
         
             SSH_EXIT_CODE=$?
@@ -149,11 +150,22 @@ jobs:
           set -e
           
           echo "Downloading logs..."
-          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@54.235.227.71:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
+          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@5${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
           cat ./ci-log.txt || echo "Log file not found"
         env:
           EC2_USER: nonadmin
           EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+
+      - name: Fetch artifacts
+        if: ${{ !cancelled() }}
+        run: |
+          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/AppData/Roaming/Code/logs ./vscode-logs
+          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/test-output ./test-output
+          sshpass -p ${EC2_PASSWORD} scp -o StrictHostKeyChecking=no -r ${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/coolstore/.vscode ./kai-logs
+        env:
+          EC2_USER: nonadmin
+          EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
+
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin ]
