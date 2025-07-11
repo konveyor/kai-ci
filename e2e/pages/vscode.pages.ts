@@ -40,7 +40,7 @@ export class VSCode extends Application {
       args,
     });
 
-    const window = await vscodeApp.firstWindow();
+    const window = await vscodeApp.firstWindow({ timeout: 60000 });
     console.log('VSCode opened');
     return new VSCode(vscodeApp, window);
   }
