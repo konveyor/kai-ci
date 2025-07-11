@@ -5,7 +5,7 @@ async function globalSetup() {
   console.log('Running global setup...');
   const vscodeApp = await VSCode.init();
   if (getOSInfo() === 'windows' && process.env.CI) {
-    await vscodeApp.getWindow().waitForTimeout(30000);
+    await vscodeApp.getWindow().waitForTimeout(60000);
   }
 
   await vscodeApp.configureGenerativeAI();

@@ -40,7 +40,12 @@ providerConfigs.forEach((config) => {
 
     test('Analyze coolstore app', async () => {
       test.setTimeout(3600000);
+      await vscodeApp.waitDefault();
+      require('child_process').exec('tasklist', (e: any, out: any) =>
+        console.log(out)
+      );
       await vscodeApp.runAnalysis();
+
       console.log(new Date().toLocaleTimeString(), 'Analysis started');
       await vscodeApp.waitDefault();
       await vscodeApp.getWindow().screenshot({
@@ -48,7 +53,7 @@ providerConfigs.forEach((config) => {
       });
       await expect(
         vscodeApp.getWindow().getByText('Analysis completed').first()
-      ).toBeVisible({ timeout: 1800000 });
+      ).toBeVisible({ timeout: 300000 });
       /*
        * There is a limit in the number of analysis and solution files that kai stores
        * This method ensures the original analysis is stored to be used later in the evaluation

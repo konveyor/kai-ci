@@ -40,7 +40,7 @@ export class VSCode extends Application {
       args,
     });
 
-    const window = await vscodeApp.firstWindow();
+    const window = await vscodeApp.firstWindow({ timeout: 60000 });
     console.log('VSCode opened');
     return new VSCode(vscodeApp, window);
   }
@@ -117,7 +117,7 @@ export class VSCode extends Application {
     );
     await input.fill(`>${command}`);
     await expect(
-      this.window.locator('a.label-name span.highlight', { hasText: command })
+      this.window.locator(`a.label-name span.highlight >> text="${command}"`)
     ).toBeVisible();
 
     await input.press('Enter', { delay: 500 });
@@ -149,9 +149,12 @@ export class VSCode extends Application {
     if (
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
-      await analysisView.getByRole('button', { name: 'Start' }).isVisible();
-      await analysisView.getByRole('button', { name: 'Start' }).click();
-      await analysisView.getByRole('button', { name: 'Stop' }).isVisible();
+      await analysisView
+        .getByRole('button', { name: 'Start' })
+        .click({ delay: 500 });
+      await analysisView
+        .getByRole('button', { name: 'Stop' })
+        .isEnabled({ timeout: 120000 });
     }
   }
 
@@ -218,7 +221,7 @@ export class VSCode extends Application {
     targets: string[],
     profileName?: string
   ) {
-    await this.executeQuickCommand('Manage Analysis Profiles');
+    await this.executeQuickCommand('Konveyor: Manage Analysis Profiles');
 
     const manageProfileView = await this.getView(KAIViews.manageProfiles);
     // TODO ask for/add test-id for this button and comboboxes
@@ -236,7 +239,7 @@ export class VSCode extends Application {
     const targetsInput = manageProfileView
       .getByRole('combobox', { name: 'Type to filter' })
       .first();
-    await targetsInput.click();
+    await targetsInput.click({ delay: 500 });
 
     for (const target of targets) {
       await targetsInput.fill(target);
@@ -250,7 +253,7 @@ export class VSCode extends Application {
     const sourceInput = manageProfileView
       .getByRole('combobox', { name: 'Type to filter' })
       .nth(1);
-    await sourceInput.click();
+    await sourceInput.click({ delay: 500 });
 
     for (const source of sources) {
       await sourceInput.fill(source);
