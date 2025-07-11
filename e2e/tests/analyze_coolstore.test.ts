@@ -12,7 +12,7 @@ import {
 import { KAIViews } from '../enums/views.enum';
 
 providerConfigs.forEach((config) => {
-  test.describe.skip(`Coolstore app tests | ${config.model}`, () => {
+  test.describe(`Coolstore app tests | ${config.model}`, () => {
     let vscodeApp: VSCode;
     let allOk = true;
 
