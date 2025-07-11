@@ -117,7 +117,7 @@ export class VSCode extends Application {
     );
     await input.fill(`>${command}`);
     await expect(
-      this.window.locator('a.label-name span.highlight', { hasText: command })
+      this.window.locator(`a.label-name span.highlight >> text="${command}"`)
     ).toBeVisible();
 
     await input.press('Enter', { delay: 500 });
@@ -221,7 +221,7 @@ export class VSCode extends Application {
     targets: string[],
     profileName?: string
   ) {
-    await this.executeQuickCommand('Manage Analysis Profiles');
+    await this.executeQuickCommand('Konveyor: Manage Analysis Profiles');
 
     const manageProfileView = await this.getView(KAIViews.manageProfiles);
     // TODO ask for/add test-id for this button and comboboxes
