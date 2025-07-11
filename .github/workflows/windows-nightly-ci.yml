@@ -91,7 +91,7 @@ jobs:
             'echo AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} >> .env',
             'echo CI=true >> .env',
             'node scripts/set-latest-vsix-env.mjs >> %LOG% 2>&1',
-            'npx playwright test >> %LOG% 2>&1',
+            'start /wait cmd /c "npx playwright test >> C:\Users\nonadmin\ci-log.txt 2>&1"'
             'set TEST_EXIT_CODE=%ERRORLEVEL%',
             'echo Done >> %LOG%',
             'del %LOCK%',

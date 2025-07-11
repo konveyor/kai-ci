@@ -6,7 +6,7 @@ async function globalSetup() {
   console.log('Running global setup...');
   const vscodeApp = await VSCode.init();
 
-  //await vscodeApp.configureGenerativeAI();
+  await vscodeApp.configureGenerativeAI();
   console.log('Completed global setup.');
   await vscodeApp.closeVSCode();
 }
