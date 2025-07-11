@@ -211,6 +211,28 @@ jobs:
           EC2_USER: nonadmin
           EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
 
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: test-output
+          path: ./test-output
+
+      - name: Upload VSCode logs
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: vscode-logs
+          path: ./vscode-logs
+
+      - name: Upload KAI logs
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: kai-logs
+          path: ./kai-logs
+
+
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin ]
