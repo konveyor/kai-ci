@@ -67,6 +67,7 @@ jobs:
           $lines = @(
             'set LOG=C:\Users\nonadmin\ci-log.txt',
             'set LOCK=C:\Users\nonadmin\RUNNING.lock',
+            'echo Running... > %LOCK%',
             'echo Waiting for explorer.exe... >> %LOG%',
             ':waitloop',
             'tasklist /FI "USERNAME eq nonadmin" | findstr /i "explorer.exe" >nul',
@@ -75,7 +76,7 @@ jobs:
             '  goto waitloop',
             ')',
             'echo Explorer started. >> %LOG%',
-            'echo Running... > %LOCK%',
+            'timeout /t 60  >> %LOG%',
             'set nodePath=C:\Program Files\nodejs',
             'set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin',
             'set PATH=%PATH%;%nodePath%;%vscodepath%',
