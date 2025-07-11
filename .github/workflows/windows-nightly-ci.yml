@@ -65,6 +65,14 @@ jobs:
       - name: Create test execution batch file directly in Windows
         run: |
           $lines = @(
+            'echo Waiting for explorer.exe...',
+            ':waitloop',
+            'tasklist /FI "USERNAME eq nonadmin" | findstr /i "explorer.exe" >nul',
+            'if errorlevel 1 (',
+            '  timeout /t 5 >nul',
+            '  goto waitloop',
+            ')',
+            'echo Explorer started.',
             'set LOG=C:\Users\nonadmin\ci-log.txt',
             'set LOCK=C:\Users\nonadmin\RUNNING.lock',
             'echo Running... > %LOCK%',
@@ -91,7 +99,7 @@ jobs:
             'echo AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} >> .env',
             'echo CI=true >> .env',
             'node scripts/set-latest-vsix-env.mjs >> %LOG% 2>&1',
-            'start /wait cmd /c "npx playwright test >> C:\Users\nonadmin\ci-log.txt 2>&1"'
+            'start /wait cmd /c "npx playwright test >> %LOG% 2>&1"',
             'set TEST_EXIT_CODE=%ERRORLEVEL%',
             'echo Done >> %LOG%',
             'del %LOCK%',
