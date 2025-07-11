@@ -65,16 +65,16 @@ jobs:
       - name: Create test execution batch file directly in Windows
         run: |
           $lines = @(
-            'echo Waiting for explorer.exe...',
+            'set LOG=C:\Users\nonadmin\ci-log.txt',
+            'set LOCK=C:\Users\nonadmin\RUNNING.lock',
+            'echo Waiting for explorer.exe... >> %LOG%',
             ':waitloop',
             'tasklist /FI "USERNAME eq nonadmin" | findstr /i "explorer.exe" >nul',
             'if errorlevel 1 (',
             '  timeout /t 5 >nul',
             '  goto waitloop',
             ')',
-            'echo Explorer started.',
-            'set LOG=C:\Users\nonadmin\ci-log.txt',
-            'set LOCK=C:\Users\nonadmin\RUNNING.lock',
+            'echo Explorer started. >> %LOG%',
             'echo Running... > %LOCK%',
             'set nodePath=C:\Program Files\nodejs',
             'set vscodepath=C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin',
