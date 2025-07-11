@@ -181,7 +181,7 @@ jobs:
           done
 
           echo "Downloading logs..."
-          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/kai-ci/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
+          sshpass -p "${EC2_PASSWORD}" scp -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o LogLevel=ERROR "${EC2_USER}@${{ needs.start-ec2-instance.outputs.ec2-host }}:C:/Users/nonadmin/ci-log.txt" ./ci-log.txt || echo "Failed to download ci-log.txt"
           cat ./ci-log.txt || echo "Log file not found"
 
           if [ "$TEST_COMPLETED" -eq 0 ]; then
