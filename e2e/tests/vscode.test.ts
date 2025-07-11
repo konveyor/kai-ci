@@ -3,7 +3,7 @@ import { VSCode } from '../pages/vscode.pages';
 import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { SCREENSHOTS_FOLDER } from '../utilities/consts';
 
-test.describe.skip('Install KAI plugin and start server', () => {
+test.describe('Install KAI plugin and start server', () => {
   let vscodeApp: VSCode;
 
   test.beforeAll(async ({ testRepoData }) => {
