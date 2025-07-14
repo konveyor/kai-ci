@@ -6,7 +6,7 @@ test.describe(`Configure extension and run analysis`, () => {
   let vscodeApp: VSCode;
 
   test.beforeAll(async ({ testRepoData }) => {
-    test.setTimeout(1600000);
+    test.setTimeout(600000);
     const repoInfo = testRepoData['coolstore'];
     vscodeApp = await VSCode.open(repoInfo.repoUrl, repoInfo.repoName);
   });
@@ -28,11 +28,8 @@ test.describe(`Configure extension and run analysis`, () => {
   });
 
   test('Analyze coolstore app', async () => {
-    test.setTimeout(3600000);
     await vscodeApp.waitDefault();
     await vscodeApp.runAnalysis();
-
-    console.log(new Date().toLocaleTimeString(), 'Analysis started');
     await vscodeApp.waitDefault();
     await expect(
       vscodeApp.getWindow().getByText('Analysis completed').first()
