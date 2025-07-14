@@ -221,10 +221,6 @@ export class VSCode extends Application {
     targets: string[],
     profileName?: string
   ) {
-    if (!sources.length || !targets.length) {
-      throw new Error('Sources and targets arrays cannot be empty');
-    }
-
     await this.executeQuickCommand('Konveyor: Manage Analysis Profiles');
 
     const manageProfileView = await this.getView(KAIViews.manageProfiles);
