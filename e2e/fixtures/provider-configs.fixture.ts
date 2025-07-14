@@ -12,6 +12,10 @@ export const DEFAULT_PROVIDER: ProviderConfig = {
   config: [
     'models:',
     '  AmazonBedrock: &active',
+    '    environment:',
+    `      AWS_ACCESS_KEY_ID: "${process.env.AWS_ACCESS_KEY_ID}"`,
+    `      AWS_SECRET_ACCESS_KEY: "${process.env.AWS_SECRET_ACCESS_KEY}"`,
+    `      AWS_DEFAULT_REGION: "${process.env.AWS_DEFAULT_REGION}"`,
     '    provider: "ChatBedrock"',
     '    args:',
     '      model_id: "meta.llama3-70b-instruct-v1:0"',
