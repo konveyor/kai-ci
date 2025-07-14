@@ -37,6 +37,6 @@ export default defineConfig({
     {
       name: 'tests',
       testMatch: /^(?!.*(vscode\.test\.ts|analyze.*\.test\.ts)).*\.test\.ts$/,
-    }
+    },
   ],
 });
