@@ -71,3 +71,9 @@ export function getRepoName(testInfo: TestInfo): string {
   const repoName = path.basename(testInfo.file).replace('.test.ts', '');
   return repoName.split('_')[1];
 }
+
+export function generateRandomString(length: number = 8): string {
+  return Math.random()
+    .toString(36)
+    .substring(2, 2 + length);
+}

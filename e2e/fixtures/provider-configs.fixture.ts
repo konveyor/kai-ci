@@ -12,6 +12,10 @@ export const DEFAULT_PROVIDER: ProviderConfig = {
   config: [
     'models:',
     '  AmazonBedrock: &active',
+    '    environment:',
+    `      AWS_ACCESS_KEY_ID: "${process.env.AWS_ACCESS_KEY_ID}"`,
+    `      AWS_SECRET_ACCESS_KEY: "${process.env.AWS_SECRET_ACCESS_KEY}"`,
+    `      AWS_DEFAULT_REGION: "${process.env.AWS_DEFAULT_REGION}"`,
     '    provider: "ChatBedrock"',
     '    args:',
     '      model_id: "meta.llama3-70b-instruct-v1:0"',
@@ -45,13 +49,14 @@ export const PARASOL_PROVIDER: ProviderConfig = {
     '    provider: "ChatOpenAI"',
     '    args:',
     '      model: "granite-3-3-8b-instruct"',
-    '      base_url: "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1"',
+    '      configuration:',
+    '        baseURL: "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com/v1"',
     'active: *active',
   ].join('\n'),
 };
 
 export const providerConfigs: ProviderConfig[] = [
-  //PARASOL_PROVIDER, Disabled as it is having connectivity issues
+  //PARASOL_PROVIDER,
   DEFAULT_PROVIDER,
   OPENAI_PROVIDER,
 ];

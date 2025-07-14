@@ -3,6 +3,7 @@ import { execSync } from 'child_process';
 import { downloadLatestKAIPlugin } from '../utilities/download.utils';
 import {
   cleanupRepo,
+  generateRandomString,
   getKAIPluginName,
   getOSInfo,
   getVscodeExecutablePath,
@@ -12,7 +13,7 @@ import { LeftBarItems } from '../enums/left-bar-items.enum';
 import { expect } from '@playwright/test';
 import { Application } from './application.pages';
 import { DEFAULT_PROVIDER } from '../fixtures/provider-configs.fixture';
-import { SCREENSHOTS_FOLDER } from '../utilities/consts';
+import { KAIViews } from '../enums/views.enum';
 
 export class VSCode extends Application {
   public static async open(repoUrl?: string, repoDir?: string) {
@@ -39,7 +40,7 @@ export class VSCode extends Application {
       args,
     });
 
-    const window = await vscodeApp.firstWindow();
+    const window = await vscodeApp.firstWindow({ timeout: 60000 });
     console.log('VSCode opened');
     return new VSCode(vscodeApp, window);
   }
@@ -108,94 +109,18 @@ export class VSCode extends Application {
     }
   }
 
-  /**
-   * Iterates through all frames and returns the
-   * server status panel frame .
-   */
-  public async getServerStatusIframe(): Promise<FrameLocator | null> {
-    if (!this.window) {
-      throw new Error('VSCode window is not initialized.');
-    }
-    const iframeLocators = this.window.locator('iframe');
-    const iframeCount = await iframeLocators.count();
-    for (let i = 0; i < iframeCount; i++) {
-      const iframeLocator = iframeLocators.nth(i);
-      const outerIframe = iframeLocator.contentFrame();
-      if (outerIframe) {
-        const iframe2 = outerIframe.locator(
-          'iframe[title="Konveyor Analysis View"]'
-        );
-        return iframe2.contentFrame();
-      }
-    }
-    // Return null if the iframe is not found
-    console.info('Iframe with title "Konveyor" not found.');
-    return null;
-  }
-
   private async executeQuickCommand(command: string) {
     await this.waitDefault();
-    await this.window.keyboard.press('Control+Shift+P');
+    await this.window.keyboard.press('Control+Shift+P', { delay: 500 });
     const input = this.window.getByPlaceholder(
       'Type the name of a command to run.'
     );
-    await this.waitDefault();
     await input.fill(`>${command}`);
     await expect(
-      this.window.locator('a.label-name span.highlight', { hasText: command })
+      this.window.locator(`a.label-name span.highlight >> text="${command}"`)
     ).toBeVisible();
 
-    await input.press('Enter');
-    await this.window.waitForTimeout(1000);
-  }
-
-  public async selectSourcesAndTargets(sources: string[], targets: string[]) {
-    // Opening analysis view due to https://github.com/konveyor/editor-extensions/issues/479
-    await this.openAnalysisView();
-    await this.waitDefault();
-    const window = this.window;
-    await this.executeQuickCommand('sources and targets');
-    const targetInput = window.getByPlaceholder('Choose one or more target');
-    await this.waitDefault();
-    for (const target of targets) {
-      await targetInput.fill(target);
-
-      await window
-        .getByRole('checkbox', { name: `${target}` })
-        .nth(1)
-        .click();
-    }
-    await targetInput.press('Enter');
-    await this.waitDefault();
-    const sourceInput = window.getByPlaceholder('Choose one or more source');
-    await expect(sourceInput).toBeVisible();
-    for (const source of sources) {
-      await sourceInput.fill(source);
-
-      await window
-        .getByRole('checkbox', { name: `${source}` })
-        .nth(1)
-        .click();
-      await window.waitForTimeout(1000);
-    }
-
-    await sourceInput.press('Enter');
-    await this.waitDefault();
-    await window.keyboard.press('Enter');
-  }
-
-  /**
-   * Opens command palette by doing ctrl+shift+P
-   * and then typing "Welcome" and then "Set Up".
-   */
-  public async openSetUpKonveyor() {
-    const window = this.getWindow();
-    await this.waitDefault();
-    await this.executeQuickCommand('welcome: open walkthrough');
-
-    await window.keyboard.type('set up konveyor');
-    await this.waitDefault();
-    await window.keyboard.press('Enter');
+    await input.press('Enter', { delay: 500 });
   }
 
   public async openLeftBarElement(name: LeftBarItems) {
@@ -220,19 +145,21 @@ export class VSCode extends Application {
 
   public async startServer(): Promise<void> {
     await this.openAnalysisView();
-    const analysisView = await this.getAnalysisIframe();
-    await this.waitDefault();
+    const analysisView = await this.getView(KAIViews.analysisView);
     if (
       !(await analysisView.getByRole('button', { name: 'Stop' }).isVisible())
     ) {
-      await analysisView.getByRole('button', { name: 'Start' }).isVisible();
-      await analysisView.getByRole('button', { name: 'Start' }).click();
-      await analysisView.getByRole('button', { name: 'Stop' }).isVisible();
+      await analysisView
+        .getByRole('button', { name: 'Start' })
+        .click({ delay: 500 });
+      await analysisView
+        .getByRole('button', { name: 'Stop' })
+        .isEnabled({ timeout: 120000 });
     }
   }
 
   public async searchViolation(term: string): Promise<void> {
-    const analysisView = await this.getAnalysisIframe();
+    const analysisView = await this.getView(KAIViews.analysisView);
 
     const toggleFilterButton = analysisView.locator(
       'button[aria-label="Show Filters"]'
@@ -252,7 +179,7 @@ export class VSCode extends Application {
 
   public async runAnalysis() {
     await this.window.waitForTimeout(15000);
-    const analysisView = await this.getAnalysisIframe();
+    const analysisView = await this.getView(KAIViews.analysisView);
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
     });
@@ -261,45 +188,79 @@ export class VSCode extends Application {
     await runAnalysisBtnLocator.click();
   }
 
-  /**
-   * Returns the iframe that contains the main Konveyor view
-   * @return Promise<FrameLocator>
-   */
-  public async getAnalysisIframe(): Promise<FrameLocator> {
-    return this.window
-      .locator('iframe')
-      .first()
-      .contentFrame()
-      .getByTitle('Konveyor Analysis View')
-      .contentFrame();
-  }
+  public async getView(view: KAIViews): Promise<FrameLocator> {
+    await this.window.locator(`div.tab.active[aria-label="${view}"]`).waitFor();
+    await this.executeQuickCommand('View: Close Other Editors in Group');
 
-  /**
-   * Returns the iframe that contains the main Konveyor view
-   * @return Promise<FrameLocator>
-   */
-  public async getResolutionIframe(): Promise<FrameLocator> {
-    return this.window
-      .locator('iframe')
-      .nth(1)
-      .contentFrame()
-      .getByTitle('Resolution Details')
-      .contentFrame();
+    const iframes = this.window.locator('iframe');
+    const count = await iframes.count();
+
+    for (let i = 0; i < count; i++) {
+      const outerFrameLocator = this.window.frameLocator('iframe').nth(i);
+      const innerFrameLocator = outerFrameLocator.getByTitle(view);
+
+      if ((await innerFrameLocator.count()) === 1) {
+        return innerFrameLocator.contentFrame();
+      }
+    }
+
+    throw new Error(`Iframe ${view} not found`);
   }
 
   public async configureGenerativeAI(config: string = DEFAULT_PROVIDER.config) {
-    await this.openSetUpKonveyor();
-    await this.window
-      .getByRole('button', { name: 'Configure Generative AI' })
-      .click();
-    await this.waitDefault();
-    await this.window
-      .getByRole('button', { name: 'Configure GenAI model settings file' })
-      .click();
-    await this.waitDefault();
-
+    await this.executeQuickCommand(
+      'Konveyor: Open the GenAI model provider configuration file'
+    );
     await this.window.keyboard.press('Control+a+Delete');
     await this.pasteContent(config);
-    await this.window.keyboard.press('Control+s');
+    await this.window.keyboard.press('Control+s', { delay: 500 });
+  }
+
+  public async createProfile(
+    sources: string[],
+    targets: string[],
+    profileName?: string
+  ) {
+    await this.executeQuickCommand('Konveyor: Manage Analysis Profiles');
+
+    const manageProfileView = await this.getView(KAIViews.manageProfiles);
+    // TODO ask for/add test-id for this button and comboboxes
+    await manageProfileView
+      .getByRole('button', { name: '+ New Profile' })
+      .click();
+
+    const randomName = generateRandomString();
+    const nameToUse = profileName ? `${profileName}-${randomName}` : randomName;
+    await manageProfileView
+      .getByRole('textbox', { name: 'Profile Name' })
+      .fill(nameToUse);
+
+    // Select Targets
+    const targetsInput = manageProfileView
+      .getByRole('combobox', { name: 'Type to filter' })
+      .first();
+    await targetsInput.click({ delay: 500 });
+
+    for (const target of targets) {
+      await targetsInput.fill(target);
+      await manageProfileView
+        .getByRole('option', { name: target, exact: true })
+        .click();
+    }
+    await this.window.keyboard.press('Escape');
+
+    // Select Source
+    const sourceInput = manageProfileView
+      .getByRole('combobox', { name: 'Type to filter' })
+      .nth(1);
+    await sourceInput.click({ delay: 500 });
+
+    for (const source of sources) {
+      await sourceInput.fill(source);
+      await manageProfileView
+        .getByRole('option', { name: source, exact: true })
+        .click();
+    }
+    await this.window.keyboard.press('Escape');
   }
 }

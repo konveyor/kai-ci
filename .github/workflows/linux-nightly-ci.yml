@@ -1,4 +1,4 @@
-name: (Linux) Run Playwright tests nightly
+name: (Linux) Run Playwright tests with latest dev build
 
 on:
   schedule:
@@ -62,15 +62,17 @@ jobs:
         export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
         dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
         mkdir ~/.vscode && echo '{ "disable-hardware-acceleration": true }' > ~/.vscode/argv.json
-    - name: Verify Installation
-      run: code --version
+    - name: Verify Installation and install Java extension
+      run: code --version && code --install-extension redhat.java
     - name: Ensure no VSCode instances are running
       run: |
         pkill -f code || true  # Kills all VSCode processes if they are running
     - name: Install dependencies
       run: npm ci
     - name: Copy .env.example to .env
-      run: cp .env.example .env  
+      run: cp .env.example .env
+    - name: Get last dev build and update env
+      run: node scripts/set-latest-vsix-env.mjs
     - name: Run Playwright tests
       run: npx playwright test --reporter=list
       env:
