@@ -90,7 +90,7 @@ jobs:
             'set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}',
             'set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}',
             'if exist C:\Users\nonadmin\kai-ci rmdir /s /q C:\Users\nonadmin\kai-ci',
-            'git clone -b %GITHUB_REF% https://github.com/konveyor/kai-ci C:\Users\nonadmin\kai-ci'',
+            'git clone -b %GITHUB_REF% https://github.com/konveyor/kai-ci C:\Users\nonadmin\kai-ci',
             'cd C:\Users\nonadmin\kai-ci',
             'powershell -Command "npm install"',
             'copy .env.example .env',
