@@ -128,7 +128,7 @@ jobs:
 
     steps:
       - name: Install sshpass
-        run: sudo apt-get install
+        run: sudo apt-get install -y sshpass
 
       - name: Wait for Windows instance to reboot and be reachable
         run: |
