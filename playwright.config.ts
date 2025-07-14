@@ -30,9 +30,13 @@ export default defineConfig({
       testMatch: /.*vscode\.test\.ts/,
     },
     {
-      name: 'main-tests',
-      testMatch: /^(?!.*vscode\.test\.ts$).*\.test\.ts$/,
+      name: 'analysis-tests',
+      testMatch: /.*analyze.+\.test\.ts/,
       dependencies: ['vscode-setup'],
     },
+    {
+      name: 'tests',
+      testMatch: /^(?!.*(vscode\.test\.ts|analyze.*\.test\.ts)).*\.test\.ts$/,
+    }
   ],
 });
