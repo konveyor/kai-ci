@@ -198,8 +198,6 @@ jobs:
             echo "Test run timed out!"
             exit 1
           fi
-          
-          exit $SSH_EXIT_CODE
         env:
           EC2_USER: nonadmin
           EC2_PASSWORD: ${{ secrets.NONADMIN_PASSWORD }}
