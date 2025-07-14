@@ -41,9 +41,6 @@ providerConfigs.forEach((config) => {
     test('Analyze coolstore app', async () => {
       test.setTimeout(3600000);
       await vscodeApp.waitDefault();
-      require('child_process').exec('tasklist', (e: any, out: any) =>
-        console.log(out)
-      );
       await vscodeApp.runAnalysis();
 
       console.log(new Date().toLocaleTimeString(), 'Analysis started');
