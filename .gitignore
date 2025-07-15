@@ -87,3 +87,4 @@ test-results/
 screenshots/
 coolstore/
 test-output
+*.vsix

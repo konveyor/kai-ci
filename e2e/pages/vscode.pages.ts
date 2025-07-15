@@ -186,6 +186,9 @@ export class VSCode extends Application {
     await expect(runAnalysisBtnLocator).toBeEnabled({ timeout: 600000 });
 
     await runAnalysisBtnLocator.click();
+    await expect(
+      analysisView.getByText('Analysis Progress').first()
+    ).toBeVisible({ timeout: 10000 });
   }
 
   public async getView(view: KAIViews): Promise<FrameLocator> {

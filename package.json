@@ -129,6 +129,7 @@
   "license": "ISC",
   "lint-staged": {
     "e2e/**/*.{ts,js,json}": "prettier --ignore-unknown --write",
-    "kai-evaluator/**/*.{ts,js,json}": "prettier --ignore-unknown --write"
+    "kai-evaluator/**/*.{ts,js,json}": "prettier --ignore-unknown --write",
+    "playwright.config.ts": "prettier --ignore-unknown --write"
   }
 }

@@ -26,13 +26,13 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'vscode-setup',
-      testMatch: /.*vscode\.test\.ts/,
+      name: 'configure-and-run-analysis',
+      testMatch: /.*configure-and-run-analysis\.test\.ts/,
     },
     {
-      name: 'main-tests',
-      testMatch: /^(?!.*vscode\.test\.ts$).*\.test\.ts$/,
-      dependencies: ['vscode-setup'],
+      name: 'analysis-tests',
+      testMatch: /.*analyze.+\.test\.ts/,
+      dependencies: ['configure-and-run-analysis'],
     },
   ],
 });
