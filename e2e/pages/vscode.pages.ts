@@ -266,4 +266,43 @@ export class VSCode extends Application {
     }
     await this.window.keyboard.press('Escape');
   }
+
+  public async deleteProfile(profileNamePrefix?: string) {
+    await this.executeQuickCommand('Konveyor: Manage Analysis Profiles');
+
+    const manageProfileView = await this.getView(KAIViews.manageProfiles);
+    const profileList = manageProfileView.getByRole('list', {
+      name: 'Profile list',
+    });
+    const profileItems = profileList.getByRole('listitem');
+    try {
+      if (profileNamePrefix) {
+        /*
+         * Locate the profile by a prefix match on its name.
+         * A regular expression is used because new profiles often have
+         * an unpredictable random suffix appended to their name,
+         * preventing an exact string match.
+         *
+         * In scenarios where multiple profiles might match the given prefix,
+         * and a unique match cannot be guaranteed, .last() is used to
+         * select the last matching profile as the default action.
+         */
+        const regex = new RegExp('^' + profileNamePrefix);
+        await profileItems.filter({ hasText: regex }).last().click();
+      } else {
+        await profileItems.first().click();
+      }
+
+      await manageProfileView
+        .getByRole('button', { name: 'Delete Profile' })
+        .click();
+      const confirmButton = manageProfileView
+        .getByRole('dialog', { name: 'Delete profile?' })
+        .getByRole('button', { name: 'Confirm' });
+      await confirmButton.waitFor({ state: 'visible' });
+      await confirmButton.click();
+    } catch (error) {
+      console.log('Error deleting profile:', error);
+    }
+  }
 }
