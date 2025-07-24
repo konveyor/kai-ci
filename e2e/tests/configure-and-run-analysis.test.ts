@@ -36,6 +36,11 @@ test.describe(`Configure extension and run analysis`, () => {
     ).toBeVisible({ timeout: 300000 });
   });
 
+  test('Delete profile', async () => {
+    await vscodeApp.waitDefault();
+    await vscodeApp.deleteProfile();
+  });
+
   test.afterAll(async () => {
     await vscodeApp.closeVSCode();
   });
