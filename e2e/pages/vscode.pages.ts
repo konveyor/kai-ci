@@ -268,7 +268,7 @@ export class VSCode extends Application {
   }
 
   public async deleteProfile(profileNamePrefix?: string) {
-    await this.executeQuickCommand('Konveyor: Manage Analysis Profiles');
+    await this.executeQuickCommand('Konveyor: Manage Analysis Profile');
 
     const manageProfileView = await this.getView(KAIViews.manageProfiles);
     const profileList = manageProfileView.getByRole('list', {
