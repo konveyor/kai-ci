@@ -17,10 +17,14 @@ export const test = base.extend<{
   testRepoData: RepoData;
 }>({
   testRepoData: async ({}, use) => {
-    const jsonPath = path.resolve(__dirname, './test-repos.json');
-    const raw = fs.readFileSync(jsonPath, 'utf-8');
-    const data: RepoData = JSON.parse(raw);
-    await use(data);
+    try {
+      const jsonPath = path.resolve(__dirname, './test-repos.json');
+      const raw = fs.readFileSync(jsonPath, 'utf-8');
+      const data: RepoData = JSON.parse(raw);
+      await use(data);
+    } catch (error: any) {
+      throw new Error(`Failed to load test repository data: ${error.message}`);
+    }
   },
 });
 

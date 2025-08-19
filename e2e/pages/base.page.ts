@@ -1,6 +1,7 @@
 import { ElectronApplication, Page } from 'playwright';
+import { getOSInfo } from '../utilities/utils';
 
-export class Application {
+export class BasePage {
   protected readonly app: ElectronApplication;
   protected readonly window: Page;
 
@@ -23,7 +24,8 @@ export class Application {
     await this.app.evaluate(({ clipboard }, content) => {
       clipboard.writeText(content);
     }, content);
-    await this.window.keyboard.press('Control+v', { delay: 500 });
+    const modifier = getOSInfo() === 'macOS' ? 'Meta' : 'Control';
+    await this.window.keyboard.press(`${modifier}+v`, { delay: 500 });
   }
 
   public async waitDefault() {

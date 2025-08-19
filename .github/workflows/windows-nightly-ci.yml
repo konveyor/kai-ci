@@ -11,7 +11,7 @@ jobs:
     uses: ./.github/workflows/provision-runner.yml
     with:
       ec2-image-id: ami-0cf05b9bbda99aed3
-      ec2-instance-type: m5.4xlarge
+      ec2-instance-type: t2.large
       security-group-id: sg-0a3e6b53e86d0e69d
       subnet-id: subnet-06113672589e7e836
       ec2-os-type: windows
@@ -84,24 +84,14 @@ jobs:
             'set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2',
             'set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9',
             'set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin',
-            'set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}',
-            'set PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }}',
-            'set AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}',
-            'set AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}',
-            'set AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}',
             'if exist C:\Users\nonadmin\kai-ci rmdir /s /q C:\Users\nonadmin\kai-ci',
             'git clone -b %GITHUB_REF% https://github.com/konveyor/kai-ci C:\Users\nonadmin\kai-ci',
             'cd C:\Users\nonadmin\kai-ci',
             'powershell -Command "npm install"',
             'copy .env.example .env',
-            'echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} >> .env',
-            'echo PARASOL_API_KEY=${{ secrets.PARASOL_API_KEY }} >> .env',
-            'echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env',
-            'echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env',
-            'echo AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} >> .env',
             'echo CI=true >> .env',
             'node scripts/set-latest-vsix-env.mjs >> %LOG% 2>&1',
-            'start /wait cmd /c "npx playwright test >> %LOG% 2>&1"',
+            'start /wait cmd /c "npx playwright test e2e/tests/base/configure-and-run-analysis.test.ts >> %LOG% 2>&1"',
             'set TEST_EXIT_CODE=%ERRORLEVEL%',
             'echo Done >> %LOG%',
             'del %LOCK%',

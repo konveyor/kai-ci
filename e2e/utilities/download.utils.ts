@@ -1,19 +1,16 @@
 import axios from 'axios';
 import * as fs from 'fs';
-import { getKAIPluginName } from './utils';
 
 /**
- * Downloads a file from the given URL and saves it to the specified destination.
- * @param fileUrl The URL of the file to download.
- * @param outputLocationPath The local file path where the file will be saved.
- * @returns Promise that resolves when the download is complete.
+ * Downloads the KAI plugin VSIX file from the default URL to the local directory.
+ * Uses environment variables DEFAULT_VSIX_DOWNLOAD_URL and VSIX_FILE_NAME.
  */
-export async function downloadFile(): Promise<void> {
-  const outputLocationPath = getKAIPluginName();
-  const defaultUrl = process.env.DEFAULT_VSIX_DOWNLOAD_URL || '';
-
-  const writer = fs.createWriteStream(outputLocationPath);
-  const response = await fetchUrl(defaultUrl);
+export async function downloadFile(
+  url: string,
+  outputFile: string
+): Promise<void> {
+  const writer = fs.createWriteStream(outputFile);
+  const response = await fetchUrl(url);
   response.data.pipe(writer);
 
   return new Promise((resolve, reject) => {
@@ -24,23 +21,13 @@ export async function downloadFile(): Promise<void> {
 
 async function fetchUrl(defaultUrl: string) {
   try {
-    const response = await axios({
+    return await axios({
       url: defaultUrl,
       method: 'GET',
       responseType: 'stream',
     });
-    return response;
   } catch (error) {
     console.error('Error fetching URL:', error);
     throw error;
-  }
-}
-
-export async function downloadLatestKAIPlugin() {
-  try {
-    await downloadFile();
-    console.log('File downloaded successfully!');
-  } catch (err) {
-    console.error('Error downloading the file:', err);
   }
 }

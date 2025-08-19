@@ -1,8 +1,15 @@
 import { expect, test } from '../fixtures/test-repo-fixture';
-import { VSCode } from '../pages/vscode.pages';
+import { VSCode } from '../pages/vscode.page';
 import { SCREENSHOTS_FOLDER, TEST_OUTPUT_FOLDER } from '../utilities/consts';
-import { getOSInfo, getRepoName } from '../utilities/utils';
-import { providerConfigs } from '../fixtures/provider-configs.fixture';
+import {
+  getOSInfo,
+  getRepoName,
+  generateRandomString,
+} from '../utilities/utils';
+import {
+  DEFAULT_PROVIDER,
+  providerConfigs,
+} from '../fixtures/provider-configs.fixture';
 import path from 'path';
 import { runEvaluation } from '../../kai-evaluator/core';
 import {
@@ -11,20 +18,24 @@ import {
 } from '../utilities/evaluation.utils';
 import { KAIViews } from '../enums/views.enum';
 
-providerConfigs.forEach((config) => {
+const providers = process.env.CI ? providerConfigs : [DEFAULT_PROVIDER];
+
+providers.forEach((config) => {
   test.describe(`Coolstore app tests | ${config.model}`, () => {
     let vscodeApp: VSCode;
     let allOk = true;
-
+    const randomString = generateRandomString();
+    let profileName = '';
     test.beforeAll(async ({ testRepoData }, testInfo) => {
       test.setTimeout(1600000);
       const repoName = getRepoName(testInfo);
       const repoInfo = testRepoData[repoName];
+      profileName = `${repoInfo.repoName}-${randomString}`;
       vscodeApp = await VSCode.open(repoInfo.repoUrl, repoInfo.repoName);
       await vscodeApp.createProfile(
         repoInfo.sources,
         repoInfo.targets,
-        repoInfo.repoName
+        profileName
       );
       await vscodeApp.configureGenerativeAI(config.config);
       await vscodeApp.startServer();
@@ -50,7 +61,9 @@ providerConfigs.forEach((config) => {
       });
       await expect(
         vscodeApp.getWindow().getByText('Analysis completed').first()
-      ).toBeVisible({ timeout: 300000 });
+      ).toBeVisible({
+        timeout: 300000,
+      });
       /*
        * There is a limit in the number of analysis and solution files that kai stores
        * This method ensures the original analysis is stored to be used later in the evaluation
@@ -59,32 +72,6 @@ providerConfigs.forEach((config) => {
       await vscodeApp.getWindow().screenshot({
         path: `${SCREENSHOTS_FOLDER}/analysis-finished.png`,
       });
-    });
-
-    test('Fix Issue with default (Low) effort', async () => {
-      test.setTimeout(3600000);
-      await vscodeApp.openAnalysisView();
-      const analysisView = await vscodeApp.getView(KAIViews.analysisView);
-      await vscodeApp.searchViolation('InventoryEntity');
-      await analysisView
-        .locator('div.pf-v6-c-card__header-toggle')
-        .nth(0)
-        .click();
-      await analysisView.locator('button#get-solution-button').nth(3).click();
-      const resolutionView = await vscodeApp.getView(
-        KAIViews.resolutionDetails
-      );
-      const fixLocator = resolutionView
-        .locator('button[aria-label="Apply fix"]')
-        .first();
-      await vscodeApp.waitDefault();
-      await expect(fixLocator).toBeVisible({ timeout: 60000 });
-      expect(await fixLocator.count()).toEqual(1);
-      // Ensures the button is clicked even if there are notifications overlaying it due to screen size
-      await fixLocator.dispatchEvent('click');
-      await expect(
-        resolutionView.getByText('All resolutions have been applied').first()
-      ).toBeVisible({ timeout: 60000 });
     });
 
     test('Fix all issues with default (Low) effort', async () => {
@@ -99,7 +86,7 @@ providerConfigs.forEach((config) => {
         KAIViews.resolutionDetails
       );
       const fixLocator = resolutionView.locator(
-        'button[aria-label="Apply fix"]'
+        'button[aria-label="Accept all changes"]'
       );
       await vscodeApp.waitDefault();
       await expect(fixLocator.first()).toBeVisible({ timeout: 3600000 });

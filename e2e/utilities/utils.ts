@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import * as path from 'path';
 import type { TestInfo } from '@playwright/test';
 import { rm } from 'node:fs/promises';
+import { ProviderConfig } from '../fixtures/provider-configs.fixture';
 
 // Function to get OS information
 export function getOSInfo(): string {
@@ -19,10 +20,6 @@ export function getOSInfo(): string {
     default:
       return `Unknown OS: ${platform}`;
   }
-}
-
-export function getKAIPluginName(): string {
-  return process.env.VSIX_FILE_NAME || 'konveyor-v0.1.0.vsix';
 }
 
 export async function cleanupRepo(repoDir: string) {
@@ -62,14 +59,20 @@ export async function uninstallExtension() {
 }
 
 export function getVscodeExecutablePath() {
-  return getOSInfo() == 'windows'
+  return getOSInfo() === 'windows'
     ? process.env.WINDOWS_VSCODE_EXECUTABLE_PATH
     : process.env.VSCODE_EXECUTABLE_PATH || '/usr/share/code/code';
 }
 
 export function getRepoName(testInfo: TestInfo): string {
   const repoName = path.basename(testInfo.file).replace('.test.ts', '');
-  return repoName.split('_')[1];
+  const parts = repoName.split('_');
+  if (parts.length < 2) {
+    throw new Error(
+      `Invalid test file name format: ${testInfo.file}. Expected format: prefix_reponame.test.ts`
+    );
+  }
+  return parts[parts.length - 1];
 }
 
 export function generateRandomString(length: number = 8): string {

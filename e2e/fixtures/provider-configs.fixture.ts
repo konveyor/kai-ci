@@ -6,16 +6,12 @@ export interface ProviderConfig {
   config: string;
 }
 
-export const DEFAULT_PROVIDER: ProviderConfig = {
+export const AWS_PROVIDER: ProviderConfig = {
   provider: LLMProviders.awsBedrock,
   model: 'meta.llama3-70b-instruct-v1:0',
   config: [
     'models:',
     '  AmazonBedrock: &active',
-    '    environment:',
-    `      AWS_ACCESS_KEY_ID: "${process.env.AWS_ACCESS_KEY_ID}"`,
-    `      AWS_SECRET_ACCESS_KEY: "${process.env.AWS_SECRET_ACCESS_KEY}"`,
-    `      AWS_DEFAULT_REGION: "${process.env.AWS_DEFAULT_REGION}"`,
     '    provider: "ChatBedrock"',
     '    args:',
     '      model_id: "meta.llama3-70b-instruct-v1:0"',
@@ -23,14 +19,25 @@ export const DEFAULT_PROVIDER: ProviderConfig = {
   ].join('\n'),
 };
 
-export const OPENAI_PROVIDER: ProviderConfig = {
+export const OPENAI_GPT4O_PROVIDER: ProviderConfig = {
+  provider: LLMProviders.openAI,
+  model: 'gpt-4o',
+  config: [
+    'models:',
+    '  OpenAI: &active',
+    '    provider: "ChatOpenAI"',
+    '    args:',
+    '      model: "gpt-4o"',
+    'active: *active',
+  ].join('\n'),
+};
+
+export const OPENAI_GPT4OMINI_PROVIDER: ProviderConfig = {
   provider: LLMProviders.openAI,
   model: 'gpt-4o-mini',
   config: [
     'models:',
     '  OpenAI: &active',
-    '    environment:',
-    `      OPENAI_API_KEY: "${process.env.OPENAI_API_KEY}"`,
     '    provider: "ChatOpenAI"',
     '    args:',
     '      model: "gpt-4o-mini"',
@@ -44,8 +51,6 @@ export const PARASOL_PROVIDER: ProviderConfig = {
   config: [
     'models:',
     '  parasols-maas-granite: &active',
-    '    environment:',
-    `      OPENAI_API_KEY: "${process.env.PARASOL_API_KEY}"`,
     '    provider: "ChatOpenAI"',
     '    args:',
     '      model: "granite-3-3-8b-instruct"',
@@ -55,8 +60,27 @@ export const PARASOL_PROVIDER: ProviderConfig = {
   ].join('\n'),
 };
 
+export const DEFAULT_PROVIDER = OPENAI_GPT4OMINI_PROVIDER;
+
 export const providerConfigs: ProviderConfig[] = [
   //PARASOL_PROVIDER,
-  DEFAULT_PROVIDER,
-  OPENAI_PROVIDER,
+  AWS_PROVIDER,
+  OPENAI_GPT4OMINI_PROVIDER,
 ];
+
+export function getAvailableProviders(): ProviderConfig[] {
+  const providers: ProviderConfig[] = [];
+  if (process.env.OPENAI_API_KEY) {
+    providers.push(OPENAI_GPT4OMINI_PROVIDER);
+  }
+
+  if (
+    process.env.AWS_ACCESS_KEY_ID &&
+    process.env.AWS_SECRET_ACCESS_KEY &&
+    process.env.AWS_DEFAULT_REGION
+  ) {
+    providers.push(AWS_PROVIDER);
+  }
+
+  return providers;
+}
