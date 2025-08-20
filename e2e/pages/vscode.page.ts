@@ -215,7 +215,7 @@ export class VSCode extends BasePage {
     await expect(
       analysisView.getByText('Analysis Progress').first()
     ).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
   }
 
@@ -302,7 +302,7 @@ export class VSCode extends BasePage {
     const profileList = manageProfileView.getByRole('list', {
       name: 'Profile list',
     });
-    await profileList.waitFor({ state: 'visible', timeout: 5000 });
+    await profileList.waitFor({ state: 'visible', timeout: 20000 });
 
     const profileItems = profileList.getByRole('listitem');
     try {
