@@ -84,15 +84,17 @@ jobs:
             'set JAVA_HOME=C:\Program Files\OpenJDK\jdk-22.0.2',
             'set MAVEN_HOME=C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.9',
             'set PATH=%PATH%;%nodePath%;%vscodepath%;%JAVA_HOME%\bin;%MAVEN_HOME%\bin',
+            'set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}',
             'if exist C:\Users\nonadmin\kai-ci rmdir /s /q C:\Users\nonadmin\kai-ci',
             'git clone -b %GITHUB_REF% https://github.com/konveyor/kai-ci C:\Users\nonadmin\kai-ci',
             'cd C:\Users\nonadmin\kai-ci',
             'powershell -Command "npm install"',
             'copy .env.example .env',
             'echo CI=true >> .env',
-            'echo VSCODE_EXECUTABLE_PATH="C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin\Code.exe" >> .env',
+            'echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} >> .env',
+            'echo VSCODE_EXECUTABLE_PATH=''C:\Users\nonadmin\AppData\Local\Programs\Microsoft VS Code\bin\Code.exe'' >> .env',
             'node scripts/set-latest-vsix-env.mjs >> %LOG% 2>&1',
-            'start /wait cmd /c "npx playwright test e2e/tests/base/configure-and-run-analysis.test.ts >> %LOG% 2>&1"',
+            'start /wait cmd /c "npx playwright test e2e/tests/base/fix-one-issue.test.ts >> %LOG% 2>&1"',
             'set TEST_EXIT_CODE=%ERRORLEVEL%',
             'echo Done >> %LOG%',
             'del %LOCK%',
@@ -228,8 +230,7 @@ jobs:
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin ]
-    #if: ${{ !cancelled() }}
-    if: false
+    if: ${{ !cancelled() }}
     uses: ./.github/workflows/remove-runner.yml
     with:
       ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}

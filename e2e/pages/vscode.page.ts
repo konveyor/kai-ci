@@ -35,7 +35,7 @@ export class VSCode extends BasePage {
     const args = [
       '--disable-workspace-trust',
       '--skip-welcome',
-      `--user-data-dir=${TEST_DATA_DIR}`,
+      `--user-data-dir="${TEST_DATA_DIR}"`,
     ];
 
     try {
