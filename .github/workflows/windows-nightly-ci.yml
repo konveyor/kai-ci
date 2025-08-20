@@ -228,7 +228,8 @@ jobs:
 
   stop-ec2-instance:
     needs: [ start-ec2-instance, install-requirements-as-admin, run-test-as-nonadmin ]
-    if: ${{ !cancelled() }}
+    #if: ${{ !cancelled() }}
+    if: false
     uses: ./.github/workflows/remove-runner.yml
     with:
       ec2-instance-id: ${{ needs.start-ec2-instance.outputs.ec2-instance-id }}
