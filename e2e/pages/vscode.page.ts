@@ -204,7 +204,6 @@ export class VSCode extends BasePage {
   }
 
   public async runAnalysis() {
-    await this.window.waitForTimeout(15000);
     const analysisView = await this.getView(KAIViews.analysisView);
     const runAnalysisBtnLocator = analysisView.getByRole('button', {
       name: 'Run Analysis',
@@ -215,7 +214,7 @@ export class VSCode extends BasePage {
     await expect(
       analysisView.getByText('Analysis Progress').first()
     ).toBeVisible({
-      timeout: 20000,
+      timeout: 30000,
     });
   }
 
@@ -308,7 +307,7 @@ export class VSCode extends BasePage {
     try {
       await profileItems
         .filter({ hasText: profileName })
-        .click({ timeout: 5000 });
+        .click({ timeout: 20000 });
       await manageProfileView
         .getByRole('button', { name: 'Delete Profile' })
         .click();
