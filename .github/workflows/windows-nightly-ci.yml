@@ -5,7 +5,7 @@ on:
     - cron: "5 3 * * *"
   workflow_dispatch:
   push:
-
+ 
 jobs:
   start-ec2-instance:
     uses: ./.github/workflows/provision-runner.yml
